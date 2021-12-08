@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedback" >
+    <id column="FEEDBACK_ID" property="feedbackId" jdbcType="BIGINT" />
+    <result column="APP_USER_ID" property="appUserId" jdbcType="BIGINT" />
+    <result column="FEEDBACK_CONTENT" property="feedbackContent" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    FEEDBACK_ID, APP_USER_ID, FEEDBACK_CONTENT, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_GUIDE_APP_USERS_FEEDBACK
+    where FEEDBACK_ID = #{feedbackId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_GUIDE_APP_USERS_FEEDBACK
+    where FEEDBACK_ID = #{feedbackId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedback" >
+    insert into SYS_GUIDE_APP_USERS_FEEDBACK (FEEDBACK_ID, APP_USER_ID, FEEDBACK_CONTENT, 
+      CREATE_DATE, UPDATE_DATE)
+    values (#{feedbackId,jdbcType=BIGINT}, #{appUserId,jdbcType=BIGINT}, #{feedbackContent,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedback" >
+    insert into SYS_GUIDE_APP_USERS_FEEDBACK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        FEEDBACK_ID,
+      </if>
+      <if test="appUserId != null" >
+        APP_USER_ID,
+      </if>
+      <if test="feedbackContent != null" >
+        FEEDBACK_CONTENT,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="feedbackId != null" >
+        #{feedbackId,jdbcType=BIGINT},
+      </if>
+      <if test="appUserId != null" >
+        #{appUserId,jdbcType=BIGINT},
+      </if>
+      <if test="feedbackContent != null" >
+        #{feedbackContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedback" >
+    update SYS_GUIDE_APP_USERS_FEEDBACK
+    <set >
+      <if test="appUserId != null" >
+        APP_USER_ID = #{appUserId,jdbcType=BIGINT},
+      </if>
+      <if test="feedbackContent != null" >
+        FEEDBACK_CONTENT = #{feedbackContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where FEEDBACK_ID = #{feedbackId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedback" >
+    update SYS_GUIDE_APP_USERS_FEEDBACK
+    set APP_USER_ID = #{appUserId,jdbcType=BIGINT},
+      FEEDBACK_CONTENT = #{feedbackContent,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+    where FEEDBACK_ID = #{feedbackId,jdbcType=BIGINT}
+  </update>
+</mapper>

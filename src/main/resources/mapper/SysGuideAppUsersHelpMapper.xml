@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersHelpMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    <id column="HELP_ID" property="helpId" jdbcType="BIGINT" />
+    <result column="HELP_TITLE" property="helpTitle" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" extends="BaseResultMap" >
+    <result column="HELP_CONTENT" property="helpContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    HELP_ID, HELP_TITLE, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <sql id="Blob_Column_List" >
+    HELP_CONTENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_GUIDE_APP_USERS_HELP
+    where HELP_ID = #{helpId,jdbcType=BIGINT}
+  </select>
+  <!--获取使用帮助列表-->
+  <select id="queryUserHelpList" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_GUIDE_APP_USERS_HELP
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_GUIDE_APP_USERS_HELP
+    where HELP_ID = #{helpId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    insert into SYS_GUIDE_APP_USERS_HELP (HELP_ID, HELP_TITLE, CREATE_DATE, 
+      UPDATE_DATE, HELP_CONTENT)
+    values (#{helpId,jdbcType=BIGINT}, #{helpTitle,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=VARCHAR}, #{helpContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    insert into SYS_GUIDE_APP_USERS_HELP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="helpId != null" >
+        HELP_ID,
+      </if>
+      <if test="helpTitle != null" >
+        HELP_TITLE,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="helpContent != null" >
+        HELP_CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="helpId != null" >
+        #{helpId,jdbcType=BIGINT},
+      </if>
+      <if test="helpTitle != null" >
+        #{helpTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="helpContent != null" >
+        #{helpContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    update SYS_GUIDE_APP_USERS_HELP
+    <set >
+      <if test="helpTitle != null" >
+        HELP_TITLE = #{helpTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="helpContent != null" >
+        HELP_CONTENT = #{helpContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where HELP_ID = #{helpId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    update SYS_GUIDE_APP_USERS_HELP
+    set HELP_TITLE = #{helpTitle,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      HELP_CONTENT = #{helpContent,jdbcType=LONGVARCHAR}
+    where HELP_ID = #{helpId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp" >
+    update SYS_GUIDE_APP_USERS_HELP
+    set HELP_TITLE = #{helpTitle,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+    where HELP_ID = #{helpId,jdbcType=BIGINT}
+  </update>
+</mapper>

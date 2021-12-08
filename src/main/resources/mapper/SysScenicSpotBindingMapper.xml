@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBindingMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    <id column="SCENIC_SPOT_FID" property="scenicSpotFid" jdbcType="BIGINT" />
+    <result column="SCENIC_SPOT_FNAME" property="scenicSpotFname" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_PID" property="scenicSpotPid" jdbcType="BIGINT" />
+    <result column="SCENIC_SPOT_TYPE" property="scenicSpotType" jdbcType="INTEGER" />
+    <result column="CITY_LABEL" property="cityLabel" jdbcType="VARCHAR" />
+    <result column="CITY_PIC" property="cityPic" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SCENIC_SPOT_FID, SCENIC_SPOT_FNAME, SCENIC_SPOT_PID, SCENIC_SPOT_TYPE, CITY_LABEL, cityPic
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
+  </select>
+
+  <resultMap id="BaseResultMaps" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    <id column="SCENIC_SPOT_FID" property="scenicSpotFid" jdbcType="BIGINT" />
+    <result column="SCENIC_SPOT_FNAME" property="scenicSpotFname" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_PID" property="scenicSpotPid" jdbcType="BIGINT" />
+    <result column="CITY_LABEL" property="cityLabel" jdbcType="VARCHAR" />
+    <result column="CITY_PIC" property="cityPic" jdbcType="VARCHAR" />
+    <collection property="sysScenicSpotList" ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+      <id column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+      <result column="SCENIC_SPOT_NAME" property="scenicSpotName" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_CONTACT" property="scenicSpotContact" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_PHONE" property="scenicSpotPhone" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_EMAIL" property="scenicSpotEmail" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_POSTAL_CODE" property="scenicSpotPostalCode" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_ROBOT_TOTAL" property="scenicSpotRobotTotal" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_STATUS" property="scenicSpotStatus" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_OPENWORD" property="scenicSpotOpenword" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_CLOSEWORD" property="scenicSpotCloseword" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_BEYOND_PRICE" property="scenicSpotBeyondPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_WEEKEND_PRICE" property="scenicSpotWeekendPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NORMAL_PRICE" property="scenicSpotNormalPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_WEEKEND_RENT_PRICE" property="scenicSpotWeekendRentPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NORMAL_RENT_PRICE" property="scenicSpotNormalRentPrice" jdbcType="VARCHAR" />
+      <!-- 周末计费时间设置 -->
+      <result column="SCENIC_SPOT_WEEKEND_TIME" property="scenicSpotWeekendTime" jdbcType="VARCHAR" />
+      <!-- 工作日计费时间设置 -->
+      <result column="SCENIC_SPOT_NORMAL_TIME" property="scenicSpotNormalTime" jdbcType="VARCHAR" />
+      <!-- 超出计费时间的剩余升级 -->
+      <result column="SCENIC_SPOT_REMAINING_TIME" property="scenicSpotRemainingTime" jdbcType="VARCHAR" />
+
+      <result column="SCENIC_SPOT_RENT_TIME" property="scenicSpotRentTime" jdbcType="VARCHAR" />
+      <result column="COORDINATE_RANGE" property="coordinateRange" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_DEPOSIT" property="scenicSpotDeposit" jdbcType="VARCHAR" />
+      <result column="NORMAL_CAPPED_PRICE" property="normalCappedPrice" jdbcType="VARCHAR" />
+      <result column="WEEKEND_CAPPED_PRICE" property="weekendCappedPrice" jdbcType="VARCHAR" />
+      <result column="RANDOM_BROADCAST_TIME" property="randomBroadcastTime" jdbcType="VARCHAR" />
+      <result column="ROBOT_WAKEUP_WORDS" property="robotWakeupWords" jdbcType="VARCHAR" />
+
+      <result column="SCENIC_SPOT_FREQUENCY" property="scenicSpotFrequency" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_FENCE_TIME" property="scenicSpotFenceTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_FORBIDDEN_ZONE_TIME" property="scenicSpotForbiddenZoneTime" jdbcType="VARCHAR" />
+
+      <result column="PAUSE_STATE" property="pauseState" jdbcType="VARCHAR" />
+      <result column="WORK_TIME" property="workTime" jdbcType="VARCHAR" />
+      <result column="CLOSING_TIME" property="closingTime" jdbcType="VARCHAR" />
+
+      <result column="PAUSE_BROADCAST" property="pauseBroadcast" jdbcType="VARCHAR" />
+      <result column="WORK_BROADCAST" property="workBroadcast" jdbcType="VARCHAR" />
+      <result column="CLOSING_BROADCAST" property="closingBroadcast" jdbcType="VARCHAR" />
+
+      <result column="LAMP_OPENING_TIME" property="lampOpeningTime" jdbcType="VARCHAR" />
+      <result column="LAMP_CLOSING_TIME" property="lampClosingTime" jdbcType="VARCHAR" />
+      <result column="LAMP_LIGHTING_TIME" property="lampLightingTime" jdbcType="VARCHAR" />
+      <result column="HEAT" property="heat" jdbcType="VARCHAR" />
+
+      <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+      <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+
+      <result column="scenicSpotImgUtl" property="scenicSpotImgUtl" jdbcType="VARCHAR" />
+      <result column="broadcastGps" property="broadcastGps" jdbcType="VARCHAR" />
+      <result column="total" property="total" jdbcType="VARCHAR" />
+
+    </collection>
+  </resultMap>
+
+  <select id="queryCityAndScenicSpotLists" resultMap="BaseResultMaps" parameterType="java.util.Map">
+    SELECT
+      A.SCENIC_SPOT_ID,
+      A.SCENIC_SPOT_NAME,
+      A.SCENIC_SPOT_CONTACT,
+      A.SCENIC_SPOT_PHONE,
+      A.SCENIC_SPOT_EMAIL,
+      A.SCENIC_SPOT_ADDRES,
+      A.SCENIC_SPOT_POSTAL_CODE,
+      A.SCENIC_SPOT_ROBOT_TOTAL,
+      A.SCENIC_SPOT_STATUS,
+      A.SCENIC_SPOT_OPENWORD,
+      A.SCENIC_SPOT_CLOSEWORD,
+      A.SCENIC_SPOT_BEYOND_PRICE,
+      A.SCENIC_SPOT_WEEKEND_PRICE,
+      A.SCENIC_SPOT_NORMAL_PRICE,
+      A.SCENIC_SPOT_WEEKEND_RENT_PRICE,
+      A.SCENIC_SPOT_NORMAL_RENT_PRICE,
+      A.SCENIC_SPOT_WEEKEND_TIME,
+      A.SCENIC_SPOT_NORMAL_TIME,
+      A.SCENIC_SPOT_REMAINING_TIME,
+      A.SCENIC_SPOT_RENT_TIME,
+      A.COORDINATE_RANGE,
+      A.SCENIC_SPOT_DEPOSIT,
+      A.NORMAL_CAPPED_PRICE,
+      A.WEEKEND_CAPPED_PRICE,
+      A.RANDOM_BROADCAST_TIME,
+      A.ROBOT_WAKEUP_WORDS,
+      A.CREATE_DATE,
+      A.UPDATE_DATE,
+      A.SCENIC_SPOT_FID,
+      A.SCENIC_SPOT_FREQUENCY,
+      A.SCENIC_SPOT_FENCE_TIME,
+      A.SCENIC_SPOT_FORBIDDEN_ZONE_TIME,
+      A.TEST_START_TIME,
+      A.TRIAL_OPERATIONS_TIME,
+      A.FORMAL_OPERATION_TIME,
+      A.STOP_OPERATION_TIME,
+      A.HEAT,
+      B.SCENIC_SPOT_FNAME,
+      B.CITY_LABEL,
+      B.CITY_PIC,
+      D.SCNEIC_SPOT_IMG_URL AS scenicSpotImgUtl,
+      C.BROADCAST_GPS AS broadcastGps,
+      COUNT(C.SCENIC_SPOT_ID) AS total
+    FROM
+      SYS_SCENIC_SPOT A
+        LEFT JOIN SYS_SCENIC_SPOT_BINDING B ON A.SCENIC_SPOT_FID = B.SCENIC_SPOT_FID
+        LEFT JOIN SYS_SCENIC_SPOT_BROADCAST C ON A.SCENIC_SPOT_ID = C.SCENIC_SPOT_ID
+        LEFT JOIN SYS_SCENIC_SPOT_IMG D ON A.SCENIC_SPOT_ID = D.SCENIC_SPOT_ID
+    <where>
+      B.SCENIC_SPOT_TYPE = 1
+      AND A.ROBOT_WAKEUP_WORDS = 1
+      <if test="scenicSpotFname != null and scenicSpotFname != ''">
+        AND B.SCENIC_SPOT_FNAME LIKE CONCAT('%',#{scenicSpotFname,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="scenicSpotName != null and scenicSpotName != ''">
+        AND A.SCENIC_SPOT_NAME LIKE CONCAT('%',#{scenicSpotName,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    GROUP BY
+      A.SCENIC_SPOT_ID
+    <choose>
+      <when test="type != null and type != ''">
+        ORDER BY
+        A.HEAT DESC
+      </when>
+      <otherwise>
+        ORDER BY
+        A.CREATE_DATE DESC
+      </otherwise>
+    </choose>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    insert into SYS_SCENIC_SPOT_BINDING (SCENIC_SPOT_FID, SCENIC_SPOT_FNAME, SCENIC_SPOT_PID, 
+      SCENIC_SPOT_TYPE)
+    values (#{scenicSpotFid,jdbcType=BIGINT}, #{scenicSpotFname,jdbcType=VARCHAR}, #{scenicSpotPid,jdbcType=BIGINT}, 
+      #{scenicSpotType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    insert into SYS_SCENIC_SPOT_BINDING
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scenicSpotFid != null" >
+        SCENIC_SPOT_FID,
+      </if>
+      <if test="scenicSpotFname != null" >
+        SCENIC_SPOT_FNAME,
+      </if>
+      <if test="scenicSpotPid != null" >
+        SCENIC_SPOT_PID,
+      </if>
+      <if test="scenicSpotType != null" >
+        SCENIC_SPOT_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scenicSpotFid != null" >
+        #{scenicSpotFid,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotFname != null" >
+        #{scenicSpotFname,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicSpotPid != null" >
+        #{scenicSpotPid,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotType != null" >
+        #{scenicSpotType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    update SYS_SCENIC_SPOT_BINDING
+    <set >
+      <if test="scenicSpotFname != null" >
+        SCENIC_SPOT_FNAME = #{scenicSpotFname,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicSpotPid != null" >
+        SCENIC_SPOT_PID = #{scenicSpotPid,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotType != null" >
+        SCENIC_SPOT_TYPE = #{scenicSpotType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
+    update SYS_SCENIC_SPOT_BINDING
+    set SCENIC_SPOT_FNAME = #{scenicSpotFname,jdbcType=VARCHAR},
+      SCENIC_SPOT_PID = #{scenicSpotPid,jdbcType=BIGINT},
+      SCENIC_SPOT_TYPE = #{scenicSpotType,jdbcType=INTEGER}
+    where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppNewsMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    <id column="GUIDE_ID" property="guideId" jdbcType="BIGINT" />
+    <id column="GUIDE_USER_ID" property="guideUserId" jdbcType="BIGINT" />
+    <result column="GUIDE_TITLE" property="guideTitle" jdbcType="VARCHAR" />
+    <result column="GUIDE_STATE" property="guideState" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" extends="BaseResultMap" >
+    <result column="GUIDE_CONTENT" property="guideContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    GUIDE_ID, GUIDE_USER_ID, GUIDE_TITLE, GUIDE_STATE, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <sql id="Blob_Column_List" >
+    GUIDE_CONTENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_GUIDE_APP_NEWS
+    where GUIDE_ID = #{guideId,jdbcType=BIGINT}
+  </select>
+  <!--查询消息列表-->
+  <select id="queryGuideAppNewsListsLimit" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_GUIDE_APP_NEWS
+    <where>
+    GUIDE_STATE IN(0,1)
+    <if test="guideTitle != null and guideTitle != ''">
+    AND GUIDE_TITLE LIKE CONCAT('%',#{guideTitle,jdbcType=VARCHAR},'%')
+    </if>
+    ORDER BY
+    CREATE_DATE DESC
+    </where>
+
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_GUIDE_APP_NEWS
+    where GUIDE_ID = #{guideId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    insert into SYS_GUIDE_APP_NEWS (GUIDE_ID, GUIDE_TITLE, GUIDE_STATE, 
+      CREATE_DATE, UPDATE_DATE, GUIDE_CONTENT
+      )
+    values (#{guideId,jdbcType=BIGINT}, #{guideTitle,jdbcType=VARCHAR}, #{guideState,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR}, #{guideContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    insert into SYS_GUIDE_APP_NEWS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="guideId != null" >
+        GUIDE_ID,
+      </if>
+      <if test="guideTitle != null" >
+        GUIDE_TITLE,
+      </if>
+      <if test="guideState != null" >
+        GUIDE_STATE,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="guideContent != null" >
+        GUIDE_CONTENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="guideId != null" >
+        #{guideId,jdbcType=BIGINT},
+      </if>
+      <if test="guideTitle != null" >
+        #{guideTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="guideState != null" >
+        #{guideState,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="guideContent != null" >
+        #{guideContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    update SYS_GUIDE_APP_NEWS
+    <set >
+      <if test="guideTitle != null" >
+        GUIDE_TITLE = #{guideTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="guideState != null" >
+        GUIDE_STATE = #{guideState,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="guideContent != null" >
+        GUIDE_CONTENT = #{guideContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where GUIDE_ID = #{guideId,jdbcType=BIGINT}
+  </update>
+  <!--批量更新-->
+  <update id="updateByBatchSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    update SYS_GUIDE_APP_NEWS
+    <set >
+      <if test="guideTitle != null" >
+        GUIDE_TITLE = #{guideTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="guideState != null" >
+        GUIDE_STATE = #{guideState,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="guideContent != null" >
+        GUIDE_CONTENT = #{guideContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    update SYS_GUIDE_APP_NEWS
+    set GUIDE_TITLE = #{guideTitle,jdbcType=VARCHAR},
+      GUIDE_STATE = #{guideState,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      GUIDE_CONTENT = #{guideContent,jdbcType=LONGVARCHAR}
+    where GUIDE_ID = #{guideId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews" >
+    update SYS_GUIDE_APP_NEWS
+    set GUIDE_TITLE = #{guideTitle,jdbcType=VARCHAR},
+      GUIDE_STATE = #{guideState,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+    where GUIDE_ID = #{guideId,jdbcType=BIGINT}
+  </update>
+</mapper>

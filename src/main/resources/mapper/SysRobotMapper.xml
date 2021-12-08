@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysRobotMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysRobot" >
+    <id column="ROBOT_ID" property="robotId" jdbcType="BIGINT" />
+    <result column="ROBOT_CODE_SIM" property="robotCodeSim" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+    <result column="ROBOT_CODE_CID" property="robotCodeCid" jdbcType="VARCHAR" />
+    <result column="ROBOT_CODE" property="robotCode" jdbcType="VARCHAR" />
+    <result column="ROBOT_RUN_STATE" property="robotRunState" jdbcType="VARCHAR" />
+    <result column="ROBOT_POWER_STATE" property="robotPowerState" jdbcType="VARCHAR" />
+    <result column="ROBOT_FAULT_STATE" property="robotFaultState" jdbcType="VARCHAR" />
+    <result column="ROBOT_TYPE" property="robotType" jdbcType="VARCHAR" />
+    <result column="ROBOT_POLLING_TYPE" property="robotPollingType" jdbcType="VARCHAR" />
+    <result column="ROBOT_GPS_SMALL_APP" property="robotGpsSmallApp" jdbcType="VARCHAR" />
+    <result column="ROBOT_GPS_BAI_DU" property="robotGpsBaiDu" jdbcType="VARCHAR" />
+    <result column="ROBOT_GPS_GPGGA" property="robotGpsGpgga" jdbcType="VARCHAR" />
+    <result column="ROBOT_ADMIN_LOCKING" property="robotAdminLocking" jdbcType="VARCHAR" />
+    <result column="PUSH_STATUS" property="pushStatus" jdbcType="VARCHAR" />
+    <result column="UPDATE_PUSH_DATE" property="updatePushDate" jdbcType="VARCHAR" />
+    <result column="ROBOT_OPERATION_STATUS" property="robotOperationStatus" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="ROBOT_REMARKS" property="robotRemarks" jdbcType="VARCHAR" />
+    <result column="CLIENT_VERSION" property="clientVersion" jdbcType="VARCHAR" />
+    <result column="ROBOT_BATCH_NUMBER" property="robotBatchNumber" jdbcType="VARCHAR" />
+    <result column="ROBOT_MODEL" property="robotModel" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ROBOT_ID, ROBOT_CODE_SIM, SCENIC_SPOT_ID, ROBOT_CODE_CID, ROBOT_CODE, ROBOT_RUN_STATE, 
+    ROBOT_POWER_STATE, ROBOT_FAULT_STATE, ROBOT_TYPE, ROBOT_POLLING_TYPE, ROBOT_GPS_SMALL_APP, 
+    ROBOT_GPS_BAI_DU, ROBOT_GPS_GPGGA, ROBOT_ADMIN_LOCKING, PUSH_STATUS, UPDATE_PUSH_DATE, 
+    ROBOT_OPERATION_STATUS, CREATE_DATE, UPDATE_DATE, ROBOT_REMARKS, CLIENT_VERSION, 
+    ROBOT_BATCH_NUMBER, ROBOT_MODEL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_ROBOT
+    where ROBOT_ID = #{robotId,jdbcType=BIGINT}
+  </select>
+  <!--根据机器人ID查询机器人或者查询所有机器人-->
+  <select id="queryRobotList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select
+    <include refid="Base_Column_List" />
+    from SYS_ROBOT
+    <where>
+      <if test="robotCode != null">
+        ROBOT_CODE = #{robotCode,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_ROBOT
+    where ROBOT_ID = #{robotId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobot" >
+    insert into SYS_ROBOT (ROBOT_ID, ROBOT_CODE_SIM, SCENIC_SPOT_ID, 
+      ROBOT_CODE_CID, ROBOT_CODE, ROBOT_RUN_STATE, 
+      ROBOT_POWER_STATE, ROBOT_FAULT_STATE, ROBOT_TYPE, 
+      ROBOT_POLLING_TYPE, ROBOT_GPS_SMALL_APP, ROBOT_GPS_BAI_DU, 
+      ROBOT_GPS_GPGGA, ROBOT_ADMIN_LOCKING, PUSH_STATUS, 
+      UPDATE_PUSH_DATE, ROBOT_OPERATION_STATUS, CREATE_DATE, 
+      UPDATE_DATE, ROBOT_REMARKS, CLIENT_VERSION, 
+      ROBOT_BATCH_NUMBER, ROBOT_MODEL)
+    values (#{robotId,jdbcType=BIGINT}, #{robotCodeSim,jdbcType=VARCHAR}, #{scenicSpotId,jdbcType=BIGINT}, 
+      #{robotCodeCid,jdbcType=VARCHAR}, #{robotCode,jdbcType=VARCHAR}, #{robotRunState,jdbcType=VARCHAR}, 
+      #{robotPowerState,jdbcType=VARCHAR}, #{robotFaultState,jdbcType=VARCHAR}, #{robotType,jdbcType=VARCHAR}, 
+      #{robotPollingType,jdbcType=VARCHAR}, #{robotGpsSmallApp,jdbcType=VARCHAR}, #{robotGpsBaiDu,jdbcType=VARCHAR}, 
+      #{robotGpsGpgga,jdbcType=VARCHAR}, #{robotAdminLocking,jdbcType=VARCHAR}, #{pushStatus,jdbcType=VARCHAR}, 
+      #{updatePushDate,jdbcType=VARCHAR}, #{robotOperationStatus,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
+      #{updateDate,jdbcType=VARCHAR}, #{robotRemarks,jdbcType=VARCHAR}, #{clientVersion,jdbcType=VARCHAR}, 
+      #{robotBatchNumber,jdbcType=VARCHAR}, #{robotModel,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobot" >
+    insert into SYS_ROBOT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="robotId != null" >
+        ROBOT_ID,
+      </if>
+      <if test="robotCodeSim != null" >
+        ROBOT_CODE_SIM,
+      </if>
+      <if test="scenicSpotId != null" >
+        SCENIC_SPOT_ID,
+      </if>
+      <if test="robotCodeCid != null" >
+        ROBOT_CODE_CID,
+      </if>
+      <if test="robotCode != null" >
+        ROBOT_CODE,
+      </if>
+      <if test="robotRunState != null" >
+        ROBOT_RUN_STATE,
+      </if>
+      <if test="robotPowerState != null" >
+        ROBOT_POWER_STATE,
+      </if>
+      <if test="robotFaultState != null" >
+        ROBOT_FAULT_STATE,
+      </if>
+      <if test="robotType != null" >
+        ROBOT_TYPE,
+      </if>
+      <if test="robotPollingType != null" >
+        ROBOT_POLLING_TYPE,
+      </if>
+      <if test="robotGpsSmallApp != null" >
+        ROBOT_GPS_SMALL_APP,
+      </if>
+      <if test="robotGpsBaiDu != null" >
+        ROBOT_GPS_BAI_DU,
+      </if>
+      <if test="robotGpsGpgga != null" >
+        ROBOT_GPS_GPGGA,
+      </if>
+      <if test="robotAdminLocking != null" >
+        ROBOT_ADMIN_LOCKING,
+      </if>
+      <if test="pushStatus != null" >
+        PUSH_STATUS,
+      </if>
+      <if test="updatePushDate != null" >
+        UPDATE_PUSH_DATE,
+      </if>
+      <if test="robotOperationStatus != null" >
+        ROBOT_OPERATION_STATUS,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+      <if test="robotRemarks != null" >
+        ROBOT_REMARKS,
+      </if>
+      <if test="clientVersion != null" >
+        CLIENT_VERSION,
+      </if>
+      <if test="robotBatchNumber != null" >
+        ROBOT_BATCH_NUMBER,
+      </if>
+      <if test="robotModel != null" >
+        ROBOT_MODEL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="robotId != null" >
+        #{robotId,jdbcType=BIGINT},
+      </if>
+      <if test="robotCodeSim != null" >
+        #{robotCodeSim,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicSpotId != null" >
+        #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="robotCodeCid != null" >
+        #{robotCodeCid,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCode != null" >
+        #{robotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robotRunState != null" >
+        #{robotRunState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotPowerState != null" >
+        #{robotPowerState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotFaultState != null" >
+        #{robotFaultState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotType != null" >
+        #{robotType,jdbcType=VARCHAR},
+      </if>
+      <if test="robotPollingType != null" >
+        #{robotPollingType,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsSmallApp != null" >
+        #{robotGpsSmallApp,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsBaiDu != null" >
+        #{robotGpsBaiDu,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsGpgga != null" >
+        #{robotGpsGpgga,jdbcType=VARCHAR},
+      </if>
+      <if test="robotAdminLocking != null" >
+        #{robotAdminLocking,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null" >
+        #{pushStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePushDate != null" >
+        #{updatePushDate,jdbcType=VARCHAR},
+      </if>
+      <if test="robotOperationStatus != null" >
+        #{robotOperationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="robotRemarks != null" >
+        #{robotRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="clientVersion != null" >
+        #{clientVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="robotBatchNumber != null" >
+        #{robotBatchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="robotModel != null" >
+        #{robotModel,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobot" >
+    update SYS_ROBOT
+    <set >
+      <if test="robotCodeSim != null" >
+        ROBOT_CODE_SIM = #{robotCodeSim,jdbcType=VARCHAR},
+      </if>
+      <if test="scenicSpotId != null" >
+        SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="robotCodeCid != null" >
+        ROBOT_CODE_CID = #{robotCodeCid,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCode != null" >
+        ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robotRunState != null" >
+        ROBOT_RUN_STATE = #{robotRunState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotPowerState != null" >
+        ROBOT_POWER_STATE = #{robotPowerState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotFaultState != null" >
+        ROBOT_FAULT_STATE = #{robotFaultState,jdbcType=VARCHAR},
+      </if>
+      <if test="robotType != null" >
+        ROBOT_TYPE = #{robotType,jdbcType=VARCHAR},
+      </if>
+      <if test="robotPollingType != null" >
+        ROBOT_POLLING_TYPE = #{robotPollingType,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsSmallApp != null" >
+        ROBOT_GPS_SMALL_APP = #{robotGpsSmallApp,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsBaiDu != null" >
+        ROBOT_GPS_BAI_DU = #{robotGpsBaiDu,jdbcType=VARCHAR},
+      </if>
+      <if test="robotGpsGpgga != null" >
+        ROBOT_GPS_GPGGA = #{robotGpsGpgga,jdbcType=VARCHAR},
+      </if>
+      <if test="robotAdminLocking != null" >
+        ROBOT_ADMIN_LOCKING = #{robotAdminLocking,jdbcType=VARCHAR},
+      </if>
+      <if test="pushStatus != null" >
+        PUSH_STATUS = #{pushStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePushDate != null" >
+        UPDATE_PUSH_DATE = #{updatePushDate,jdbcType=VARCHAR},
+      </if>
+      <if test="robotOperationStatus != null" >
+        ROBOT_OPERATION_STATUS = #{robotOperationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="robotRemarks != null" >
+        ROBOT_REMARKS = #{robotRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="clientVersion != null" >
+        CLIENT_VERSION = #{clientVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="robotBatchNumber != null" >
+        ROBOT_BATCH_NUMBER = #{robotBatchNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="robotModel != null" >
+        ROBOT_MODEL = #{robotModel,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ROBOT_ID = #{robotId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobot" >
+    update SYS_ROBOT
+    set ROBOT_CODE_SIM = #{robotCodeSim,jdbcType=VARCHAR},
+      SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+      ROBOT_CODE_CID = #{robotCodeCid,jdbcType=VARCHAR},
+      ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+      ROBOT_RUN_STATE = #{robotRunState,jdbcType=VARCHAR},
+      ROBOT_POWER_STATE = #{robotPowerState,jdbcType=VARCHAR},
+      ROBOT_FAULT_STATE = #{robotFaultState,jdbcType=VARCHAR},
+      ROBOT_TYPE = #{robotType,jdbcType=VARCHAR},
+      ROBOT_POLLING_TYPE = #{robotPollingType,jdbcType=VARCHAR},
+      ROBOT_GPS_SMALL_APP = #{robotGpsSmallApp,jdbcType=VARCHAR},
+      ROBOT_GPS_BAI_DU = #{robotGpsBaiDu,jdbcType=VARCHAR},
+      ROBOT_GPS_GPGGA = #{robotGpsGpgga,jdbcType=VARCHAR},
+      ROBOT_ADMIN_LOCKING = #{robotAdminLocking,jdbcType=VARCHAR},
+      PUSH_STATUS = #{pushStatus,jdbcType=VARCHAR},
+      UPDATE_PUSH_DATE = #{updatePushDate,jdbcType=VARCHAR},
+      ROBOT_OPERATION_STATUS = #{robotOperationStatus,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      ROBOT_REMARKS = #{robotRemarks,jdbcType=VARCHAR},
+      CLIENT_VERSION = #{clientVersion,jdbcType=VARCHAR},
+      ROBOT_BATCH_NUMBER = #{robotBatchNumber,jdbcType=VARCHAR},
+      ROBOT_MODEL = #{robotModel,jdbcType=VARCHAR}
+    where ROBOT_ID = #{robotId,jdbcType=BIGINT}
+  </update>
+</mapper>
