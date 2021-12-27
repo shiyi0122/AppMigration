@@ -53,7 +53,7 @@
     SELECT * FROM
       SYS_SCENIC_SPOT_BROADCAST A
       LEFT JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND B ON A.BROADCAST_ID = B.BROADCAST_ID
-      WHERE A.SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
+      WHERE A.SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND A.SORT_TYPE = 0 AND B.BROADCAST_ID IS NOT NULL
       order by  A.SORT_TYPE DESC
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >

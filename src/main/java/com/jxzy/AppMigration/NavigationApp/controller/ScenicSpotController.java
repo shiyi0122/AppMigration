@@ -43,6 +43,8 @@ public class ScenicSpotController extends PublicUtil {
     private SysRobotMapResService sysRobotMapResService;
     @Autowired
     private SysCurrentUserExchangeService sysCurrentUserExchangeService;
+    @Autowired
+    private SysScenicSpotParkingService sysScenicSpotParkingService;
 
     /**
      * 根据城市和景区名查询列表
@@ -133,9 +135,10 @@ public class ScenicSpotController extends PublicUtil {
                 returnModel.setState(Constant.STATE_SUCCESS);
                 return returnModel;
             }else if (type.equals("2")) {
-                List<SysScenicSpotBroadcast> broadcast = sysScenicSpotBroadcastService.queryScenicSpotStop(pageNum,pageSize,search);
+                List<SysScenicSpotBroadcast> parking = sysScenicSpotParkingService.getScenicSpotParkingList(pageNum,pageSize,search);
+                //List<SysScenicSpotBroadcast> parking = sysScenicSpotBroadcastService.queryScenicSpotStop(pageNum,pageSize,search);
                 //PageInfo就是一个分页Bean
-                PageInfo pageInfo = new PageInfo(broadcast);
+                PageInfo pageInfo = new PageInfo(parking);
                 returnModel.setData(pageInfo);
                 returnModel.setMsg("成功获取停靠点列表！");
                 returnModel.setState(Constant.STATE_SUCCESS);
