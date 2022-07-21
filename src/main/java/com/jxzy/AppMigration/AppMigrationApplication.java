@@ -16,6 +16,7 @@ public class AppMigrationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AppMigrationApplication.class, args);
+		System.out.println("swagger请求地址:"+"http://localhost:8081/swagger-ui/index.html");
 	}
 
 }

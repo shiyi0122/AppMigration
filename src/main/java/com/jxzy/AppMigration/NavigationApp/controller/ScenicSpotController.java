@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Api(tags = "导览APP景区资源相关")
@@ -47,7 +50,7 @@ public class ScenicSpotController extends PublicUtil {
     private SysScenicSpotParkingService sysScenicSpotParkingService;
 
     /**
-     * 根据城市和景区名查询列表
+     * 根据城市和景区名查询列表以及热度
      * @param: longinTokenId 登录令牌
      * @param: scenicSpotName景区名称
      * @param: city          省
@@ -59,7 +62,7 @@ public class ScenicSpotController extends PublicUtil {
      * @author: qushaobei
      * @date: 2021/11/4 0004
      */
-        @ApiOperation("根据省市和景区名查询列表")
+        @ApiOperation("根据省市和景区名查询列表以及热度")
         @GetMapping("/queryCityAndScenicSpotLists")
         public ReturnModel queryCityAndScenicSpotLists(@ApiParam(name="longinTokenId",value="登录令牌,状态码202为登录失效",required=true)String longinTokenId,
                                                 @ApiParam(name="scenicSpotName",value="景区名称",required=false)String scenicSpotName,
@@ -92,6 +95,58 @@ public class ScenicSpotController extends PublicUtil {
                 logger.info("queryScenicSpotLists",e);
                 returnModel.setData("");
                 returnModel.setMsg("获取景区列表失败！");
+                returnModel.setState(Constant.STATE_FAILURE);
+                return returnModel;
+            }
+        }
+
+        /**
+         * 更新景区热度
+         * @param: longinTokenId
+         * @param: scenicSpotId
+         * @description: TODO
+         * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+         * @author: qushaobei
+         * @date: 2021/12/29 0029
+         */
+        @ApiOperation("更新景区热度")
+        @PostMapping("/addScenicSpotHeat")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name="longinTokenId", value="登录令牌,状态码202为登录失效", dataType="string", required = true),
+                @ApiImplicitParam(name="scenicSpotId",value="景区ID",dataType="string",required = true)})
+        public ReturnModel addScenicSpotHeat(String longinTokenId,String scenicSpotId) {
+            ReturnModel returnModel = new ReturnModel();
+            try {
+                SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
+                if (user == null) {
+                    returnModel.setData("");
+                    returnModel.setMsg("令牌失效，请重新登录！");
+                    returnModel.setState(Constant.LOGIN_FAILURE);
+                    return returnModel;
+                }
+                SysScenicSpot scenicSpot = sysScenicSpotService.queryScenicSpotData(Long.parseLong(scenicSpotId));
+                if (scenicSpot == null) {
+                    returnModel.setData("");
+                    returnModel.setMsg("为查询到此景区或景区ID有误！");
+                    returnModel.setState(Constant.LOGIN_FAILURE);
+                    return returnModel;
+                }
+                int update = sysScenicSpotService.updateScenicSpotHeat(scenicSpot);
+                if (update > 0) {
+                    returnModel.setData(scenicSpot);
+                    returnModel.setMsg("更新成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else {
+                    returnModel.setData("");
+                    returnModel.setMsg("更新失败！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }
+            } catch (Exception e) {
+                logger.info("addScenicSpotHeat", e);
+                returnModel.setData("");
+                returnModel.setMsg("增加景区热度！");
                 returnModel.setState(Constant.STATE_FAILURE);
                 return returnModel;
             }

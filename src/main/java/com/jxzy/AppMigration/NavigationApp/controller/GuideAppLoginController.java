@@ -7,6 +7,7 @@ import com.aliyuncs.dypnsapi.model.v20170525.GetMobileResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.profile.DefaultProfile;
+import com.github.pagehelper.util.StringUtil;
 import com.google.gson.Gson;
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
@@ -83,8 +84,9 @@ public class GuideAppLoginController extends PublicUtil {
             search.put("userClientGtId", userClientGtId);
             search.put("userPhone", userPhone);
             SysGuideAppUsers user = sysGuideAppUsersService.getPhoneSign(search);
+            System.out.println(user+"当前用户信息+++++++++++++++++++++++++++++一键登录");
             if (user != null) {
-                if (user.getUserPhone() != null && !"".equals(user.getUserPhone())) {
+                if (StringUtil.isEmpty(user.getUserPhone()) && userPhone.equals(user.getUserPhone())) {
                     returnModel.setData(user);
                     returnModel.setMsg("成功获取用户信息！");
                     returnModel.setState(Constant.STATE_SUCCESS);
@@ -100,6 +102,7 @@ public class GuideAppLoginController extends PublicUtil {
             }
             if (register > 0) {
                 SysGuideAppUsers users = sysGuideAppUsersService.getPhoneSign(search);
+                System.out.println(user+"当前用户信息————————————————————————————————————一键登录");
                 returnModel.setData(users);
                 returnModel.setMsg("一键登录成功！");
                 returnModel.setState(Constant.STATE_SUCCESS);
@@ -230,12 +233,14 @@ public class GuideAppLoginController extends PublicUtil {
                 returnModel.setState(Constant.STATE_FAILURE);
                 return returnModel;//加密返回
             }
+            System.out.println(phoneSign+"当前是手机唯一标识￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥");
             search.put("phoneSign", phoneSign);
             search.put("userClientGtId", userClientGtId);
             search.put("userPhone", userPhone);
             SysGuideAppUsers user = sysGuideAppUsersService.getPhoneSign(search);
+            System.out.println(user+"当前用户信息+++++++++++++++++++++++++++++");
             if (user != null) {
-                if (user.getUserPhone() != null && !"".equals(user.getUserPhone())) {
+                if (StringUtil.isEmpty(user.getUserPhone()) && userPhone.equals(user.getUserPhone())) {
                     returnModel.setData(user);
                     returnModel.setMsg("成功获取用户信息！");
                     returnModel.setState(Constant.STATE_SUCCESS);
@@ -251,6 +256,7 @@ public class GuideAppLoginController extends PublicUtil {
             }
             if (register > 0) {
                 SysGuideAppUsers users = sysGuideAppUsersService.getPhoneSign(search);
+                System.out.println(user+"当前用户信息————————————————————————————————————");
                 returnModel.setData(users);
                 returnModel.setMsg("一键登录成功！");
                 returnModel.setState(Constant.STATE_SUCCESS);

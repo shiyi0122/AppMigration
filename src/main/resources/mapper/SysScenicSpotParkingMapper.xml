@@ -36,7 +36,7 @@
     ,
     <include refid="Blob_Column_List" />
     from SYS_SCENIC_SPOT_PARKING
-    where PARKING_SCENIC_SPOT_ID = #{parkingScenicSpotId,jdbcType=BIGINT}
+    where PARKING_SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND PARKING_TYPE = 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >

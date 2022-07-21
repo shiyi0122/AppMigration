@@ -52,6 +52,8 @@
     <result column="FREE_TIME_SETTING" property="freeTimeSetting" jdbcType="VARCHAR" />
     <result column="GIFT_TIME_SETTING" property="giftTimeSetting" jdbcType="VARCHAR" />
     <result column="GIFT_USAGE_SETTING" property="giftUsageSetting" jdbcType="VARCHAR" />
+
+    <result column="HEAT" property="heat" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     SCENIC_SPOT_ID, SCENIC_SPOT_NAME, SCENIC_SPOT_CONTACT, SCENIC_SPOT_PHONE, SCENIC_SPOT_EMAIL, 
@@ -65,7 +67,7 @@
     TEST_START_TIME, TRIAL_OPERATIONS_TIME, FORMAL_OPERATION_TIME, STOP_OPERATION_TIME, 
     COMPANY_ID, PAUSE_STATE, WORK_TIME, CLOSING_TIME, PAUSE_BROADCAST, WORK_BROADCAST, 
     CLOSING_BROADCAST, LAMP_OPENING_TIME, LAMP_CLOSING_TIME, LAMP_LIGHTING_TIME, FREE_TIME_SETTING, 
-    GIFT_TIME_SETTING, GIFT_USAGE_SETTING
+    GIFT_TIME_SETTING, GIFT_USAGE_SETTING,HEAT
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -104,7 +106,7 @@
       WORK_TIME, CLOSING_TIME, PAUSE_BROADCAST, 
       WORK_BROADCAST, CLOSING_BROADCAST, LAMP_OPENING_TIME, 
       LAMP_CLOSING_TIME, LAMP_LIGHTING_TIME, FREE_TIME_SETTING, 
-      GIFT_TIME_SETTING, GIFT_USAGE_SETTING)
+      GIFT_TIME_SETTING, GIFT_USAGE_SETTING,HEAT)
     values (#{scenicSpotId,jdbcType=BIGINT}, #{scenicSpotName,jdbcType=VARCHAR}, #{scenicSpotContact,jdbcType=VARCHAR}, 
       #{scenicSpotPhone,jdbcType=VARCHAR}, #{scenicSpotEmail,jdbcType=VARCHAR}, #{scenicSpotAddres,jdbcType=VARCHAR}, 
       #{scenicSpotPostalCode,jdbcType=VARCHAR}, #{scenicSpotRobotTotal,jdbcType=VARCHAR}, 
@@ -124,7 +126,7 @@
       #{workTime,jdbcType=VARCHAR}, #{closingTime,jdbcType=VARCHAR}, #{pauseBroadcast,jdbcType=VARCHAR}, 
       #{workBroadcast,jdbcType=VARCHAR}, #{closingBroadcast,jdbcType=VARCHAR}, #{lampOpeningTime,jdbcType=VARCHAR}, 
       #{lampClosingTime,jdbcType=VARCHAR}, #{lampLightingTime,jdbcType=VARCHAR}, #{freeTimeSetting,jdbcType=VARCHAR}, 
-      #{giftTimeSetting,jdbcType=VARCHAR}, #{giftUsageSetting,jdbcType=VARCHAR})
+      #{giftTimeSetting,jdbcType=VARCHAR}, #{giftUsageSetting,jdbcType=VARCHAR}, #{heat,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot" >
     insert into SYS_SCENIC_SPOT
@@ -279,6 +281,9 @@
       <if test="giftUsageSetting != null" >
         GIFT_USAGE_SETTING,
       </if>
+      <if test="heat != null" >
+        HEAT,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="scenicSpotId != null" >
@@ -430,6 +435,9 @@
       </if>
       <if test="giftUsageSetting != null" >
         #{giftUsageSetting,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null" >
+        #{heat,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -583,6 +591,9 @@
       <if test="giftUsageSetting != null" >
         GIFT_USAGE_SETTING = #{giftUsageSetting,jdbcType=VARCHAR},
       </if>
+      <if test="heat != null" >
+        HEAT = #{heat,jdbcType=BIGINT},
+      </if>
     </set>
     where SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
   </update>
@@ -636,7 +647,8 @@
       LAMP_LIGHTING_TIME = #{lampLightingTime,jdbcType=VARCHAR},
       FREE_TIME_SETTING = #{freeTimeSetting,jdbcType=VARCHAR},
       GIFT_TIME_SETTING = #{giftTimeSetting,jdbcType=VARCHAR},
-      GIFT_USAGE_SETTING = #{giftUsageSetting,jdbcType=VARCHAR}
+      GIFT_USAGE_SETTING = #{giftUsageSetting,jdbcType=VARCHAR},
+      HEAT = #{heat,jdbcType=BIGINT}
     where SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
   </update>
 </mapper>

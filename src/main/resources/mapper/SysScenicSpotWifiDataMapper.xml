@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotWifiDataMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData" >
+    <id column="WIFI_ID" property="wifiId" jdbcType="BIGINT" />
+    <result column="MAC" property="mac" jdbcType="VARCHAR" />
+    <result column="RSSI" property="rssi" jdbcType="VARCHAR" />
+    <result column="RSSI_ONE" property="rssiOne" jdbcType="VARCHAR" />
+    <result column="RSSI_TWO" property="rssiTwo" jdbcType="VARCHAR" />
+    <result column="RSSI_THREE" property="rssiThree" jdbcType="VARCHAR" />
+    <result column="TMC" property="tmc" jdbcType="VARCHAR" />
+    <result column="ROUTER" property="router" jdbcType="VARCHAR" />
+    <result column="RANGES" property="ranges" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    WIFI_ID, MAC, RSSI, RSSI_ONE, RSSI_TWO, RSSI_THREE, TMC, ROUTER, RANGES, CREATE_DATE, 
+    UPDATE_DATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_SCENIC_SPOT_WIFI_DATA
+    where WIFI_ID = #{wifiId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_SCENIC_SPOT_WIFI_DATA
+    where WIFI_ID = #{wifiId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData" >
+    insert into SYS_SCENIC_SPOT_WIFI_DATA (WIFI_ID, MAC, RSSI, 
+      RSSI_ONE, RSSI_TWO, RSSI_THREE, 
+      TMC, ROUTER, RANGES, 
+      CREATE_DATE, UPDATE_DATE)
+    values (#{wifiId,jdbcType=BIGINT}, #{mac,jdbcType=VARCHAR}, #{rssi,jdbcType=VARCHAR}, 
+      #{rssiOne,jdbcType=VARCHAR}, #{rssiTwo,jdbcType=VARCHAR}, #{rssiThree,jdbcType=VARCHAR}, 
+      #{tmc,jdbcType=VARCHAR}, #{router,jdbcType=VARCHAR}, #{ranges,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData" >
+    insert into SYS_SCENIC_SPOT_WIFI_DATA
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="wifiId != null" >
+        WIFI_ID,
+      </if>
+      <if test="mac != null" >
+        MAC,
+      </if>
+      <if test="rssi != null" >
+        RSSI,
+      </if>
+      <if test="rssiOne != null" >
+        RSSI_ONE,
+      </if>
+      <if test="rssiTwo != null" >
+        RSSI_TWO,
+      </if>
+      <if test="rssiThree != null" >
+        RSSI_THREE,
+      </if>
+      <if test="tmc != null" >
+        TMC,
+      </if>
+      <if test="router != null" >
+        ROUTER,
+      </if>
+      <if test="ranges != null" >
+        RANGES,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="wifiId != null" >
+        #{wifiId,jdbcType=BIGINT},
+      </if>
+      <if test="mac != null" >
+        #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="rssi != null" >
+        #{rssi,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiOne != null" >
+        #{rssiOne,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiTwo != null" >
+        #{rssiTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiThree != null" >
+        #{rssiThree,jdbcType=VARCHAR},
+      </if>
+      <if test="tmc != null" >
+        #{tmc,jdbcType=VARCHAR},
+      </if>
+      <if test="router != null" >
+        #{router,jdbcType=VARCHAR},
+      </if>
+      <if test="ranges != null" >
+        #{ranges,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData" >
+    update SYS_SCENIC_SPOT_WIFI_DATA
+    <set >
+      <if test="mac != null" >
+        MAC = #{mac,jdbcType=VARCHAR},
+      </if>
+      <if test="rssi != null" >
+        RSSI = #{rssi,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiOne != null" >
+        RSSI_ONE = #{rssiOne,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiTwo != null" >
+        RSSI_TWO = #{rssiTwo,jdbcType=VARCHAR},
+      </if>
+      <if test="rssiThree != null" >
+        RSSI_THREE = #{rssiThree,jdbcType=VARCHAR},
+      </if>
+      <if test="tmc != null" >
+        TMC = #{tmc,jdbcType=VARCHAR},
+      </if>
+      <if test="router != null" >
+        ROUTER = #{router,jdbcType=VARCHAR},
+      </if>
+      <if test="ranges != null" >
+        RANGES = #{ranges,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where WIFI_ID = #{wifiId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData" >
+    update SYS_SCENIC_SPOT_WIFI_DATA
+    set MAC = #{mac,jdbcType=VARCHAR},
+      RSSI = #{rssi,jdbcType=VARCHAR},
+      RSSI_ONE = #{rssiOne,jdbcType=VARCHAR},
+      RSSI_TWO = #{rssiTwo,jdbcType=VARCHAR},
+      RSSI_THREE = #{rssiThree,jdbcType=VARCHAR},
+      TMC = #{tmc,jdbcType=VARCHAR},
+      ROUTER = #{router,jdbcType=VARCHAR},
+      RANGES = #{ranges,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+    where WIFI_ID = #{wifiId,jdbcType=BIGINT}
+  </update>
+</mapper>

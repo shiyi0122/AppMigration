@@ -30,7 +30,7 @@ public class SysScenicSpotBindingServiceImpl implements SysScenicSpotBindingServ
         PageHelper.startPage(pageNum,pageSize);
         List<SysScenicSpotBinding> binding = sysScenicSpotBindingMapper.queryCityAndScenicSpotLists(search);
         for (int i = 0;i<binding.size();i++){
-            binding.get(i).setCityPic(DOMAIN_NAME+binding.get(i).getCityPic());
+            binding.get(i).setCityPic("https://topsroboteer.ac.cn/"+binding.get(i).getCityPic());
         }
         return binding;
     }

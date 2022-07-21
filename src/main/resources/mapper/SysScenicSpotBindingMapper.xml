@@ -72,7 +72,7 @@
       <result column="LAMP_OPENING_TIME" property="lampOpeningTime" jdbcType="VARCHAR" />
       <result column="LAMP_CLOSING_TIME" property="lampClosingTime" jdbcType="VARCHAR" />
       <result column="LAMP_LIGHTING_TIME" property="lampLightingTime" jdbcType="VARCHAR" />
-      <result column="HEAT" property="heat" jdbcType="VARCHAR" />
+      <result column="HEAT" property="heat" jdbcType="BIGINT" />
 
       <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
       <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
@@ -136,7 +136,7 @@
         LEFT JOIN SYS_SCENIC_SPOT_IMG D ON A.SCENIC_SPOT_ID = D.SCENIC_SPOT_ID
     <where>
       B.SCENIC_SPOT_TYPE = 1
-      AND A.ROBOT_WAKEUP_WORDS = 1
+      AND A.ROBOT_WAKEUP_WORDS = 1 AND A.REPEAT_STATUS = 1
       <if test="scenicSpotFname != null and scenicSpotFname != ''">
         AND B.SCENIC_SPOT_FNAME LIKE CONCAT('%',#{scenicSpotFname,jdbcType=VARCHAR},'%')
       </if>
