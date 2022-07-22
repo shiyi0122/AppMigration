@@ -1,8 +1,10 @@
 package com.jxzy.AppMigration.NavigationApp.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class SysGuideAppUsers {
     private Long userId;
 
@@ -17,4 +19,20 @@ public class SysGuideAppUsers {
     private String createDate;
 
     private String updateDate;
+
+
+    //新添加字段
+
+    private String userName;
+
+    private String qq;
+
+    private String weChatId;
+
+    private String appleId;
+
+
+
+
+
 }
