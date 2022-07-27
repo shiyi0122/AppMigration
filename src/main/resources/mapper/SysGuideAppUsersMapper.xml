@@ -129,4 +129,13 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where USER_ID = #{userId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="getUid" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    select * from SYS_GUIDE_APP_USERS where USER_ID = #{uid}
+  </select>
+
+  <select id="selectPhoneByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    select * from SYS_GUIDE_APP_USERS where USER_PHONE = #{phone}
+  </select>
 </mapper>

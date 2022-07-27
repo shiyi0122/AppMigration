@@ -34,4 +34,8 @@ public interface SysGuideAppUsersMapper {
      * @date: 2021/11/5 0005
      */
     SysGuideAppUsers getPhoneSign(Map<String, Object> search);
+
+    SysGuideAppUsers getUid(Long uid);
+
+    SysGuideAppUsers selectPhoneByUser(String phone);
 }

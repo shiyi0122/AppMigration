@@ -1,7 +1,8 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
+
+
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
-import sun.java2d.pipe.AAShapePipe;
 
 import java.util.Map;
 
@@ -51,4 +52,18 @@ public interface SysGuideAppUsersService {
      * @date: 2021/11/11 0011
      */
     int updateRegister(SysGuideAppUsers user, Map<String, Object> search);
+    /**
+     * 判断token的有效性
+     *
+     */
+    boolean getContrastToken(String token);
+
+
+    int updateAppUsers(SysGuideAppUsers user);
+
+
+    SysGuideAppUsers insertAppUser(Map<String, Object> search);
+
+    SysGuideAppUsers bindPhone(String phone, String openId, Integer flag);
+
 }

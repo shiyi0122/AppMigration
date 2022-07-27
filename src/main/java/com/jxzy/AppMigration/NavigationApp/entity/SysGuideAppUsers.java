@@ -19,4 +19,20 @@ public class SysGuideAppUsers {
     private String createDate;
 
     private String updateDate;
+
+
+    //新添加字段
+
+    private String userName;
+
+    private String qq;
+
+    private String weChatId;
+
+    private String appleId;
+
+
+
+
+
 }
