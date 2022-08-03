@@ -12,7 +12,10 @@ import com.github.pagehelper.util.StringUtil;
 import com.google.gson.Gson;
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
+import com.jxzy.AppMigration.NavigationApp.entity.base.ThirdPartyLoginDTO;
+import com.jxzy.AppMigration.NavigationApp.exception.InformationErrorException;
 import com.jxzy.AppMigration.NavigationApp.util.*;
+import com.jxzy.AppMigration.common.utils.AppleIdValidationComponent;
 import com.jxzy.AppMigration.common.utils.AuroraOneClickLogin;
 import com.jxzy.AppMigration.common.utils.CacheManagers;
 import io.swagger.annotations.Api;
@@ -23,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +38,9 @@ import java.util.Map;
 public class GuideAppLoginController extends PublicUtil {
     @Autowired
     private SysGuideAppUsersService sysGuideAppUsersService;
+
+    @Autowired
+    private AppleIdValidationComponent appleIdValidationComponent;
 
     @ApiOperation("号码认证服务(暂停)")
     @GetMapping("authentication")
@@ -301,12 +308,63 @@ public class GuideAppLoginController extends PublicUtil {
 
         SysGuideAppUsers sysGuideAppUsers = sysGuideAppUsersService.bindPhone(phone,openId,flag);
 
-
         returnModel.setData(sysGuideAppUsers);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("绑定成功！");
         return returnModel;
     }
 
+    /**
+     * 第三方登录
+     * @param loginDTO
+     * @return
+     */
+    @PostMapping("thirdSignIn")
+    public ReturnModel thirdSignIn(@RequestBody @Valid ThirdPartyLoginDTO loginDTO) {
+
+        ReturnModel returnModel = new ReturnModel();
+        if (StringUtils.isEmpty(loginDTO.getQq()) || StringUtils.isEmpty(loginDTO.getWechatId())){
+            throw new InformationErrorException("请求数据有误");
+        }
+
+        SysGuideAppUsers sysGuideAppUsers =  sysGuideAppUsersService.thirdLogin(loginDTO);
+
+        returnModel.setData(sysGuideAppUsers);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("登录成功！");
+        return returnModel;
+    }
+
+
+    /**
+     * 苹果登录
+     */
+    @PostMapping("appleSignIn")
+    public ReturnModel appleSignIn(@RequestBody @Valid ThirdPartyLoginDTO loginDTO) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        if (!StringUtils.isEmpty(loginDTO.getAppleId()) && StringUtils.isEmpty(loginDTO.getAppleToken())) {
+            throw new InformationErrorException("token or apple id is empty");
+        }
+
+        boolean valid = appleIdValidationComponent.isValid(loginDTO.getAppleToken());
+
+        if (!StringUtils.isEmpty(loginDTO.getAppleToken()) && !valid) {
+            throw new InformationErrorException("token error");
+        }
+
+        SysGuideAppUsers sysGuideAppUsers = loginDTO.convertToUser();
+        if (sysGuideAppUsers.getAppleId() == null && sysGuideAppUsers.getAppleId().length() == 0) {
+            throw new InformationErrorException("请求错误");
+        }
+        SysGuideAppUsers user =  sysGuideAppUsersService.appleSignIn(sysGuideAppUsers);
+
+
+        returnModel.setData(user);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("登录成功!");
+        return returnModel;
+    }
 
 }

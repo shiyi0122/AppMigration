@@ -639,4 +639,30 @@
       GIFT_USAGE_SETTING = #{giftUsageSetting,jdbcType=VARCHAR}
     where SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+    select sss.*
+    from SYS_SCENIC_SPOT_BINDING sssb
+    left join SYS_SCENIC_SPOT sss
+    on sssb.SCENIC_SPOT_FID = sss.SCENIC_SPOT_ID
+    where sssb.SCENIC_SPOT_PID = #{cityId}
+    and sss.SCENIC_SPOT_NAME like CONCAT('%',#{spotName},'%')
+    <if test="sort == 1">
+      order by START_LEVEL DESC
+    </if>
+    <if test="sort == 2">
+      order by HEAT DESC
+    </if>
+  </select>
+
+  <select id="spotDetails" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+    select sss.*,sssb.url
+    from SYS_SCENIC_SPOT sss
+    left join sys_scenic_spot_banner sssb
+    on sss.SCENIC_SPOT_ID = sssb.spot_id
+    where sss.SCENIC_SPOT_ID = #{spotId}
+  </select>
+
+
 </mapper>

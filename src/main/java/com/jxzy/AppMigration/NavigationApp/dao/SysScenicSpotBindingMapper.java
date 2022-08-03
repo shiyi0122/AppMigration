@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding;
 
 import java.util.List;
@@ -26,4 +27,12 @@ public interface SysScenicSpotBindingMapper {
      * @date: 2021/11/1 0001
      */
     List<SysScenicSpotBinding> queryCityAndScenicSpotLists(Map<String, Object> search);
+
+
+    SysScenicSpotBinding selectSpotByFname(String cityName);
+
+
+    List<SysScenicSpot> selectBySearch(Map<String, Object> search);
+
+
 }

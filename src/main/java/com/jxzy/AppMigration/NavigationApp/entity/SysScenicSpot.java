@@ -111,4 +111,19 @@ public class SysScenicSpot {
     private String broadcastGps;
 
     private String heat;
+
+
+
+    //景区介绍
+    private String  introduction;
+    //距离
+    private Double distance ;
+    //景点数量
+    private Integer scenicSpotBroadcastCount;
+    //景区轮播图
+    private String url;
+
+
+
+
 }

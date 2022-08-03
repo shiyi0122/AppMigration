@@ -221,4 +221,28 @@
       SCENIC_SPOT_TYPE = #{scenicSpotType,jdbcType=INTEGER}
     where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectSpotByFname" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_FNAME like CONCAT('%',#{cityName},'%') and SCENIC_SPOT_TYPE = 1
+  </select>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+    select sss.* from SYS_SCENIC_SPOT_BINDING sssb
+    left join SYS_SCENIC_SPOT sss on sssb.SCENIC_SPOT_FID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="scenicSpotPid != null and scenicSpotPid != ''">
+        and  sssb.SCENIC_SPOT_PID = #{scenicSpotPid}
+      </if>
+       and sss.ROBOT_WAKEUP_WORDS in (1,3)
+    </where>
+    <if test="sort == 1">
+      order by START_LEVEL DESC
+    </if>
+    <if test="sort == 2">
+      order by HEAT DESC
+    </if>
+
+  </select>
+
 </mapper>

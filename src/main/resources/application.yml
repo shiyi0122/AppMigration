@@ -36,7 +36,7 @@ pagehelper:
   support-methods-arguments: true
 ## 端口号设置
 server:
-  port: 8081
+  port: 8082
   max-http-header-size: 1024000
   #日志机别
   logging:
@@ -50,6 +50,11 @@ TENCENT_APPID: 1400295952
 TENCENT_KEY: f4eeb442e910c057d2579c90fa0a3f4d
 TENCENT_TEMPLATE: 500066
 TENCENT_MINUTE: 5
+
+
+#首页轮播图上传路径
+bannerPatheGetPicUrl: static/banner_pic/
+bannerPatheGetPicPaht: /pro/static/banner_pic/
 
 #支付相关
 #微信支付

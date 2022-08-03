@@ -3,6 +3,7 @@ package com.jxzy.AppMigration.NavigationApp.Service;
 
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
+import com.jxzy.AppMigration.NavigationApp.entity.base.ThirdPartyLoginDTO;
 
 import java.util.Map;
 
@@ -65,5 +66,9 @@ public interface SysGuideAppUsersService {
     SysGuideAppUsers insertAppUser(Map<String, Object> search);
 
     SysGuideAppUsers bindPhone(String phone, String openId, Integer flag);
+
+    SysGuideAppUsers thirdLogin(ThirdPartyLoginDTO loginDTO);
+
+    SysGuideAppUsers appleSignIn(SysGuideAppUsers sysGuideAppUsers);
 
 }

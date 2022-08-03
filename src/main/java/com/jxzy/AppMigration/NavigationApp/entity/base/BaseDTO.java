@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * DTO基类
  *
- * @author Dong.w
+ * @author
  */
 @Data
 public class BaseDTO implements Serializable {

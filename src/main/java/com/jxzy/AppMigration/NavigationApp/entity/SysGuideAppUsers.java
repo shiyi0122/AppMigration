@@ -25,7 +25,7 @@ public class SysGuideAppUsers {
 
     private String userName;
 
-    private String qq;
+    private String qqId;
 
     private String weChatId;
 

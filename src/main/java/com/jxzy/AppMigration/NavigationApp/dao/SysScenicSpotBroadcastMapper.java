@@ -35,4 +35,7 @@ public interface SysScenicSpotBroadcastMapper {
      * @date: 2021/11/4 0004
      */
     List<SysScenicSpotBroadcast> queryScenicSpotStop(Map<String, Object> search);
+
+    Integer selectSpotByCount(Long scenicSpotId);
+
 }

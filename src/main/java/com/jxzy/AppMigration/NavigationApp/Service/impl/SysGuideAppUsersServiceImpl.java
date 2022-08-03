@@ -1,12 +1,17 @@
 package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersService;
 import com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersMapper;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
+import com.jxzy.AppMigration.NavigationApp.entity.base.ThirdPartyLoginDTO;
 import com.jxzy.AppMigration.NavigationApp.exception.ExistedException;
 import com.jxzy.AppMigration.NavigationApp.exception.ForBiddenException;
 import com.jxzy.AppMigration.NavigationApp.exception.InformationErrorException;
+import com.jxzy.AppMigration.NavigationApp.exception.UniversalException;
+import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.JWTUtils;
 import com.jxzy.AppMigration.common.utils.DateUtil;
 import com.jxzy.AppMigration.common.utils.IdUtils;
@@ -17,12 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 @Transactional
-public class
-SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
+public class SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
     @Autowired
     private SysGuideAppUsersMapper sysGuideAppUsersMapper;
 
@@ -165,7 +171,7 @@ SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
         if (!org.springframework.util.StringUtils.isEmpty(sysGuideAppUsers)){
             String threadId = null;
             if (flag == 1){
-                threadId = sysGuideAppUsers.getQq();
+                threadId = sysGuideAppUsers.getQqId();
             }else if (flag == 2){
                 threadId = sysGuideAppUsers.getWeChatId();
             }else if (flag == 3){
@@ -177,7 +183,7 @@ SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
 
                 sysGuideAppUsers.setUpdateDate(DateUtil.currentDateTime());
                 if (flag == 1){
-                    sysGuideAppUsers.setQq(openId);
+                    sysGuideAppUsers.setQqId(openId);
                 }else if (flag ==2){
                     sysGuideAppUsers.setWeChatId(openId);
                 }else if (flag == 3){
@@ -196,7 +202,7 @@ SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
             SysGuideAppUsers sysGuideAppUsersNew = new SysGuideAppUsers();
             sysGuideAppUsersNew.setUserId(IdUtils.getSeqId());
             if (flag == 1){
-                sysGuideAppUsersNew.setQq(openId);
+                sysGuideAppUsersNew.setQqId(openId);
             }else if (flag ==2){
                 sysGuideAppUsersNew.setWeChatId(openId);
             }else if (flag == 3){
@@ -213,5 +219,88 @@ SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
             }
             return sysGuideAppUsersNew;
         }
+    }
+
+    /**
+     * 第三方登录
+     * @param loginDTO
+     * @return
+     */
+    @Override
+    public SysGuideAppUsers thirdLogin(ThirdPartyLoginDTO loginDTO) {
+
+        Map<String, Object> search = new HashMap<>();
+        SysGuideAppUsers sysGuideAppUsers = new SysGuideAppUsers();
+        if (!StringUtils.isEmpty(loginDTO.getQq())){
+            search.put("qq",loginDTO.getQq());
+        }
+        if (!StringUtils.isEmpty(loginDTO.getWechatId())){
+            search.put("weChatId",loginDTO.getWechatId());
+        }
+
+        List<SysGuideAppUsers> list = sysGuideAppUsersMapper.selectBySearch(search);
+
+        if (CollectionUtil.isEmpty(list)){
+            throw new UniversalException(Constant.LOGIN_FAILURE, "未绑定手机号");
+        }else if (CollectionUtil.isNotEmpty(list)){
+
+             sysGuideAppUsers = list.get(0);
+            sysGuideAppUsers.setUpdateDate(DateUtil.currentDateTime());
+            sysGuideAppUsers.setLonginTokenId(JWTUtils.sign(sysGuideAppUsers.getUserName(),sysGuideAppUsers.getUserId(),new Date().toString()));
+
+            int i = sysGuideAppUsersMapper.updateByPrimaryKeySelective(sysGuideAppUsers);
+
+            if (i!=0){
+                return sysGuideAppUsers;
+            }
+
+        }
+        return sysGuideAppUsers;
+    }
+
+    /**
+     * apple登录
+     * @param sysGuideAppUsers
+     * @return
+     */
+    @Override
+    public SysGuideAppUsers appleSignIn(SysGuideAppUsers sysGuideAppUsers) {
+
+        Map<String, Object> search = new HashMap<>();
+        String appleId = sysGuideAppUsers.getAppleId();
+
+        search.put("appleId",appleId);
+
+        List<SysGuideAppUsers> sysGuideAppUsersList = sysGuideAppUsersMapper.selectBySearch(search);
+
+        if (StringUtils.isEmpty(sysGuideAppUsersList)){
+
+            SysGuideAppUsers sysGuideAppUsersNew = new SysGuideAppUsers();
+            Long seqId = IdUtils.getSeqId();
+            sysGuideAppUsersNew.setUserId(seqId);
+            String tokenSign = JWTUtils.sign(appleId, sysGuideAppUsersNew.getUserId(), new Date().toString());
+            sysGuideAppUsersNew.setLonginTokenId(tokenSign);
+            sysGuideAppUsersNew.setCreateDate(DateUtil.currentDateTime());
+            sysGuideAppUsersNew.setUpdateDate(DateUtil.currentDateTime());
+            sysGuideAppUsersNew.setUserName(RandomUtil.randomNumbers(4));
+
+            int i = sysGuideAppUsersMapper.insertSelective(sysGuideAppUsersNew);
+            search = new HashMap<>();
+
+            search.put("userId",seqId);
+            List<SysGuideAppUsers> sysGuideAppUsersNewT = sysGuideAppUsersMapper.selectBySearch(search);
+            return sysGuideAppUsersNewT.get(0);
+        }
+
+        SysGuideAppUsers sysGuideAppUsersNew = sysGuideAppUsersList.get(0);
+        sysGuideAppUsersNew.setUpdateDate(DateUtil.currentDateTime());
+        String sign = JWTUtils.sign(sysGuideAppUsersNew.getUserName(), sysGuideAppUsersNew.getUserId(), new Date().toString());
+        sysGuideAppUsersNew.setLonginTokenId(sign);
+
+        int i = sysGuideAppUsersMapper.updateByPrimaryKeySelective(sysGuideAppUsersNew);
+
+        return sysGuideAppUsersNew;
+
+
     }
 }

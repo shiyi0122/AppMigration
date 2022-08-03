@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,4 +37,10 @@ public interface SysGuideAppNewsMapper {
      * @date: 2021/11/3 0003
      */
     int updateByBatchSelective(SysGuideAppNews record);
+
+    List<SysGuideAppNews> selectBySearch(HashMap<String, Object> search);
+
+
+    List<String> selectIdBySearch(HashMap<String, Object> search);
+
 }

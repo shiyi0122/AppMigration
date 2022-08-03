@@ -228,4 +228,9 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectSpotByCount" resultType="java.lang.Integer">
+    select COUNT(*) from SYS_SCENIC_SPOT_BROADCAST where SCENIC_SPOT_ID = #{scenicSpotId}
+  </select>
+
 </mapper>

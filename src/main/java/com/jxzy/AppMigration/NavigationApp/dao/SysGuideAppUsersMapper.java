@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysGuideAppUsersMapper {
@@ -38,4 +39,6 @@ public interface SysGuideAppUsersMapper {
     SysGuideAppUsers getUid(Long uid);
 
     SysGuideAppUsers selectPhoneByUser(String phone);
+
+    List<SysGuideAppUsers> selectBySearch(Map<String, Object> search);
 }

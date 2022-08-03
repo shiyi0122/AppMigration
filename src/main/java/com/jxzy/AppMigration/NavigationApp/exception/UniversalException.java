@@ -8,14 +8,14 @@ import com.jxzy.AppMigration.NavigationApp.util.Constant;
  */
 public class UniversalException extends RuntimeException {
 
-    private Constant type;
+    private String type;
 
-    public UniversalException(Constant type, String message) {
+    public UniversalException(String type, String message) {
         super(message);
         this.type = type;
     }
 
-    public Constant getType() {
+    public String getType() {
         return type;
     }
 }

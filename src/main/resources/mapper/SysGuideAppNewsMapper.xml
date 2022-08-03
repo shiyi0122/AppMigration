@@ -157,4 +157,24 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where GUIDE_ID = #{guideId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews">
+    select * from SYS_GUIDE_APP_NEWS
+    <where>
+      <if test="userId != null and userId != ''">
+        and  USER_ID = #{userId}
+      </if>
+    </where>
+    order by CREATE_DATE DESC
+  </select>
+
+  <select id="selectIdBySearch" resultType="java.lang.String">
+    select GUIDE_ID  from SYS_GUIDE_APP_NEWS
+    <where>
+      <if test="userId != null and userId != ''">
+        and  GUIDE_USER_ID = #{userId}
+      </if>
+    </where>
+    order by CREATE_DATE DESC
+  </select>
 </mapper>

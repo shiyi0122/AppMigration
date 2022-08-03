@@ -138,4 +138,19 @@
   <select id="selectPhoneByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
     select * from SYS_GUIDE_APP_USERS where USER_PHONE = #{phone}
   </select>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" parameterType="java.util.Map">
+    select * from SYS_GUIDE_APP_USERS
+    <where>
+      <if test="qq != null and qq != ''">
+         and  QQ_ID = #{qq}
+      </if>
+      <if test="weChatId != null and weChatId != ''">
+         and  WE_CHAT_ID = {weChatId}
+      </if>
+      <if test="appleId != null and appleId != ''">
+         and  APPLE_ID = {appleId}
+      </if>
+    </where>
+  </select>
 </mapper>
