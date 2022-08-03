@@ -29,8 +29,14 @@ public class SysRobotMapResServiceImpl implements SysRobotMapResService {
      */
     public List<SysRobotMapRes> queryMapRes(Map<String, Object> search) {
         List<SysRobotMapRes> res = sysRobotMapResMapper.queryMapRes(search);
+
         for (int i = 0; i < res.size(); i++) {
-            res.get(i).setResUrl(DOMAIN_NAME + res.get(i).getResUrl());
+            Long resScenicSpotId = res.get(i).getResScenicSpotId();
+            if ("21011241290975".equals(resScenicSpotId.toString())) {
+                res.get(i).setResUrl(DOMAIN_NAME + "static/upload_map/1635405342994--.zip");
+            }else {
+                res.get(i).setResUrl(DOMAIN_NAME + res.get(i).getResUrl());
+            }
         }
         return res;
     }

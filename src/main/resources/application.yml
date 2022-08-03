@@ -7,20 +7,21 @@ spring:
     password: Jxzytangliu001
   transaction:
     rollback-on-commit-failure: true
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 100MB
-      max-request-size: 200MB
-  resources:
-    static-locations: classpath:static
-  mvc:
-    view:
-      suffix: .html
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    content-type: text/html
+    encoding: utf-8
+    cache: false
+    mode: LEGACYHTML5
+
+
+
   #redis
   redis:
     host: r-2zeau438goyxpelfa3pd.redis.rds.aliyuncs.com
     port: 6379
+    database: 1
     password: Jxzy001!
 ## mybatis 配置
 mybatis:
