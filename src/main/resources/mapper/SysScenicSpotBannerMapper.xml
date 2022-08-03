@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBannerMapper" >
+
+    <select id="getScenicSpotBanner" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBanner">
+        select *
+        from sys_scenic_spot_banner
+        <where>
+            <if test="spotId != null and spotId != ''">
+                spot_id = #{spotId}
+            </if>
+        </where>
+        <if test="sort == 1">
+            order by sort ASC
+        </if>
+        <if test="sort == 2">
+            order by sort DESC
+        </if>
+
+    </select>
+
+    <insert id="addScenicSpotBanner" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBanner">
+
+        insert into sys_scenic_spot_banner
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="content != null and content != ''">
+                content,
+            </if>
+            <if test="url != null and url != ''">
+                url,
+            </if>
+            <if test="spotId != null and spotId != ''">
+                spot_id,
+            </if>
+            <if test="sort != null and sort !=''">
+                sort,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="createTime != null and createTime !=''">
+                create_time,
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType = BIGINT},
+            </if>
+            <if test="content !=null">
+                #{content,jdbcType = VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType = VARCHAR},
+            </if>
+            <if test="spotId != null ">
+                #{spotId,jdbcType = BIGINT},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType = INTEGER},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType = INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType = VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType = VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="editScenicSpotBanner">
+        update sys_scenic_spot_banner
+        <set>
+            <if test="content != null and content != ''">
+                content = #{content, jdbcType = VARCHAR},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url,jdbcType = VARCHAR},
+            </if>
+            <if test="spotId != null and spotId != ''">
+                spot_id = #{spotId,jdbcType = BIGINT},
+            </if>
+            <if test="sort != null and sort != ''">
+                sort = #{sort,jdbcType = INTEGER},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type,jdbcType = INTEGER},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime,jdbcType = VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime,jdbcType = VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType = BIGINT}
+    </update>
+
+
+
+</mapper>

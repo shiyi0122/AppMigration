@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppNewsReadMapper" >
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNewsRead">
+        insert into sys_guide_app_news_read
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="guideUserId != null" >
+                GUIDE_USER_ID,
+            </if>
+            <if test="guideId != null" >
+                GUIDE_ID,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="guideUserId != null" >
+                #{guideUserId,jdbcType=BIGINT},
+            </if>
+            <if test="guideId != null" >
+                #{guideId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNewsRead">
+        select * from sys_guide_app_news_read
+        <where>
+            <if test="userId != null and userId != ''">
+                and  GUIDE_USER_ID = #{userId}
+            </if>
+        </where>
+
+        order by CREATE_TIME DESC
+    </select>
+
+    <select id="selectIdBySearch" resultType="java.lang.String">
+        select GUIDE_ID as id from sys_guide_app_news_read
+        <where>
+            <if test="userId != null and userId != ''">
+                and  GUIDE_USER_ID = #{userId}
+            </if>
+        </where>
+        order by CREATE_TIME DESC
+    </select>
+
+
+
+</mapper>
