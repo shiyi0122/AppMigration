@@ -8,6 +8,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
 import com.jxzy.AppMigration.NavigationApp.util.*;
 import com.jxzy.AppMigration.common.utils.DateUtil;
+import com.jxzy.AppMigration.common.utils.IdUtils;
 import io.swagger.annotations.*;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,14 @@ public class ScenicSpotController extends PublicUtil {
     private SysCurrentUserExchangeService sysCurrentUserExchangeService;
     @Autowired
     private SysScenicSpotParkingService sysScenicSpotParkingService;
+    @Autowired
+    private  SysScenicSpotHeatService sysScenicSpotHeatService;
+    @Autowired
+    private SysScenicDistrictRankingService sysScenicDistrictRankingService;
+    @Autowired
+    private SysUserDistrictFabulousCollectionService sysUserDistrictFabulousCollectionService;
+    @Autowired
+    private SysUserScenicFabulousCollectionService sysUserScenicFabulousCollectionService;
 
     /**
      * 根据城市和景区名查询列表以及热度
@@ -892,6 +901,77 @@ public class ScenicSpotController extends PublicUtil {
             return returnModel;
         }
     }
+
+
+    /**
+     * 张
+     * 根据坐标获取当前所在城市(首页全部景区)
+     */
+    @ApiOperation("根据坐标获取当前所在城市(百度坐标)，获取下面的全部景区")
+    @GetMapping("/currentCity")
+    public PageDataResult currentCity(PageDTO pageDTO){
+
+        PageDataResult pageDataResult = new PageDataResult();
+        String lng = pageDTO.getLng();
+        String lat = pageDTO.getLat();
+        Integer sort = pageDTO.getSort();
+        Integer pageNum = pageDTO.getPageNum();
+        Integer pageSize = pageDTO.getPageSize();
+        String cityName = HttpClientUtils.findByLatAndLng(lng,lat);
+        if (!StringUtils.isEmpty(cityName)){
+
+            pageDataResult =  sysScenicSpotService.currentCity(lng,lat,cityName,sort,pageNum,pageSize);
+            return pageDataResult;
+        }else{
+
+            pageDataResult.setCode(400);
+            return pageDataResult;
+        }
+    }
+    /**
+     * zhang
+     * 景区搜索
+     */
+
+    @ApiOperation("景区搜索")
+    @GetMapping("searchSpot")
+    public PageDataResult searchSpot(PageDTO pageDTO){
+        PageDataResult pageDataResult = new PageDataResult();
+        pageDataResult = sysScenicSpotService.searchSpot(pageDTO);
+
+        return pageDataResult;
+    }
+
+
+    /**
+     * zhang
+     * 获取景区详情
+     */
+
+    @ApiOperation("获取景区详情")
+    @GetMapping("spotDetails")
+    public ReturnModel spotDetails(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+            returnModel.setData(0);
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景区id为空，无法获取详情!");
+        }
+        if (StringUtils.isEmpty(searchDTO.getLat()) || StringUtils.isEmpty(searchDTO.getLat())){
+            returnModel.setData(0);
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("当前坐标数据为空，无法获取数据!");
+        }
+        SysScenicSpot sysScenicSpot = sysScenicSpotService.spotDetails(searchDTO.getSpotId(),searchDTO.getLat(),searchDTO.getLng());
+
+        returnModel.setData(sysScenicSpot);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取景区详情成功!");
+        return returnModel;
+    }
+
 
 
 
