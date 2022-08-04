@@ -110,7 +110,7 @@ public class SysScenicSpot {
 
     private String broadcastGps;
 
-    private String heat;
+    private long heat;
 
 
 

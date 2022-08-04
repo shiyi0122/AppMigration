@@ -29,6 +29,14 @@
     from SYS_SCENIC_SPOT_GPS_COORDINATE
     where COORDINATE_ID = #{coordinateId,jdbcType=BIGINT}
   </select>
+  <!--查询景区所有电子围栏-->
+  <select id="queryLocationScenicSpot" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_SCENIC_SPOT_GPS_COORDINATE
+  </select>
   <!--景区电子围栏-->
   <select id="queryScenicSpotElectronicFence" resultMap="ResultMapWithBLOBs" parameterType="java.util.HashMap" >
     select

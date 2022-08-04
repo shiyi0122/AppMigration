@@ -22,7 +22,6 @@ public interface SysScenicSpotMapper {
 
     List<SysScenicSpot> selectBySearch(HashMap<String, Object> search);
 
-
     SysScenicSpot spotDetails(String spotId);
 
 }
