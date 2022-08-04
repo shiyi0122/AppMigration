@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * 自定义return
  * 曲绍备
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "自定义return")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReturnModel {
+public class ReturnModel implements Serializable {
 
     @ApiModelProperty(value = "数据主体" , required = true)
     private Object data;

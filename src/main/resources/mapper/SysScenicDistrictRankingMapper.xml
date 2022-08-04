@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicDistrictRankingMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="scenic_district_id" property="scenicDistrictId" jdbcType="BIGINT" />
+    <result column="same_day" property="sameDay" jdbcType="INTEGER" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, scenic_district_id, same_day, total, type, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_scenic_district_ranking
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <!--查询景点排行数据-->
+  <select id="bestRanking" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select
+    <include refid="Base_Column_List" />
+    from sys_scenic_district_ranking
+    where scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT} and type = #{type,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_scenic_district_ranking
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
+    insert into sys_scenic_district_ranking (id, scenic_district_id, same_day, 
+      total, type, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{scenicDistrictId,jdbcType=BIGINT}, #{sameDay,jdbcType=INTEGER}, 
+      #{total,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
+    insert into sys_scenic_district_ranking
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="scenicDistrictId != null" >
+        scenic_district_id,
+      </if>
+      <if test="sameDay != null" >
+        same_day,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="scenicDistrictId != null" >
+        #{scenicDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="sameDay != null" >
+        #{sameDay,jdbcType=INTEGER},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
+    update sys_scenic_district_ranking
+    <set >
+      <if test="scenicDistrictId != null" >
+        scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT},
+      </if>
+      <if test="sameDay != null" >
+        same_day = #{sameDay,jdbcType=INTEGER},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
+    update sys_scenic_district_ranking
+    set scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT},
+      same_day = #{sameDay,jdbcType=INTEGER},
+      total = #{total,jdbcType=INTEGER},
+      type = #{type,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

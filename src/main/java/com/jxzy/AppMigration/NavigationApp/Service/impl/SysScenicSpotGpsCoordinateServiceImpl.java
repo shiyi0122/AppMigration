@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,5 +25,17 @@ public class SysScenicSpotGpsCoordinateServiceImpl implements SysScenicSpotGpsCo
      */
     public SysScenicSpotGpsCoordinateWithBLOBs queryScenicSpotElectronicFence(Map<String, Object> search) {
         return sysScenicSpotGpsCoordinateMapper.queryScenicSpotElectronicFence(search);
+    }
+
+    /**
+     * 查询景区所有电子围栏
+     * @param:
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinateWithBLOBs>
+     * @author: qushaobei
+     * @date: 2022/8/3 0003
+     */
+    public List<SysScenicSpotGpsCoordinateWithBLOBs> queryLocationScenicSpot() {
+        return sysScenicSpotGpsCoordinateMapper.queryLocationScenicSpot();
     }
 }

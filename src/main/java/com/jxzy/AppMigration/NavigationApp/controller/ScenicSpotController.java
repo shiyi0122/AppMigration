@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-@Api(tags = "导览APP景区资源相关")
+
+@Api(tags = "游小伴景区资源相关")
 @RestController
 @RequestMapping("scenicSpot")
 public class ScenicSpotController extends PublicUtil {
@@ -51,7 +51,7 @@ public class ScenicSpotController extends PublicUtil {
     private SysScenicSpotParkingService sysScenicSpotParkingService;
 
     /**
-     * 根据城市和景区名查询列表
+     * 根据城市和景区名查询列表以及热度
      * @param: longinTokenId 登录令牌
      * @param: scenicSpotName景区名称
      * @param: city          省
@@ -63,7 +63,7 @@ public class ScenicSpotController extends PublicUtil {
      * @author: qushaobei
      * @date: 2021/11/4 0004
      */
-        @ApiOperation("根据省市和景区名查询列表")
+        @ApiOperation("根据省市和景区名查询列表以及热度")
         @GetMapping("/queryCityAndScenicSpotLists")
         public ReturnModel queryCityAndScenicSpotLists(@ApiParam(name="longinTokenId",value="登录令牌,状态码202为登录失效",required=true)String longinTokenId,
                                                 @ApiParam(name="scenicSpotName",value="景区名称",required=false)String scenicSpotName,
@@ -96,6 +96,58 @@ public class ScenicSpotController extends PublicUtil {
                 logger.info("queryScenicSpotLists",e);
                 returnModel.setData("");
                 returnModel.setMsg("获取景区列表失败！");
+                returnModel.setState(Constant.STATE_FAILURE);
+                return returnModel;
+            }
+        }
+
+        /**
+         * 更新景区热度
+         * @param: longinTokenId
+         * @param: scenicSpotId
+         * @description: TODO
+         * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+         * @author: qushaobei
+         * @date: 2021/12/29 0029
+         */
+        @ApiOperation("更新景区热度")
+        @PostMapping("/addScenicSpotHeat")
+        @ApiImplicitParams({
+                @ApiImplicitParam(name="longinTokenId", value="登录令牌,状态码202为登录失效", dataType="string", required = true),
+                @ApiImplicitParam(name="scenicSpotId",value="景区ID",dataType="string",required = true)})
+        public ReturnModel addScenicSpotHeat(String longinTokenId,String scenicSpotId) {
+            ReturnModel returnModel = new ReturnModel();
+            try {
+                SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
+                if (user == null) {
+                    returnModel.setData("");
+                    returnModel.setMsg("令牌失效，请重新登录！");
+                    returnModel.setState(Constant.LOGIN_FAILURE);
+                    return returnModel;
+                }
+                SysScenicSpot scenicSpot = sysScenicSpotService.queryScenicSpotData(Long.parseLong(scenicSpotId));
+                if (scenicSpot == null) {
+                    returnModel.setData("");
+                    returnModel.setMsg("为查询到此景区或景区ID有误！");
+                    returnModel.setState(Constant.LOGIN_FAILURE);
+                    return returnModel;
+                }
+                int update = sysScenicSpotService.updateScenicSpotHeat(scenicSpot);
+                if (update > 0) {
+                    returnModel.setData(scenicSpot);
+                    returnModel.setMsg("更新成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else {
+                    returnModel.setData("");
+                    returnModel.setMsg("更新失败！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }
+            } catch (Exception e) {
+                logger.info("addScenicSpotHeat", e);
+                returnModel.setData("");
+                returnModel.setMsg("增加景区热度！");
                 returnModel.setState(Constant.STATE_FAILURE);
                 return returnModel;
             }
@@ -330,74 +382,515 @@ public class ScenicSpotController extends PublicUtil {
         }
     }
 
-
     /**
-     * 张
-     * 根据坐标获取当前所在城市(首页全部景区)
+     * 更新景区排名
+     * @param: scenicSpotId
+     * @param: userCoordinates
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/2 0002
      */
-    @ApiOperation("根据坐标获取当前所在城市(百度坐标)，获取下面的全部景区")
-    @GetMapping("/currentCity")
-    public PageDataResult currentCity(PageDTO pageDTO){
-
-        PageDataResult pageDataResult = new PageDataResult();
-        String lng = pageDTO.getLng();
-        String lat = pageDTO.getLat();
-        Integer sort = pageDTO.getSort();
-        Integer pageNum = pageDTO.getPageNum();
-        Integer pageSize = pageDTO.getPageSize();
-        String cityName = HttpClientUtils.findByLatAndLng(lng,lat);
-        if (!StringUtils.isEmpty(cityName)){
-
-            pageDataResult =  sysScenicSpotService.currentCity(lng,lat,cityName,sort,pageNum,pageSize);
-            return pageDataResult;
-        }else{
-
-            pageDataResult.setCode(400);
-            return pageDataResult;
-        }
-    }
-    /**
-     * zhang
-     * 景区搜索
-     */
-
-    @ApiOperation("景区搜索")
-    @GetMapping("searchSpot")
-    public PageDataResult searchSpot(PageDTO pageDTO){
-        PageDataResult pageDataResult = new PageDataResult();
-        pageDataResult = sysScenicSpotService.searchSpot(pageDTO);
-
-        return pageDataResult;
-    }
-
-
-    /**
-     * zhang
-     * 获取景区详情
-     */
-
-    @ApiOperation("获取景区详情")
-    @GetMapping("spotDetails")
-    public ReturnModel spotDetails(SearchDTO searchDTO){
-
+    @ApiOperation("更新景区排名")
+    @GetMapping("/bestPopularity")
+    public ReturnModel bestPopularity(@ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
+                                      @ApiParam(name="userCoordinates",value="用户坐标",required=false)String userCoordinates,
+                                      @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
+                                      @ApiParam(name="sameDay",value="当日数据",required=true)int sameDay,
+                                      @ApiParam(name="total",value="累计数据",required=true)int total) {
         ReturnModel returnModel = new ReturnModel();
-
-        if (StringUtils.isEmpty(searchDTO.getSpotId())){
-            returnModel.setData(0);
+        Map<String, Object> search = new HashMap<>();
+        SysScenicSpotGpsCoordinateWithBLOBs coordinate = null;//初始化电子围栏对象
+        SysScenicSpotHeat heat = new SysScenicSpotHeat();//查询最佳人气榜数据
+        boolean flag = false;
+        // 当前机器人的GPS 小程序获取的GPS从数据库中查找
+        Point n1 = null;
+        try {
+            if (userCoordinates != null) {
+                String[] split = userCoordinates.split(",");//获取机器人经纬度 并根据逗号截取
+                n1 = new Point(Double.valueOf(split[0]), Double.valueOf(split[1]));//
+                search.put("scenicSpotId", scenicSpotId);
+                coordinate = sysScenicSpotGpsCoordinateService.queryScenicSpotElectronicFence(search);
+                if (coordinate != null) {//判断是否在围栏内
+                    String[] coordinateOuterring = coordinate.getCoordinateOuterring().split("!");//获取WGS84围栏坐标组
+                    if (coordinateOuterring != null && coordinateOuterring.length > 0) {
+                        Point[] ps = new Point[coordinateOuterring.length];
+                        for (int i = 0; i < coordinateOuterring.length; i++) {
+                            String[] str = coordinateOuterring[i].split(",");
+                            ps[i] = new Point(Double.valueOf(str[0]), Double.valueOf(str[1]));
+                        }
+                        flag = JudgingCoordinates.isPtInPoly(n1.getX(), n1.getY(), ps);
+                    }
+                }else {
+                    returnModel.setData("");
+                    returnModel.setMsg("未查询到景区围栏数据！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }
+                if (flag == false) {
+                    search.put("type",type);
+                    SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
+                    if (heats == null) {
+                        heat.setId(IdUtils.getSeqId());//ID
+                        heat.setSameDay(sameDay);//当日统计
+                        heat.setTotal(total);//累计统计
+                        heat.setScenicSpotId(Long.parseLong(scenicSpotId));//景区ID
+                        heat.setType(type);//类型 2代表人气榜
+                        heat.setCreateTime(DateUtil.currentDateTime());
+                        heat.setUpdateTime(DateUtil.currentDateTime());
+                        sysScenicSpotHeatService.insetScenicSpotHeat(heat);
+                        returnModel.setData("");
+                        returnModel.setMsg("创建人气榜数据成功！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = simpleDateFormat.parse(heats.getUpdateTime());
+                        if (DateUtil.isToday(date)) {//判断是否是当天时间
+                            heats.setSameDay(heats.getSameDay()+sameDay);
+                            heats.setTotal(heats.getTotal()+total);
+                            sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                            returnModel.setData("");
+                            returnModel.setMsg("更新人气榜数据成功！");
+                            returnModel.setState(Constant.STATE_SUCCESS);
+                            return returnModel;
+                        }else {
+                            heats.setSameDay(sameDay);
+                            heats.setTotal(heats.getTotal()+total);
+                            heats.setUpdateTime(DateUtil.currentDateTime());
+                            sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                            returnModel.setData("");
+                            returnModel.setMsg("更新人气榜数据成功！");
+                            returnModel.setState(Constant.STATE_SUCCESS);
+                            return returnModel;
+                        }
+                    }
+                }else {
+                    returnModel.setData("");
+                    returnModel.setMsg("您已经在此景区无需进行导航！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }
+            }
+            search.put("type",type);
+            SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
+            if (heats == null) {
+                heat.setId(IdUtils.getSeqId());//ID
+                heat.setSameDay(sameDay);//当日统计
+                heat.setTotal(total);//累计统计
+                heat.setScenicSpotId(Long.parseLong(scenicSpotId));//景区ID
+                heat.setType(type);//类型 2代表人气榜
+                heat.setCreateTime(DateUtil.currentDateTime());
+                heat.setUpdateTime(DateUtil.currentDateTime());
+                sysScenicSpotHeatService.insetScenicSpotHeat(heat);
+                returnModel.setData("");
+                returnModel.setMsg("创建人气榜数据成功！");
+                returnModel.setState(Constant.STATE_SUCCESS);
+                return returnModel;
+            }else {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = simpleDateFormat.parse(heats.getUpdateTime());
+                if (DateUtil.isToday(date)) {//判断是否是当天时间
+                    heats.setSameDay(heats.getSameDay()+sameDay);
+                    heats.setTotal(heats.getTotal()+total);
+                    sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                    returnModel.setData("");
+                    returnModel.setMsg("更新人气榜数据成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else {
+                    heats.setSameDay(sameDay);
+                    heats.setTotal(heats.getTotal()+total);
+                    heats.setUpdateTime(DateUtil.currentDateTime());
+                    sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                    returnModel.setData("");
+                    returnModel.setMsg("更新人气榜数据成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }
+            }
+        }catch(Exception e){
+            logger.info("queryExchangePrizeList", e);
+            returnModel.setData("");
+            returnModel.setMsg("更新景区排名失败！");
             returnModel.setState(Constant.STATE_FAILURE);
-            returnModel.setMsg("景区id为空，无法获取详情!");
+            return returnModel;
         }
-        if (StringUtils.isEmpty(searchDTO.getLat()) || StringUtils.isEmpty(searchDTO.getLat())){
-            returnModel.setData(0);
-            returnModel.setState(Constant.STATE_FAILURE);
-            returnModel.setMsg("当前坐标数据为空，无法获取数据!");
-        }
-        SysScenicSpot sysScenicSpot = sysScenicSpotService.spotDetails(searchDTO.getSpotId(),searchDTO.getLat(),searchDTO.getLng());
+    }
 
-        returnModel.setData(sysScenicSpot);
-        returnModel.setState(Constant.STATE_SUCCESS);
-        returnModel.setMsg("获取景区详情成功!");
-        return returnModel;
+    /**
+     * 查询用户是否在景区范围内
+     * @param: userCoordinates
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/3 0003
+     */
+    @ApiOperation("查询用户是否在景区范围内")
+    @GetMapping("/queryLocationScenicSpot")
+    public ReturnModel queryLocationScenicSpot (@ApiParam(name="userCoordinates",value="当前页,输入0不分页",required=true)String userCoordinates){
+        ReturnModel returnModel = new ReturnModel();
+        Map<String,Object> search = new HashMap<>();
+        boolean flag = false;
+        // 当前机器人的GPS 小程序获取的GPS从数据库中查找
+        Point n1 =  null;
+        try {
+            String[] splits = userCoordinates.split(",");//获取机器人经纬度 并根据逗号截取
+            n1 = new Point(Double.valueOf(splits[0]),Double.valueOf(splits[1]));
+            List<SysScenicSpotGpsCoordinateWithBLOBs> coordinate = sysScenicSpotGpsCoordinateService.queryLocationScenicSpot();
+            for (SysScenicSpotGpsCoordinateWithBLOBs GpsCoordinate : coordinate) {
+            String[] split = GpsCoordinate.getCoordinateOuterring().split("!");
+            if(split != null && split.length>0){
+                Point[] ps = new Point[split.length];
+                for (int i = 0; i < split.length; i++) {
+                    String[] str = split[i].split(",");
+                    ps[i] = new Point(Double.valueOf(str[0]),Double.valueOf(str[1]));
+                }
+                flag = JudgingCoordinates.isPtInPoly(n1.getX() , n1.getY() , ps);
+            }
+            if(flag == true){
+                returnModel.setData(GpsCoordinate.getCoordinateScenicSpotId());
+                returnModel.setMsg("成功获取奖品列表！");
+                returnModel.setState(Constant.STATE_SUCCESS);
+                return returnModel;
+            }
+            }
+            returnModel.setData("");
+            returnModel.setMsg("此用户不在景区范围内");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }catch (Exception e){
+            logger.info("bestPopularity",e);
+            returnModel.setData("");
+            returnModel.setMsg("询用户是否在景区范围内失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+    }
+
+    /**
+     * 更新景区景点排名
+     * @param: scenicSpotId
+     * @param: scenicDistrictId
+     * @param: userCoordinates
+     * @param: type
+     * @param: sameDay
+     * @param: total
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/3 0003
+     */
+    @ApiOperation("更新景区景点排名")
+    @GetMapping("/bestRanking")
+    public ReturnModel bestRanking(@ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
+                                      @ApiParam(name="scenicDistrictId",value="景点ID",required=true)String scenicDistrictId,
+                                      @ApiParam(name="userCoordinates",value="用户坐标",required=false)String userCoordinates,
+                                      @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
+                                      @ApiParam(name="sameDay",value="当日数据",required=true)int sameDay,
+                                      @ApiParam(name="total",value="累计数据",required=true)int total) {
+        ReturnModel returnModel = new ReturnModel();
+        Map<String, Object> search = new HashMap<>();
+        SysScenicSpotGpsCoordinateWithBLOBs coordinate = null;//初始化电子围栏对象
+        SysScenicDistrictRanking ranking = new SysScenicDistrictRanking();//查询最佳人气榜数据
+        boolean flag = false;
+        // 当前机器人的GPS 小程序获取的GPS从数据库中查找
+        Point n1 = null;
+        try {
+            if (userCoordinates != null) {
+                String[] split = userCoordinates.split(",");//获取机器人经纬度 并根据逗号截取
+                n1 = new Point(Double.valueOf(split[0]), Double.valueOf(split[1]));//
+                search.put("scenicSpotId", scenicSpotId);
+                coordinate = sysScenicSpotGpsCoordinateService.queryScenicSpotElectronicFence(search);
+                if (coordinate != null) {//判断是否在围栏内
+                    String[] coordinateOuterring = coordinate.getCoordinateOuterring().split("!");//获取WGS84围栏坐标组
+                    if (coordinateOuterring != null && coordinateOuterring.length > 0) {
+                        Point[] ps = new Point[coordinateOuterring.length];
+                        for (int i = 0; i < coordinateOuterring.length; i++) {
+                            String[] str = coordinateOuterring[i].split(",");
+                            ps[i] = new Point(Double.valueOf(str[0]), Double.valueOf(str[1]));
+                        }
+                        flag = JudgingCoordinates.isPtInPoly(n1.getX(), n1.getY(), ps);
+                    }
+                }else {
+                    returnModel.setData("");
+                    returnModel.setMsg("未查询到景区围栏数据！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }
+                if (flag == false) {
+                    returnModel.setData("");
+                    returnModel.setMsg("您不在此景区无法为您导航此景点！");
+                    returnModel.setState(Constant.STATE_FAILURE);
+                    return returnModel;
+                }else {
+                    search.put("type",type);
+                    search.put("scenicDistrictId",scenicDistrictId);
+                    SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
+                    if (rankings == null) {
+                        ranking.setId(IdUtils.getSeqId());//ID
+                        ranking.setSameDay(sameDay);//当日统计
+                        ranking.setTotal(total);//累计统计
+                        ranking.setScenicDistrictId(Long.parseLong(scenicDistrictId));//景区ID
+                        ranking.setType(type);//类型 2代表人气榜
+                        ranking.setCreateTime(DateUtil.currentDateTime());
+                        ranking.setUpdateTime(DateUtil.currentDateTime());
+                        sysScenicDistrictRankingService.insetbestRanking(ranking);
+                        returnModel.setData("");
+                        returnModel.setMsg("创建人气榜数据成功！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else {
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date date = simpleDateFormat.parse(rankings.getUpdateTime());
+                        if (DateUtil.isToday(date)) {//判断是否是当天时间
+                            rankings.setSameDay(rankings.getSameDay()+sameDay);
+                            rankings.setTotal(rankings.getTotal()+total);
+                            sysScenicDistrictRankingService.updatebestRanking(rankings);
+                            returnModel.setData("");
+                            returnModel.setMsg("更新人气榜数据成功！");
+                            returnModel.setState(Constant.STATE_SUCCESS);
+                            return returnModel;
+                        }else {
+                            rankings.setSameDay(sameDay);
+                            rankings.setTotal(rankings.getTotal()+total);
+                            rankings.setUpdateTime(DateUtil.currentDateTime());
+                            sysScenicDistrictRankingService.updatebestRanking(rankings);
+                            returnModel.setData("");
+                            returnModel.setMsg("更新人气榜数据成功！");
+                            returnModel.setState(Constant.STATE_SUCCESS);
+                            return returnModel;
+                        }
+                    }
+                }
+            }
+            search.put("type",type);
+            search.put("scenicDistrictId",scenicDistrictId);
+            SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
+            if (rankings == null) {
+                ranking.setId(IdUtils.getSeqId());//ID
+                ranking.setSameDay(sameDay);//当日统计
+                ranking.setTotal(total);//累计统计
+                ranking.setScenicDistrictId(Long.parseLong(scenicDistrictId));//景区ID
+                ranking.setType(type);//类型 2代表人气榜
+                ranking.setCreateTime(DateUtil.currentDateTime());
+                ranking.setUpdateTime(DateUtil.currentDateTime());
+                sysScenicDistrictRankingService.insetbestRanking(ranking);
+                returnModel.setData("");
+                returnModel.setMsg("创建排名数据成功！");
+                returnModel.setState(Constant.STATE_SUCCESS);
+                return returnModel;
+            }else {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = simpleDateFormat.parse(rankings.getUpdateTime());
+                if (DateUtil.isToday(date)) {//判断是否是当天时间
+                    rankings.setSameDay(rankings.getSameDay()+sameDay);
+                    rankings.setTotal(rankings.getTotal()+total);
+                    sysScenicDistrictRankingService.updatebestRanking(rankings);
+                    returnModel.setData("");
+                    returnModel.setMsg("更新排名数据成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else {
+                    rankings.setSameDay(sameDay);
+                    rankings.setTotal(rankings.getTotal()+total);
+                    rankings.setUpdateTime(DateUtil.currentDateTime());
+                    sysScenicDistrictRankingService.updatebestRanking(rankings);
+                    returnModel.setData("");
+                    returnModel.setMsg("更新排名数据成功！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }
+            }
+        }catch(Exception e){
+            logger.info("bestRanking", e);
+            returnModel.setData("");
+            returnModel.setMsg("更新景点排名失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+    }
+
+    /**
+     * 更新用户景区或景点收藏和点赞
+     * @param: userId
+     * @param: type
+     * @param: part
+     * @param: scenicSpotId
+     * @param: scenicDistrictId
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/3 0003
+     */
+    @ApiOperation("更新用户景区或景点收藏和点赞")
+    @GetMapping("/updateUserFabulousCollection")
+    public ReturnModel updateUserFabulousCollection(@ApiParam(name="userId",value="用户ID",required=true)String userId,
+                                              @ApiParam(name="type",value="区分景区点赞收藏还是景点点赞收藏：1景区，2景点",required=true)String type,
+                                              @ApiParam(name="part",value="区分点赞还是收藏：1点赞，2收藏,3取消点赞,4取消收藏",required=true)String part,
+                                              @ApiParam(name="scenicSpotId",value="景区ID",required=false)String scenicSpotId,
+                                              @ApiParam(name="scenicDistrictId",value="景点ID",required=false)String scenicDistrictId){
+        ReturnModel returnModel = new ReturnModel();
+        Map<String,Object> search = new HashMap<>();
+        SysUserDistrictFabulousCollection users = new SysUserDistrictFabulousCollection();
+        SysUserScenicFabulousCollection sciences =new SysUserScenicFabulousCollection();
+        try {
+            if ("1".equals(type)) {
+                search.put("userId",userId);
+                search.put("scenicSpotId",scenicSpotId);
+                SysUserDistrictFabulousCollection user = sysUserDistrictFabulousCollectionService.queryUserFabulousCollection(search);
+                if (user == null) {
+                    if ("1".equals(part)) {
+                        users.setId(IdUtils.getSeqId());
+                        users.setUserId(Long.parseLong(userId));
+                        users.setScenicSpotId(Long.parseLong(scenicSpotId));
+                        users.setFabulous("1");//点赞
+                        users.setCreateTime(DateUtil.currentDateTime());
+                        users.setUpdateTime(DateUtil.currentDateTime());
+                        sysUserDistrictFabulousCollectionService.insetUserFabulousCollection(users);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功为景区点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("2".equals(part)) {
+                        users.setId(IdUtils.getSeqId());
+                        users.setUserId(Long.parseLong(userId));
+                        users.setScenicSpotId(Long.parseLong(scenicSpotId));
+                        users.setCollection("1");//收藏
+                        users.setCreateTime(DateUtil.currentDateTime());
+                        users.setUpdateTime(DateUtil.currentDateTime());
+                        sysUserDistrictFabulousCollectionService.insetUserFabulousCollection(users);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功关注此景区！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }
+                }else {
+                    if ("1".equals(part)) {
+                        user.setFabulous("1");
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功为景区点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("2".equals(part)) {
+                        user.setCollection("1");
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功关注此景区！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("3".equals(part)) {
+                        search.put("type","5");//点赞
+                        search.put("scenicSpotId", scenicSpotId);
+                        SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
+                        heats.setTotal(heats.getTotal()-1);
+                        heats.setSameDay(heats.getSameDay()-1);
+                        sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                        user.setFabulous("0");
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        returnModel.setData("");
+                        returnModel.setMsg("已取消点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("4".equals(part)) {
+                        search.put("type","4");//收藏
+                        search.put("scenicSpotId", scenicSpotId);
+                        SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
+                        heats.setTotal(heats.getTotal()-1);
+                        heats.setSameDay(heats.getSameDay()-1);
+                        sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                        user.setCollection("0");
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        returnModel.setData("");
+                        returnModel.setMsg("已取消关注！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }
+                }
+
+            }else if ("2".equals(type)) {
+                search.put("userId",userId);
+                search.put("scenicDistrictId",scenicDistrictId);
+                SysUserScenicFabulousCollection scenic = sysUserScenicFabulousCollectionService.queryUserFabulousCollection(search);
+                if (scenic == null) {
+                    if ("1".equals(part)) {
+                        sciences.setId(IdUtils.getSeqId());
+                        sciences.setUserId(Long.parseLong(userId));
+                        sciences.setScenicDistrictId(Long.parseLong(scenicDistrictId));
+                        sciences.setFabulous("1");//点赞
+                        sciences.setCreateTime(DateUtil.currentDateTime());
+                        sciences.setUpdateTime(DateUtil.currentDateTime());
+                        sysUserScenicFabulousCollectionService.insetUserFabulousCollection(sciences);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功为景点点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("2".equals(part)) {
+                        sciences.setId(IdUtils.getSeqId());
+                        sciences.setUserId(Long.parseLong(userId));
+                        sciences.setScenicDistrictId(Long.parseLong(scenicDistrictId));
+                        sciences.setCollection("1");//收藏
+                        sciences.setCreateTime(DateUtil.currentDateTime());
+                        sciences.setUpdateTime(DateUtil.currentDateTime());
+                        sysUserScenicFabulousCollectionService.insetUserFabulousCollection(sciences);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功关注此景点！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }
+                }else {
+                    if ("1".equals(part)) {
+                        scenic.setFabulous("1");
+                        sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功为景点点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("2".equals(part)) {
+                        scenic.setCollection("1");//收藏
+                        sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
+                        returnModel.setData("");
+                        returnModel.setMsg("已成功关注此景点！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("3".equals(part)) {
+                        search.put("type","5");
+                        search.put("scenicDistrictId",scenicDistrictId);
+                        SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
+                        rankings.setSameDay(rankings.getSameDay()-1);
+                        rankings.setTotal(rankings.getTotal()-1);
+                        sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        scenic.setFabulous("0");
+                        sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
+                        returnModel.setData("");
+                        returnModel.setMsg("已取消点赞！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }else if ("4".equals(part)) {
+                        search.put("type","4");
+                        search.put("scenicDistrictId",scenicDistrictId);
+                        SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
+                        rankings.setSameDay(rankings.getSameDay()-1);
+                        rankings.setTotal(rankings.getTotal()-1);
+                        sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        scenic.setCollection("0");
+                        sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
+                        returnModel.setData("");
+                        returnModel.setMsg("已取消关注！");
+                        returnModel.setState(Constant.STATE_SUCCESS);
+                        return returnModel;
+                    }
+                }
+            }
+            return returnModel;
+        }catch (Exception e){
+            logger.info("updateUserFabulousCollection",e);
+            returnModel.setData("");
+            returnModel.setMsg("更新景区景点点赞收藏失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
     }
 
 
