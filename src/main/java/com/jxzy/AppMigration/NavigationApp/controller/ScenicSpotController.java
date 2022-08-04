@@ -332,6 +332,7 @@ public class ScenicSpotController extends PublicUtil {
 
 
     /**
+     * 张
      * 根据坐标获取当前所在城市(首页全部景区)
      */
     @ApiOperation("根据坐标获取当前所在城市(百度坐标)，获取下面的全部景区")
@@ -355,6 +356,10 @@ public class ScenicSpotController extends PublicUtil {
             return pageDataResult;
         }
     }
+    /**
+     * zhang
+     * 景区搜索
+     */
 
     @ApiOperation("景区搜索")
     @GetMapping("searchSpot")
@@ -367,6 +372,7 @@ public class ScenicSpotController extends PublicUtil {
 
 
     /**
+     * zhang
      * 获取景区详情
      */
 

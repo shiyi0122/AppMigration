@@ -81,9 +81,6 @@ public class SysGuideAppNewsServiceImpl implements SysGuideAppNewsService {
           return sysGuideAppNews;
 
 
-
-
-
     }
 
     /**

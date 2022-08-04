@@ -220,6 +220,14 @@ public class TextRelatedController extends PublicUtil {
 
     }
 
+    /**
+     *
+     *  zhang
+     * @param userId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @ApiOperation("查询通知消息")
     @GetMapping("/getSysGuideAppNews")
     public ReturnModel getSysGuideAppNews(String userId, Integer pageNum, Integer pageSize) {
@@ -236,6 +244,7 @@ public class TextRelatedController extends PublicUtil {
         return returnModel;
 
     }
+
 
     @ApiOperation("读取通知消息")
     @GetMapping("/getSysGuideAppNewsRead")
