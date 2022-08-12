@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
 
 import java.util.List;
 import java.util.Map;
@@ -37,5 +38,15 @@ public interface SysScenicSpotBroadcastMapper {
     List<SysScenicSpotBroadcast> queryScenicSpotStop(Map<String, Object> search);
 
     Integer selectSpotByCount(Long scenicSpotId);
+
+    /**
+     * 查询景点排行
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    List<SysScenicSpotBroadcast> queryWordsScenicSpotBroadcastList(Map<String, Object> search);
 
 }

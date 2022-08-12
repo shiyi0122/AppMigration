@@ -177,4 +177,19 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
         scenicSpot.setHeat(heat);
         return sysScenicSpotMapper.updateByPrimaryKeySelective(scenicSpot);
     }
+
+    /**
+     * 查询景区排行
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    public List<SysScenicSpot> queryScenicSpotRankingList(int pageNum, int pageSize, Map<String, Object> search) {
+        PageHelper.startPage(pageNum, pageSize);
+        return sysScenicSpotMapper.queryScenicSpotRankingList(search);
+    }
 }

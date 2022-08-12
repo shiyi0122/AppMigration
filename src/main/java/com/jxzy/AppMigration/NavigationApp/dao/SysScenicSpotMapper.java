@@ -4,6 +4,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface SysScenicSpotMapper {
     int deleteByPrimaryKey(Long scenicSpotId);
@@ -24,4 +25,13 @@ public interface SysScenicSpotMapper {
 
     SysScenicSpot spotDetails(String spotId);
 
+    /**
+     * 查询景区排行
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    List<SysScenicSpot> queryScenicSpotRankingList(Map<String, Object> search);
 }

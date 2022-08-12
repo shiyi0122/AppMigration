@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotBroadcastService;
+import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBroadcastExtendMapper;
 import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBroadcastMapper;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class SysScenicSpotBroadcastServiceImpl implements SysScenicSpotBroadcastService {
     @Autowired
     private SysScenicSpotBroadcastMapper sysScenicSpotBroadcastMapper;
+    @Autowired
+    private SysScenicSpotBroadcastExtendMapper sysScenicSpotBroadcastExtendMapper;
     @Value("${DOMAIN_NAME}")
     private String DOMAIN_NAME;//后台管系统域名地址
     /**
@@ -53,5 +56,32 @@ public class SysScenicSpotBroadcastServiceImpl implements SysScenicSpotBroadcast
     public List<SysScenicSpotBroadcast> queryScenicSpotStop(int pageNum, int pageSize, Map<String, Object> search) {
         PageHelper.startPage(pageNum, pageSize);
         return sysScenicSpotBroadcastMapper.queryScenicSpotStop(search);
+    }
+
+    /**
+     * 查询景点排行
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    public List<SysScenicSpotBroadcast> queryWordsScenicSpotBroadcastList(int pageNum, int pageSize, Map<String, Object> search) {
+        PageHelper.startPage(pageNum, pageSize);
+        return sysScenicSpotBroadcastMapper.queryWordsScenicSpotBroadcastList(search);
+    }
+
+    /**
+     * 查询景点详情
+     * @param: search
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs
+     * @author: qushaobei
+     * @date: 2022/8/5 0005
+     */
+    public SysScenicSpotBroadcastExtendWithBLOBs queryscenicSpotContent(Map<String, Object> search) {
+        return sysScenicSpotBroadcastExtendMapper.queryscenicSpotContent(search);
     }
 }

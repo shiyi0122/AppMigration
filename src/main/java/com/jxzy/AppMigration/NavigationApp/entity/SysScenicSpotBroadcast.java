@@ -32,5 +32,14 @@ public class SysScenicSpotBroadcast {
     private String createDate;
 
     private String updateDate;
+
     private List<SysScenicSpotBroadcastExtendWithBLOBs> SysScenicSpotBroadcastExtend;
+
+    private List<SysScenicSpot> spotList;
+
+    private List<SysScenicDistrictRanking> rankings;
+
+    private String scenicSpotAddres;
+
+
 }
