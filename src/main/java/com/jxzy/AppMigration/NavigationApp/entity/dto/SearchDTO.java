@@ -44,12 +44,13 @@ public class SearchDTO extends BaseDTO {
     //市
     private String market;
 
+    //
 
     //经度
     private String lng;
     //纬度
     private String lat;
-
+    //排序
     private Integer sort;
 
 

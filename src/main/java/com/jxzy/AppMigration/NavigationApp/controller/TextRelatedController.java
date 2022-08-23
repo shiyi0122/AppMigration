@@ -6,6 +6,9 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppAgreement;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
+import com.jxzy.AppMigration.NavigationApp.entity.dto.BaseDataDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
@@ -220,15 +223,21 @@ public class TextRelatedController extends PublicUtil {
 
     }
 
+    /**
+     *
+     *  zhang
+     * @param
+     * @return
+     */
     @ApiOperation("查询通知消息")
     @GetMapping("/getSysGuideAppNews")
-    public ReturnModel getSysGuideAppNews(String userId, Integer pageNum, Integer pageSize) {
+    public ReturnModel getSysGuideAppNews(PageDTO pageDTO) {
         ReturnModel returnModel = new ReturnModel();
         HashMap<String, Object> search = new HashMap<>();
 
-        search.put("userId", userId);
+        search.put("userId", pageDTO.getUid());
 
-        List<SysGuideAppNews> sysGuideAppNews = sysGuideAppNewsService.queryGuideAppNewsListsLimit(pageNum, pageSize, search);
+        List<SysGuideAppNews> sysGuideAppNews = sysGuideAppNewsService.queryGuideAppNewsListsLimit(pageDTO.getPageNum(), pageDTO.getPageSize(), search);
 
         returnModel.setData(sysGuideAppNews);
         returnModel.setState(Constant.STATE_SUCCESS);
@@ -237,13 +246,20 @@ public class TextRelatedController extends PublicUtil {
 
     }
 
+
+    /**
+     *
+     *  zhang
+     * @param
+     * @return
+     */
     @ApiOperation("读取通知消息")
     @GetMapping("/getSysGuideAppNewsRead")
-    public ReturnModel getSysGuideAppNewsRead(String userId, Long guideId) {
+    public ReturnModel getSysGuideAppNewsRead(BaseDataDTO dataDTO) {
 
         ReturnModel returnModel = new ReturnModel();
 
-        SysGuideAppNews sysGuideAppNews = sysGuideAppNewsService.getSysGuideAppNewsRead(userId, guideId);
+        SysGuideAppNews sysGuideAppNews = sysGuideAppNewsService.getSysGuideAppNewsRead(dataDTO.getUid(),dataDTO.getId());
 
         returnModel.setData(sysGuideAppNews);
         returnModel.setState(Constant.STATE_SUCCESS);
@@ -252,13 +268,19 @@ public class TextRelatedController extends PublicUtil {
 
     }
 
+    /**
+     *
+     *  zhang
+     * @param
+     * @return
+     */
     @ApiOperation("全部已读")
     @GetMapping("/allRead")
-    public ReturnModel allRead(String userId) {
+    public ReturnModel allRead(BaseDataDTO dataDTO) {
 
         ReturnModel returnModel = new ReturnModel();
 
-        int i = sysGuideAppNewsService.allRead(userId);
+        int i = sysGuideAppNewsService.allRead(dataDTO.getUid());
 
         if (i>0){
             returnModel.setData(i);

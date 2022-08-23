@@ -17,7 +17,7 @@ public class BaseDTO implements Serializable {
     @NotNull
     private String token;
 
-    @Min(10000)
-    private Long uid;
+
+    private String uid;
 
 }
