@@ -4,28 +4,29 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.*;
 import com.jxzy.AppMigration.NavigationApp.entity.*;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.util.*;
 import com.jxzy.AppMigration.common.utils.DateUtil;
 import com.jxzy.AppMigration.common.utils.IdUtils;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 @Api(tags = "游小伴景区资源相关")
+@CrossOrigin
 @RestController
 @RequestMapping("scenicSpot")
 public class ScenicSpotController extends PublicUtil {
+    private static final UUID UUID = null;
     @Autowired
     private SysScenicSpotService sysScenicSpotService;
     @Autowired
@@ -54,6 +55,10 @@ public class ScenicSpotController extends PublicUtil {
     private SysUserDistrictFabulousCollectionService sysUserDistrictFabulousCollectionService;
     @Autowired
     private SysUserScenicFabulousCollectionService sysUserScenicFabulousCollectionService;
+    @Value("${DOMAIN_NAME}")
+    private String DOMAIN_NAME;//后台管系统域名地址
+    @Value("${UPLOAD_PIC}")
+    private String UPLOAD_PIC;//后台管系统域名地址
 
     /**
      * 根据城市和景区名查询列表以及热度
@@ -398,8 +403,8 @@ public class ScenicSpotController extends PublicUtil {
      */
     @ApiOperation("更新景区排名")
     @GetMapping("/bestPopularity")
-    public ReturnModel bestPopularity(@ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
-                                      @ApiParam(name="userCoordinates",value="用户坐标",required=false)String userCoordinates,
+    public ReturnModel bestPopularity(@ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
+                                      @ApiParam(name="userCoordinates",value="用户坐标(type=1的时候不传此参数)",required=false)String userCoordinates,
                                       @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
                                       @ApiParam(name="sameDay",value="当日数据",required=true)int sameDay,
                                       @ApiParam(name="total",value="累计数据",required=true)int total) {
@@ -434,6 +439,7 @@ public class ScenicSpotController extends PublicUtil {
                 }
                 if (flag == false) {
                     search.put("type",type);
+                    search.put("scenicSpotId",scenicSpotId);
                     SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
                     if (heats == null) {
                         heat.setId(IdUtils.getSeqId());//ID
@@ -478,6 +484,7 @@ public class ScenicSpotController extends PublicUtil {
                 }
             }
             search.put("type",type);
+            search.put("scenicSpotId",scenicSpotId);
             SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
             if (heats == null) {
                 heat.setId(IdUtils.getSeqId());//ID
@@ -555,7 +562,7 @@ public class ScenicSpotController extends PublicUtil {
             }
             if(flag == true){
                 returnModel.setData(GpsCoordinate.getCoordinateScenicSpotId());
-                returnModel.setMsg("成功获取奖品列表！");
+                returnModel.setMsg("您已在景区内！");
                 returnModel.setState(Constant.STATE_SUCCESS);
                 return returnModel;
             }
@@ -574,7 +581,7 @@ public class ScenicSpotController extends PublicUtil {
     }
 
     /**
-     * 更新景区景点排名
+     * 更新景点排名
      * @param: scenicSpotId
      * @param: scenicDistrictId
      * @param: userCoordinates
@@ -586,9 +593,9 @@ public class ScenicSpotController extends PublicUtil {
      * @author: qushaobei
      * @date: 2022/8/3 0003
      */
-    @ApiOperation("更新景区景点排名")
+    @ApiOperation("更新景点排名")
     @GetMapping("/bestRanking")
-    public ReturnModel bestRanking(@ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
+    public ReturnModel bestRanking(@ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
                                       @ApiParam(name="scenicDistrictId",value="景点ID",required=true)String scenicDistrictId,
                                       @ApiParam(name="userCoordinates",value="用户坐标",required=false)String userCoordinates,
                                       @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
@@ -636,7 +643,7 @@ public class ScenicSpotController extends PublicUtil {
                         ranking.setId(IdUtils.getSeqId());//ID
                         ranking.setSameDay(sameDay);//当日统计
                         ranking.setTotal(total);//累计统计
-                        ranking.setScenicDistrictId(Long.parseLong(scenicDistrictId));//景区ID
+                        ranking.setBroadcastId(Long.parseLong(scenicDistrictId));//景区ID
                         ranking.setType(type);//类型 2代表人气榜
                         ranking.setCreateTime(DateUtil.currentDateTime());
                         ranking.setUpdateTime(DateUtil.currentDateTime());
@@ -676,7 +683,7 @@ public class ScenicSpotController extends PublicUtil {
                 ranking.setId(IdUtils.getSeqId());//ID
                 ranking.setSameDay(sameDay);//当日统计
                 ranking.setTotal(total);//累计统计
-                ranking.setScenicDistrictId(Long.parseLong(scenicDistrictId));//景区ID
+                ranking.setBroadcastId(Long.parseLong(scenicDistrictId));//景区ID
                 ranking.setType(type);//类型 2代表人气榜
                 ranking.setCreateTime(DateUtil.currentDateTime());
                 ranking.setUpdateTime(DateUtil.currentDateTime());
@@ -897,5 +904,194 @@ public class ScenicSpotController extends PublicUtil {
             return returnModel;
         }
     }
+
+    /**
+     * 查询景区排名列表以及检索景区
+     * @param: type
+     * @param: pageNum
+     * @param: pageSize
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    @ApiOperation("查询景区排名列表以及检索景区")
+    @GetMapping("/queryScenicSpotRankingList")
+    public ReturnModel queryScenicSpotRankingList(@ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=false)String type,
+                                                  @ApiParam(name="types",value="判定type条件，类型和type类型一样(1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜)",required=false)String types,
+                                                  @ApiParam(name="scenicSpotName",value="景区名称",required=false)String scenicSpotName,
+                                                  @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
+                                                  @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+        ReturnModel returnModel = new ReturnModel();
+        Map<String,Object> search = new HashMap<>();
+        try {
+            if (type != null) {
+                search.put("type",type);
+            }
+            if (scenicSpotName != null && types != null) {
+                search.put("scenicSpotName",scenicSpotName);
+                search.put("types",types);
+            }
+            List<SysScenicSpot> spotList = sysScenicSpotService.queryScenicSpotRankingList(pageNum,pageSize,search);
+            //PageInfo就是一个分页Bean
+            PageInfo pageInfo = new PageInfo(spotList);
+            returnModel.setData(pageInfo);
+            returnModel.setMsg("成功获取景区排行列表！");
+            returnModel.setState(Constant.STATE_SUCCESS);
+            return returnModel;
+        }catch (Exception e){
+            logger.info("queryScenicSpotRankingList",e);
+            returnModel.setData("");
+            returnModel.setMsg("获取景区排行列表失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+    }
+
+    /**
+     * 查询景点排名列表以及景点详情和检索景点
+     * @param: type
+     * @param: scenicSpotId
+     * @param: broadcastId
+     * @param: pageNum
+     * @param: pageSize
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/8 0008
+     */
+    @ApiOperation("查询景点排名列表以及景点详情和检索景点")
+    @GetMapping("/queryScenicDistrictRankingList")
+    public ReturnModel queryScenicDistrictRankingList(@ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=false)String type,
+                                                      @ApiParam(name="types",value="判定type条件，类型和type类型一样(1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜)",required=false)String types,
+                                                      @ApiParam(name="scenicSpotId",value="景区ID",required=false)String scenicSpotId,
+                                                      @ApiParam(name="broadcastId",value="景点ID",required=false)String broadcastId,
+                                                      @ApiParam(name="broadcastName",value="景点名称",required=false)String broadcastName,
+                                                      @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
+                                                      @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+        ReturnModel returnModel = new ReturnModel();
+        Map<String,Object> search = new HashMap<>();
+        try {
+            if (scenicSpotId != null) {
+                search.put("type",type);
+                search.put("types",types);
+                search.put("scenicSpotId",scenicSpotId);
+                search.put("broadcastName",broadcastName);
+                List<SysScenicSpotBroadcast> broadcast = sysScenicSpotBroadcastService.queryWordsScenicSpotBroadcastList(pageNum,pageSize,search);
+                for (int i = 0; i < broadcast.size(); i++) {
+                    String pictureUrl = broadcast.get(i).getPictureUrl();
+                    if (pictureUrl != null && !"".equals(pictureUrl)) {
+                        broadcast.get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                    }
+                }
+                //PageInfo就是一个分页Bean
+                PageInfo pageInfo = new PageInfo(broadcast);
+                returnModel.setData(pageInfo);
+                returnModel.setMsg("成功获取景区排行列表！");
+                returnModel.setState(Constant.STATE_SUCCESS);
+                return returnModel;
+            }else if (broadcastId != null) {
+                search.put("broadcastId",broadcastId);
+                SysScenicSpotBroadcastExtendWithBLOBs extend = sysScenicSpotBroadcastService.queryscenicSpotContent(search);
+                returnModel.setData(extend);
+                returnModel.setMsg("成功获取景区排行列表！");
+                returnModel.setState(Constant.STATE_SUCCESS);
+                return returnModel;
+            }
+            return returnModel;
+        }catch (Exception e){
+            logger.info("queryScenicSpotRankingList",e);
+            returnModel.setData("");
+            returnModel.setMsg("获取景区排行列表失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+    }
+
+    /**
+     * 查询景区和景点点赞和收藏
+     * @param: type
+     * @param: scenicType
+     * @param: userId
+     * @param: baseDto
+     * @param: pageNum
+     * @param: pageSize
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    @ApiOperation("查询景区和景点点赞和收藏")
+    @GetMapping("/queryUserLikeCollection")
+    public ReturnModel queryUserLikeCollection(@ApiParam(name="type",value="4收藏榜、5点赞榜",required=true)String type,
+                                               @ApiParam(name="scenicType",value="1景区、2景点",required=true)String scenicType,
+                                               @ApiParam(name="userId",value="用户ID",required=true)String userId,
+                                               @ApiParam(name="baseDto",value="登录令牌(测试阶段暂时可以随便传参)",required=true) BaseDTO baseDto,
+                                               @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
+                                               @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+        ReturnModel returnModel = new ReturnModel();
+        Map<String,Object> search = new HashMap<>();
+        try {
+            search.put("userId",userId);
+            if ("1".equals(scenicType)) {//景区
+                if ("4".equals(type)) {//收藏
+                    List<SysUserDistrictFabulousCollection> broadcast = sysUserDistrictFabulousCollectionService.queryUserCollection(pageNum,pageSize,search);
+                    //PageInfo就是一个分页Bean
+                    PageInfo pageInfo = new PageInfo(broadcast);
+                    returnModel.setData(pageInfo);
+                    returnModel.setMsg("成功获取景区排行列表！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else if ("5".equals(type)) {//点赞
+                    List<SysUserDistrictFabulousCollection> broadcast = sysUserDistrictFabulousCollectionService.queryUserLike(pageNum,pageSize,search);
+                    //PageInfo就是一个分页Bean
+                    PageInfo pageInfo = new PageInfo(broadcast);
+                    returnModel.setData(pageInfo);
+                    returnModel.setMsg("成功获取景区排行列表！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }
+            }else if ("2".equals(scenicType)) {//景点
+                if ("4".equals(type)) {//收藏
+                    List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicCollection(pageNum,pageSize,search);
+                    for (int i = 0; i < broadcast.size(); i++) {
+                        String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(i).getPictureUrl();
+                        if (pictureUrl != null && !"".equals(pictureUrl)) {
+                            broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                        }
+                    }
+                    //PageInfo就是一个分页Bean
+                    PageInfo pageInfo = new PageInfo(broadcast);
+                    returnModel.setData(pageInfo);
+                    returnModel.setMsg("成功获取景区排行列表！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }else if ("5".equals(type)) {//点赞
+                    List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicLike(pageNum,pageSize,search);
+                    for (int i = 0; i < broadcast.size(); i++) {
+                        String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(i).getPictureUrl();
+                        if (pictureUrl != null && !"".equals(pictureUrl)) {
+                            broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                        }
+                    }
+                    //PageInfo就是一个分页Bean
+                    PageInfo pageInfo = new PageInfo(broadcast);
+                    returnModel.setData(pageInfo);
+                    returnModel.setMsg("成功获取景区排行列表！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }
+            }
+            return returnModel;
+        }catch (Exception e){
+            logger.info("queryScenicSpotRankingList",e);
+            returnModel.setData("");
+            returnModel.setMsg("获取景区排行列表失败！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+    }
+
+
 
 }

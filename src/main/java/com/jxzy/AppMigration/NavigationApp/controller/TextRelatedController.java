@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "导览APP消息、反馈、关于相关")
+//@Api(tags = "导览APP消息、反馈、关于相关")
 @RestController
 @RequestMapping("text")
 public class TextRelatedController extends PublicUtil {

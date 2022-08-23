@@ -25,4 +25,28 @@ public class SysGuideAppUsersHelpServiceImpl implements SysGuideAppUsersHelpServ
     public List<SysGuideAppUsersHelp> queryUserHelpList() {
         return sysGuideAppUsersHelpMapper.queryUserHelpList();
     }
+
+    /**
+     * 查询使用帮助
+     * @param: helpId
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp
+     * @author: qushaobei
+     * @date: 2022/8/17 0017
+     */
+    public SysGuideAppUsersHelp queryUserHelp(Long helpId) {
+        return sysGuideAppUsersHelpMapper.selectByPrimaryKey(helpId);
+    }
+
+    /**
+     * 使用帮助搜索
+     * @param: helpName
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp>
+     * @author: qushaobei
+     * @date: 2022/8/19 0019
+     */
+    public List<SysGuideAppUsersHelp> queryUserHelpData(String helpTitle) {
+        return sysGuideAppUsersHelpMapper.queryUserHelpData(helpTitle);
+    }
 }

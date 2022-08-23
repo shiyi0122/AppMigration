@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysUserScenicFabulousCollectionService {
@@ -35,4 +36,28 @@ public interface SysUserScenicFabulousCollectionService {
      * @date: 2022/8/3 0003
      */
     int updateUserFabulousCollection(SysUserScenicFabulousCollection scenic);
+
+    /**
+     * 查询用户收藏景点列表
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserScenicFabulousCollection> queryUserScenicCollection(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 查询用户点赞景点列表
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserScenicFabulousCollection> queryUserScenicLike(int pageNum, int pageSize, Map<String, Object> search);
 }

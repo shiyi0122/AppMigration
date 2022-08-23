@@ -2,8 +2,11 @@ package com.jxzy.AppMigration.NavigationApp.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SysScenicSpot {
+    
     private Long scenicSpotId;
 
     private String scenicSpotName;
@@ -106,12 +109,15 @@ public class SysScenicSpot {
 
     private String scenicSpotImgUtl;
 
+    private String scneicSpotImgUrl;
+
     private String total;
 
     private String broadcastGps;
 
-    private long heat;
+    private Long heat;
 
+    private List<SysScenicSpotHeat> heatList;
 
 
     //景区介绍

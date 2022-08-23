@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotShopsTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
+    <id column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="shops_id" property="shopsId" jdbcType="BIGINT" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    type_id, shops_id, type_name, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_scenic_spot_shops_type
+    where type_id = #{typeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_scenic_spot_shops_type
+    where type_id = #{typeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
+    insert into sys_scenic_spot_shops_type (type_id, shops_id, type_name, 
+      create_time, update_time)
+    values (#{typeId,jdbcType=BIGINT}, #{shopsId,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
+    insert into sys_scenic_spot_shops_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="shopsId != null" >
+        shops_id,
+      </if>
+      <if test="typeName != null" >
+        type_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="shopsId != null" >
+        #{shopsId,jdbcType=BIGINT},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
+    update sys_scenic_spot_shops_type
+    <set >
+      <if test="shopsId != null" >
+        shops_id = #{shopsId,jdbcType=BIGINT},
+      </if>
+      <if test="typeName != null" >
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where type_id = #{typeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
+    update sys_scenic_spot_shops_type
+    set shops_id = #{shopsId,jdbcType=BIGINT},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where type_id = #{typeId,jdbcType=BIGINT}
+  </update>
+</mapper>

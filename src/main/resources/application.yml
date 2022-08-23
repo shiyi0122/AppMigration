@@ -14,8 +14,11 @@ spring:
     encoding: utf-8
     cache: false
     mode: LEGACYHTML5
-
-
+#设置tomcat文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 1000MB
 
   #redis
   redis:
@@ -45,6 +48,12 @@ server:
       root: info
 #路径和域名获取
 DOMAIN_NAME: https://topsroboteer.com.cn/
+
+#上传头像
+UPLOAD_PIC: D:\IDEAAppMigration\AppMigration\src\main\resources\static\uploadPIC
+
+#意见反馈
+FEEDBACK_PIC: D:\IDEAAppMigration\AppMigration\src\main\resources\static\feedbackPIC
 
 #腾讯短信验证
 TENCENT_APPID: 1400295952

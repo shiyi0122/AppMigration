@@ -9,10 +9,16 @@
     <result column="PHONE_SIGN" property="phoneSign" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="QQ_ID" property="qqId" jdbcType="VARCHAR" />
+    <result column="WE_CHAT_ID" property="weChatId" jdbcType="VARCHAR" />
+    <result column="APPLE_ID" property="appleId" jdbcType="VARCHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="PORTRAIT_PIC" property="portraitPic" jdbcType="VARCHAR" />
+    <result column="USER_GENDER" property="userGender" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    USER_ID, USER_PHONE, LONGIN_TOKEN_ID, USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE, 
-    UPDATE_DATE
+    USER_ID, USER_PHONE, LONGIN_TOKEN_ID, USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE,
+    UPDATE_DATE, QQ_ID, WE_CHAT_ID, APPLE_ID, USER_NAME, PORTRAIT_PIC, USER_GENDER
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -34,17 +40,22 @@
     from SYS_GUIDE_APP_USERS
     where PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR}
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from SYS_GUIDE_APP_USERS
     where USER_ID = #{userId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
-    insert into SYS_GUIDE_APP_USERS (USER_ID, USER_PHONE, LONGIN_TOKEN_ID, 
-      USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE, 
-      UPDATE_DATE)
-    values (#{userId,jdbcType=BIGINT}, #{userPhone,jdbcType=VARCHAR}, #{longinTokenId,jdbcType=VARCHAR}, 
-      #{userClientGtId,jdbcType=VARCHAR}, #{phoneSign,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=VARCHAR})
+    insert into SYS_GUIDE_APP_USERS (USER_ID, USER_PHONE, LONGIN_TOKEN_ID,
+                                     USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE,
+                                     UPDATE_DATE, QQ_ID, WE_CHAT_ID,
+                                     APPLE_ID, USER_NAME, PORTRAIT_PIC,
+                                     USER_GENDER)
+    values (#{userId,jdbcType=BIGINT}, #{userPhone,jdbcType=VARCHAR}, #{longinTokenId,jdbcType=VARCHAR},
+            #{userClientGtId,jdbcType=VARCHAR}, #{phoneSign,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
+            #{updateDate,jdbcType=VARCHAR}, #{qqId,jdbcType=VARCHAR}, #{weChatId,jdbcType=VARCHAR},
+            #{appleId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{portraitPic,jdbcType=VARCHAR},
+            #{userGender,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
     insert into SYS_GUIDE_APP_USERS
@@ -70,6 +81,24 @@
       <if test="updateDate != null" >
         UPDATE_DATE,
       </if>
+      <if test="qqId != null" >
+        QQ_ID,
+      </if>
+      <if test="weChatId != null" >
+        WE_CHAT_ID,
+      </if>
+      <if test="appleId != null" >
+        APPLE_ID,
+      </if>
+      <if test="userName != null" >
+        USER_NAME,
+      </if>
+      <if test="portraitPic != null" >
+        PORTRAIT_PIC,
+      </if>
+      <if test="userGender != null" >
+        USER_GENDER,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userId != null" >
@@ -92,6 +121,24 @@
       </if>
       <if test="updateDate != null" >
         #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="qqId != null" >
+        #{qqId,jdbcType=VARCHAR},
+      </if>
+      <if test="weChatId != null" >
+        #{weChatId,jdbcType=VARCHAR},
+      </if>
+      <if test="appleId != null" >
+        #{appleId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="portraitPic != null" >
+        #{portraitPic,jdbcType=VARCHAR},
+      </if>
+      <if test="userGender != null" >
+        #{userGender,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -116,17 +163,41 @@
       <if test="updateDate != null" >
         UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
       </if>
+      <if test="qqId != null" >
+        QQ_ID = #{qqId,jdbcType=VARCHAR},
+      </if>
+      <if test="weChatId != null" >
+        WE_CHAT_ID = #{weChatId,jdbcType=VARCHAR},
+      </if>
+      <if test="appleId != null" >
+        APPLE_ID = #{appleId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="portraitPic != null" >
+        PORTRAIT_PIC = #{portraitPic,jdbcType=VARCHAR},
+      </if>
+      <if test="userGender != null" >
+        USER_GENDER = #{userGender,jdbcType=VARCHAR},
+      </if>
     </set>
     where USER_ID = #{userId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
     update SYS_GUIDE_APP_USERS
     set USER_PHONE = #{userPhone,jdbcType=VARCHAR},
-      LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR},
-      USER_CLIENT_GT_ID = #{userClientGtId,jdbcType=VARCHAR},
-      PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR},
-      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
-      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+        LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR},
+        USER_CLIENT_GT_ID = #{userClientGtId,jdbcType=VARCHAR},
+        PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR},
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+        QQ_ID = #{qqId,jdbcType=VARCHAR},
+        WE_CHAT_ID = #{weChatId,jdbcType=VARCHAR},
+        APPLE_ID = #{appleId,jdbcType=VARCHAR},
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+        PORTRAIT_PIC = #{portraitPic,jdbcType=VARCHAR},
+        USER_GENDER = #{userGender,jdbcType=VARCHAR}
     where USER_ID = #{userId,jdbcType=BIGINT}
   </update>
 

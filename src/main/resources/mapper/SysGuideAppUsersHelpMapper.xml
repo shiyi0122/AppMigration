@@ -24,6 +24,15 @@
     from SYS_GUIDE_APP_USERS_HELP
     where HELP_ID = #{helpId,jdbcType=BIGINT}
   </select>
+  <!--使用帮助搜索-->
+  <select id="queryUserHelpData" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_GUIDE_APP_USERS_HELP
+    where HELP_TITLE like concat ('%',#{helpTitle,jdbcType=VARCHAR},'%')
+  </select>
   <!--获取使用帮助列表-->
   <select id="queryUserHelpList" resultMap="ResultMapWithBLOBs">
     select

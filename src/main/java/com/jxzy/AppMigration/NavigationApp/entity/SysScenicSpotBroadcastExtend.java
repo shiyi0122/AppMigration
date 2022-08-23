@@ -2,6 +2,8 @@ package com.jxzy.AppMigration.NavigationApp.entity;
 
 import lombok.Data;
 
+
+
 @Data
 public class SysScenicSpotBroadcastExtend {
     private Long broadcastResId;
@@ -15,4 +17,5 @@ public class SysScenicSpotBroadcastExtend {
     private String createDate;
 
     private String updateDate;
+
 }

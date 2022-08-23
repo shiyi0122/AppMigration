@@ -7,6 +7,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
 import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SysScenicSpotService {
 
@@ -38,5 +39,15 @@ public interface SysScenicSpotService {
     int updateScenicSpotHeat(SysScenicSpot scenicSpot);
 
 
-
+    /**
+     * 查询景区排行
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    List<SysScenicSpot> queryScenicSpotRankingList(int pageNum, int pageSize, Map<String, Object> search);
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 public class SysScenicDistrictRanking {
     private Long id;
 
-    private Long scenicDistrictId;
+    private Long broadcastId;
 
     private Integer sameDay;
 

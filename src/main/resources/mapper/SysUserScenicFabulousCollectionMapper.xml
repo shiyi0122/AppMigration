@@ -19,6 +19,65 @@
     from sys_user_scenic_fabulous_collection
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+
+  <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection">
+      <id column="id" property="id" jdbcType="BIGINT" />
+      <result column="user_id" property="userId" jdbcType="BIGINT" />
+      <result column="scenic_district_id" property="scenicDistrictId" jdbcType="BIGINT" />
+      <result column="fabulous" property="fabulous" jdbcType="VARCHAR" />
+      <result column="collection" property="collection" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+      <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <collection property="sysScenicSpotBroadcasts" column="scenicDistrictId"
+                ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+      <id column="BROADCAST_ID" property="broadcastId" jdbcType="BIGINT" />
+      <result column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+      <result column="BROADCAST_GPS" property="broadcastGps" jdbcType="VARCHAR" />
+      <result column="BROADCAST_GPS_BAI_DU" property="broadcastGpsBaiDu" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_RANGE" property="scenicSpotRange" jdbcType="VARCHAR" />
+      <result column="BROADCAST_NAME" property="broadcastName" jdbcType="VARCHAR" />
+      <result column="PIN_YIN_NAME" property="pinYinName" jdbcType="VARCHAR" />
+      <result column="INTRODUCTION_TYPES" property="introductionTypes" jdbcType="VARCHAR" />
+      <result column="NAVIGATION_TYPE" property="navigationType" jdbcType="VARCHAR" />
+      <result column="BROADCAST_PRIORITY" property="broadcastPriority" jdbcType="VARCHAR" />
+      <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
+      <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+      <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
+      <result column="PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+
+  <select id="queryUserScenicCollection" resultMap="BaseResultMapMax" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      sys_user_scenic_fabulous_collection a
+        LEFT JOIN SYS_SCENIC_SPOT_BROADCAST b ON a.scenic_district_id = b.BROADCAST_ID
+        LEFT JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND d ON b.BROADCAST_ID = d.BROADCAST_ID
+        LEFT JOIN SYS_SCENIC_SPOT c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+    WHERE
+      a.user_id = #{userId,jdbcType=BIGINT}
+      AND a.collection = 1
+    ORDER BY
+      a.update_time DESC
+  </select>
+
+  <select id="queryUserScenicLike" resultMap="BaseResultMapMax" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      sys_user_scenic_fabulous_collection a
+        LEFT JOIN SYS_SCENIC_SPOT_BROADCAST b ON a.scenic_district_id = b.BROADCAST_ID
+        LEFT JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND d ON b.BROADCAST_ID = d.BROADCAST_ID
+        LEFT JOIN SYS_SCENIC_SPOT c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+    WHERE
+      a.user_id = #{userId,jdbcType=BIGINT}
+      AND a.fabulous = 1
+    ORDER BY
+      a.update_time DESC
+  </select>
   <!--查询用户景点点赞或收藏-->
   <select id="queryUserFabulousCollection" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select

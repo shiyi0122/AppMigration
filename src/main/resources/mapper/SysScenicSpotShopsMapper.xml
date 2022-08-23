@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotShopsMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
+    <id column="shops_id" property="shopsId" jdbcType="BIGINT" />
+    <result column="scenic_spot_id" property="scenicSpotId" jdbcType="BIGINT" />
+    <result column="shops_name" property="shopsName" jdbcType="VARCHAR" />
+    <result column="shops_phone" property="shopsPhone" jdbcType="VARCHAR" />
+    <result column="shops_address" property="shopsAddress" jdbcType="VARCHAR" />
+    <result column="shops_gps" property="shopsGps" jdbcType="VARCHAR" />
+    <result column="shops_pic" property="shopsPic" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    shops_id, scenic_spot_id, shops_name, shops_phone, shops_address, shops_gps, shops_pic, 
+    create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_scenic_spot_shops
+    where shops_id = #{shopsId,jdbcType=BIGINT}
+  </select>
+
+  <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops">
+    <id column="shops_id" property="shopsId" jdbcType="BIGINT" />
+    <result column="scenic_spot_id" property="scenicSpotId" jdbcType="BIGINT" />
+    <result column="shops_name" property="shopsName" jdbcType="VARCHAR" />
+    <result column="shops_phone" property="shopsPhone" jdbcType="VARCHAR" />
+    <result column="shops_address" property="shopsAddress" jdbcType="VARCHAR" />
+    <result column="shops_gps" property="shopsGps" jdbcType="VARCHAR" />
+    <result column="shops_pic" property="shopsPic" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <collection property="sysScenicSpotShopsType" column="shops_id"
+                ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType">
+      <id column="type_id" property="typeId" jdbcType="BIGINT" />
+      <result column="shops_id" property="shopsId" jdbcType="BIGINT" />
+      <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+      <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      <collection property="sysScenicSpotShopsDetails" column="type_id"
+                  ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsDetails">
+        <id column="details_id" property="detailsId" jdbcType="BIGINT" />
+        <result column="type_id" property="typeId" jdbcType="BIGINT" />
+        <result column="product_name" property="productName" jdbcType="VARCHAR" />
+        <result column="product_pic_url" property="productPicUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      </collection>
+    </collection>
+  </resultMap>
+
+  <select id="queryScenicShopsList" resultMap="BaseResultMapMax" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      sys_scenic_spot_shops a
+        LEFT JOIN sys_scenic_spot_shops_type b ON a.shops_id = b.shops_id
+        LEFT JOIN sys_scenic_spot_shops_details c ON b.type_id = c.type_id
+    WHERE a.shops_id = #{shopsId,jdbcType=BIGINT}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_scenic_spot_shops
+    where shops_id = #{shopsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
+    insert into sys_scenic_spot_shops (shops_id, scenic_spot_id, shops_name, 
+      shops_phone, shops_address, shops_gps, 
+      shops_pic, create_time, update_time
+      )
+    values (#{shopsId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{shopsName,jdbcType=VARCHAR}, 
+      #{shopsPhone,jdbcType=VARCHAR}, #{shopsAddress,jdbcType=VARCHAR}, #{shopsGps,jdbcType=VARCHAR}, 
+      #{shopsPic,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
+    insert into sys_scenic_spot_shops
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopsId != null" >
+        shops_id,
+      </if>
+      <if test="scenicSpotId != null" >
+        scenic_spot_id,
+      </if>
+      <if test="shopsName != null" >
+        shops_name,
+      </if>
+      <if test="shopsPhone != null" >
+        shops_phone,
+      </if>
+      <if test="shopsAddress != null" >
+        shops_address,
+      </if>
+      <if test="shopsGps != null" >
+        shops_gps,
+      </if>
+      <if test="shopsPic != null" >
+        shops_pic,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopsId != null" >
+        #{shopsId,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotId != null" >
+        #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="shopsName != null" >
+        #{shopsName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPhone != null" >
+        #{shopsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsAddress != null" >
+        #{shopsAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGps != null" >
+        #{shopsGps,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPic != null" >
+        #{shopsPic,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
+    update sys_scenic_spot_shops
+    <set >
+      <if test="scenicSpotId != null" >
+        scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="shopsName != null" >
+        shops_name = #{shopsName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPhone != null" >
+        shops_phone = #{shopsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsAddress != null" >
+        shops_address = #{shopsAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGps != null" >
+        shops_gps = #{shopsGps,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPic != null" >
+        shops_pic = #{shopsPic,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shops_id = #{shopsId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
+    update sys_scenic_spot_shops
+    set scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT},
+      shops_name = #{shopsName,jdbcType=VARCHAR},
+      shops_phone = #{shopsPhone,jdbcType=VARCHAR},
+      shops_address = #{shopsAddress,jdbcType=VARCHAR},
+      shops_gps = #{shopsGps,jdbcType=VARCHAR},
+      shops_pic = #{shopsPic,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where shops_id = #{shopsId,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -13,6 +13,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
 import com.jxzy.AppMigration.NavigationApp.util.DistanceUtil;
 import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,6 +30,8 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
     private SysScenicSpotBindingMapper sysScenicSpotBindingMapper;
     @Autowired
     private SysScenicSpotBroadcastMapper sysScenicSpotBroadcastMapper;
+    @Value("${DOMAIN_NAME}")
+    private String DOMAIN_NAME;//后台管系统域名地址
 
 
     @Override
@@ -176,5 +179,21 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
         long heat = scenicSpot.getHeat() + 1;//自增热度
         scenicSpot.setHeat(heat);
         return sysScenicSpotMapper.updateByPrimaryKeySelective(scenicSpot);
+    }
+
+    /**
+     * 查询景区排行
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot>
+     * @author: qushaobei
+     * @date: 2022/8/4 0004
+     */
+    public List<SysScenicSpot> queryScenicSpotRankingList(int pageNum, int pageSize, Map<String, Object> search) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<SysScenicSpot> spotList = sysScenicSpotMapper.queryScenicSpotRankingList(search);
+        return spotList;
     }
 }

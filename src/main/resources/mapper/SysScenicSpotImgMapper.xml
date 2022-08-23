@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotImgMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg" >
+    <id column="SCNEIC_SPOT_IMG_ID" property="scneicSpotImgId" jdbcType="BIGINT" />
+    <result column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+    <result column="SCNEIC_SPOT_IMG_URL" property="scneicSpotImgUrl" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SCNEIC_SPOT_IMG_ID, SCENIC_SPOT_ID, SCNEIC_SPOT_IMG_URL, CREATE_DATE, UPDATE_DATE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_SCENIC_SPOT_IMG
+    where SCNEIC_SPOT_IMG_ID = #{scneicSpotImgId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from SYS_SCENIC_SPOT_IMG
+    where SCNEIC_SPOT_IMG_ID = #{scneicSpotImgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg" >
+    insert into SYS_SCENIC_SPOT_IMG (SCNEIC_SPOT_IMG_ID, SCENIC_SPOT_ID, SCNEIC_SPOT_IMG_URL, 
+      CREATE_DATE, UPDATE_DATE)
+    values (#{scneicSpotImgId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{scneicSpotImgUrl,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg" >
+    insert into SYS_SCENIC_SPOT_IMG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scneicSpotImgId != null" >
+        SCNEIC_SPOT_IMG_ID,
+      </if>
+      <if test="scenicSpotId != null" >
+        SCENIC_SPOT_ID,
+      </if>
+      <if test="scneicSpotImgUrl != null" >
+        SCNEIC_SPOT_IMG_URL,
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scneicSpotImgId != null" >
+        #{scneicSpotImgId,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotId != null" >
+        #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="scneicSpotImgUrl != null" >
+        #{scneicSpotImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg" >
+    update SYS_SCENIC_SPOT_IMG
+    <set >
+      <if test="scenicSpotId != null" >
+        SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="scneicSpotImgUrl != null" >
+        SCNEIC_SPOT_IMG_URL = #{scneicSpotImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null" >
+        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SCNEIC_SPOT_IMG_ID = #{scneicSpotImgId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg" >
+    update SYS_SCENIC_SPOT_IMG
+    set SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+      SCNEIC_SPOT_IMG_URL = #{scneicSpotImgUrl,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+    where SCNEIC_SPOT_IMG_ID = #{scneicSpotImgId,jdbcType=BIGINT}
+  </update>
+</mapper>

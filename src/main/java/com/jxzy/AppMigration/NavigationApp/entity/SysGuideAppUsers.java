@@ -31,6 +31,9 @@ public class SysGuideAppUsers {
 
     private String appleId;
 
+    private String portraitPic;
+
+    private String userGender;
 
 
 

@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysUserScenicFabulousCollectionMapper {
@@ -26,4 +27,24 @@ public interface SysUserScenicFabulousCollectionMapper {
      * @date: 2022/8/3 0003
      */
     SysUserScenicFabulousCollection queryUserFabulousCollection(Map<String, Object> search);
+
+    /**
+     * 查询用户收藏景点列表
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserScenicFabulousCollection> queryUserScenicCollection(Map<String, Object> search);
+
+    /**
+     * 查询用户点赞景点列表
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserScenicFabulousCollection> queryUserScenicLike(Map<String, Object> search);
 }

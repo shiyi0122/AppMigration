@@ -19,6 +19,98 @@
     from sys_user_district_fabulous_collection
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection">
+      <id column="id" property="id" jdbcType="BIGINT" />
+      <result column="user_id" property="userId" jdbcType="BIGINT" />
+      <result column="scenic_spot_id" property="scenicSpotId" jdbcType="BIGINT" />
+      <result column="fabulous" property="fabulous" jdbcType="VARCHAR" />
+      <result column="collection" property="collection" jdbcType="VARCHAR" />
+      <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+      <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <collection property="sysScenicSpotList" column="scenic_spot_id"
+                ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+      <id column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+      <result column="SCENIC_SPOT_NAME" property="scenicSpotName" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_CONTACT" property="scenicSpotContact" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_PHONE" property="scenicSpotPhone" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_EMAIL" property="scenicSpotEmail" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_POSTAL_CODE" property="scenicSpotPostalCode" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_ROBOT_TOTAL" property="scenicSpotRobotTotal" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_STATUS" property="scenicSpotStatus" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_OPENWORD" property="scenicSpotOpenword" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_CLOSEWORD" property="scenicSpotCloseword" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_BEYOND_PRICE" property="scenicSpotBeyondPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_WEEKEND_PRICE" property="scenicSpotWeekendPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NORMAL_PRICE" property="scenicSpotNormalPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_WEEKEND_RENT_PRICE" property="scenicSpotWeekendRentPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NORMAL_RENT_PRICE" property="scenicSpotNormalRentPrice" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_WEEKEND_TIME" property="scenicSpotWeekendTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NORMAL_TIME" property="scenicSpotNormalTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_REMAINING_TIME" property="scenicSpotRemainingTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_RENT_TIME" property="scenicSpotRentTime" jdbcType="VARCHAR" />
+      <result column="COORDINATE_RANGE" property="coordinateRange" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_DEPOSIT" property="scenicSpotDeposit" jdbcType="VARCHAR" />
+      <result column="NORMAL_CAPPED_PRICE" property="normalCappedPrice" jdbcType="VARCHAR" />
+      <result column="WEEKEND_CAPPED_PRICE" property="weekendCappedPrice" jdbcType="VARCHAR" />
+      <result column="RANDOM_BROADCAST_TIME" property="randomBroadcastTime" jdbcType="VARCHAR" />
+      <result column="ROBOT_WAKEUP_WORDS" property="robotWakeupWords" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_THE_SERVER" property="scenicSpotTheServer" jdbcType="VARCHAR" />
+      <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+      <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_FID" property="scenicSpotFid" jdbcType="BIGINT" />
+      <result column="SCENIC_SPOT_FREQUENCY" property="scenicSpotFrequency" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_FENCE_TIME" property="scenicSpotFenceTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_FORBIDDEN_ZONE_TIME" property="scenicSpotForbiddenZoneTime" jdbcType="VARCHAR" />
+      <result column="TEST_START_TIME" property="testStartTime" jdbcType="VARCHAR" />
+      <result column="TRIAL_OPERATIONS_TIME" property="trialOperationsTime" jdbcType="VARCHAR" />
+      <result column="FORMAL_OPERATION_TIME" property="formalOperationTime" jdbcType="VARCHAR" />
+      <result column="STOP_OPERATION_TIME" property="stopOperationTime" jdbcType="VARCHAR" />
+      <result column="COMPANY_ID" property="companyId" jdbcType="BIGINT" />
+      <result column="PAUSE_STATE" property="pauseState" jdbcType="VARCHAR" />
+      <result column="WORK_TIME" property="workTime" jdbcType="VARCHAR" />
+      <result column="CLOSING_TIME" property="closingTime" jdbcType="VARCHAR" />
+      <result column="PAUSE_BROADCAST" property="pauseBroadcast" jdbcType="VARCHAR" />
+      <result column="WORK_BROADCAST" property="workBroadcast" jdbcType="VARCHAR" />
+      <result column="CLOSING_BROADCAST" property="closingBroadcast" jdbcType="VARCHAR" />
+      <result column="LAMP_OPENING_TIME" property="lampOpeningTime" jdbcType="VARCHAR" />
+      <result column="LAMP_CLOSING_TIME" property="lampClosingTime" jdbcType="VARCHAR" />
+      <result column="LAMP_LIGHTING_TIME" property="lampLightingTime" jdbcType="VARCHAR" />
+      <result column="FREE_TIME_SETTING" property="freeTimeSetting" jdbcType="VARCHAR" />
+      <result column="GIFT_TIME_SETTING" property="giftTimeSetting" jdbcType="VARCHAR" />
+      <result column="GIFT_USAGE_SETTING" property="giftUsageSetting" jdbcType="VARCHAR" />
+      <result column="SCNEIC_SPOT_IMG_URL" property="scneicSpotImgUrl" jdbcType="VARCHAR" />
+      <result column="HEAT" property="heat" jdbcType="BIGINT" />
+    </collection>
+  </resultMap>
+  <!--查询用户景区收藏列表-->
+  <select id="queryUserCollection" resultMap="BaseResultMapMax" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      sys_user_district_fabulous_collection a
+        LEFT JOIN SYS_SCENIC_SPOT b ON a.scenic_spot_id = b.SCENIC_SPOT_ID
+        AND a.collection = 1
+        LEFT JOIN SYS_SCENIC_SPOT_IMG c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+    WHERE
+      a.user_id = #{userId,jdbcType=BIGINT}
+    ORDER BY a.update_time DESC
+  </select>
+  <!--查询用户景区点赞列表-->
+  <select id="queryUserLike" resultMap="BaseResultMapMax" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      sys_user_district_fabulous_collection a
+        LEFT JOIN SYS_SCENIC_SPOT b ON a.scenic_spot_id = b.SCENIC_SPOT_ID
+        AND a.fabulous = 1
+        LEFT JOIN SYS_SCENIC_SPOT_IMG c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+    WHERE
+      a.user_id = #{userId,jdbcType=BIGINT}
+    ORDER BY a.update_time DESC
+  </select>
+
+
 
   <!--查询用户是否在此景区进行点赞或收藏-->
   <select id="queryUserFabulousCollection" resultMap="BaseResultMap" parameterType="java.util.HashMap" >

@@ -36,6 +36,7 @@
     <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
     <collection property="SysScenicSpotBroadcastExtend" column="BROADCAST_ID"
                 ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs">
       <id column="BROADCAST_RES_ID" property="broadcastResId" jdbcType="BIGINT" />
@@ -56,6 +57,64 @@
       WHERE A.SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND A.SORT_TYPE = 0 AND B.BROADCAST_ID IS NOT NULL
       order by  A.SORT_TYPE DESC
   </select>
+
+
+
+  <resultMap id="BaseResultMapList" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    <id column="BROADCAST_ID" property="broadcastId" jdbcType="BIGINT" />
+    <result column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+    <result column="BROADCAST_GPS" property="broadcastGps" jdbcType="VARCHAR" />
+    <result column="BROADCAST_GPS_BAI_DU" property="broadcastGpsBaiDu" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_RANGE" property="scenicSpotRange" jdbcType="VARCHAR" />
+    <result column="BROADCAST_NAME" property="broadcastName" jdbcType="VARCHAR" />
+    <result column="PIN_YIN_NAME" property="pinYinName" jdbcType="VARCHAR" />
+    <result column="INTRODUCTION_TYPES" property="introductionTypes" jdbcType="VARCHAR" />
+    <result column="NAVIGATION_TYPE" property="navigationType" jdbcType="VARCHAR" />
+    <result column="BROADCAST_PRIORITY" property="broadcastPriority" jdbcType="VARCHAR" />
+    <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
+    <result column="PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR" />
+      <collection property="rankings" column="broadcast_id"
+                   ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="broadcast_id" property="broadcastId" jdbcType="BIGINT" />
+        <result column="same_day" property="sameDay" jdbcType="INTEGER" />
+        <result column="total" property="total" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      </collection>
+  </resultMap>
+
+  <select id="queryWordsScenicSpotBroadcastList" resultMap="BaseResultMapList" parameterType="java.util.HashMap" >
+    SELECT
+      *
+    FROM
+      SYS_SCENIC_SPOT a
+        INNER JOIN SYS_SCENIC_SPOT_BROADCAST b ON a.SCENIC_SPOT_ID = b.SCENIC_SPOT_ID
+        INNER JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND d ON b.BROADCAST_ID = d.BROADCAST_ID
+        LEFT JOIN sys_scenic_district_ranking c ON b.BROADCAST_ID = c.broadcast_id
+        <if test="type != null and type != ''">
+          AND c.type = #{type,jdbcType=VARCHAR}
+        </if>
+        <if test="types != null and types != ''">
+          AND c.type = #{types,jdbcType=VARCHAR}
+        </if>
+    WHERE
+    <if test="broadcastName != null and broadcastName != '' and scenicSpotId != null and scenicSpotId != ''">
+      b.SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
+      AND b.BROADCAST_NAME like concat ('%',#{broadcastName},'%')
+    </if>
+    <if test="type != null and type != ''">
+      b.SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT}
+       AND b.SORT_TYPE = 0
+    ORDER BY
+      c.update_time DESC
+    </if>
+  </select>
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />

@@ -3,7 +3,7 @@
 <mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicDistrictRankingMapper" >
   <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="scenic_district_id" property="scenicDistrictId" jdbcType="BIGINT" />
+    <result column="broadcast_id" property="broadcastId" jdbcType="BIGINT" />
     <result column="same_day" property="sameDay" jdbcType="INTEGER" />
     <result column="total" property="total" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="VARCHAR" />
@@ -11,7 +11,7 @@
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, scenic_district_id, same_day, total, type, create_time, update_time
+    id, broadcast_id, same_day, total, type, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -19,23 +19,22 @@
     from sys_scenic_district_ranking
     where id = #{id,jdbcType=BIGINT}
   </select>
-
   <!--查询景点排行数据-->
   <select id="bestRanking" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select
     <include refid="Base_Column_List" />
     from sys_scenic_district_ranking
-    where scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT} and type = #{type,jdbcType=VARCHAR}
+    where broadcast_id = #{scenicDistrictId,jdbcType=BIGINT} and type = #{type,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from sys_scenic_district_ranking
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
-    insert into sys_scenic_district_ranking (id, scenic_district_id, same_day, 
+    insert into sys_scenic_district_ranking (id, broadcast_id, same_day, 
       total, type, create_time, 
       update_time)
-    values (#{id,jdbcType=BIGINT}, #{scenicDistrictId,jdbcType=BIGINT}, #{sameDay,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{broadcastId,jdbcType=BIGINT}, #{sameDay,jdbcType=INTEGER}, 
       #{total,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=VARCHAR})
   </insert>
@@ -45,8 +44,8 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="scenicDistrictId != null" >
-        scenic_district_id,
+      <if test="broadcastId != null" >
+        broadcast_id,
       </if>
       <if test="sameDay != null" >
         same_day,
@@ -68,8 +67,8 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="scenicDistrictId != null" >
-        #{scenicDistrictId,jdbcType=BIGINT},
+      <if test="broadcastId != null" >
+        #{broadcastId,jdbcType=BIGINT},
       </if>
       <if test="sameDay != null" >
         #{sameDay,jdbcType=INTEGER},
@@ -91,8 +90,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
     update sys_scenic_district_ranking
     <set >
-      <if test="scenicDistrictId != null" >
-        scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT},
+      <if test="broadcastId != null" >
+        broadcast_id = #{broadcastId,jdbcType=BIGINT},
       </if>
       <if test="sameDay != null" >
         same_day = #{sameDay,jdbcType=INTEGER},
@@ -114,7 +113,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking" >
     update sys_scenic_district_ranking
-    set scenic_district_id = #{scenicDistrictId,jdbcType=BIGINT},
+    set broadcast_id = #{broadcastId,jdbcType=BIGINT},
       same_day = #{sameDay,jdbcType=INTEGER},
       total = #{total,jdbcType=INTEGER},
       type = #{type,jdbcType=VARCHAR},

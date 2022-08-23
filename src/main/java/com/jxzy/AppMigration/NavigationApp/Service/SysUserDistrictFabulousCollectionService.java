@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysUserDistrictFabulousCollectionService {
@@ -35,4 +36,28 @@ public interface SysUserDistrictFabulousCollectionService {
      * @date: 2022/8/3 0003
      */
     int updateUserFabulousCollection(SysUserDistrictFabulousCollection user);
+
+    /**
+     * 查询用户收藏景区列表
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserDistrictFabulousCollection> queryUserCollection(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 查询用户点赞景区列表
+     * @param: pageNum
+     * @param: pageSize
+     * @param: search
+     * @description: TODO
+     * @return: java.util.List<com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection>
+     * @author: qushaobei
+     * @date: 2022/8/15 0015
+     */
+    List<SysUserDistrictFabulousCollection> queryUserLike(int pageNum, int pageSize, Map<String, Object> search);
 }
