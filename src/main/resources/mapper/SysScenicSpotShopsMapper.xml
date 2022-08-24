@@ -9,12 +9,13 @@
     <result column="shops_address" property="shopsAddress" jdbcType="VARCHAR" />
     <result column="shops_gps" property="shopsGps" jdbcType="VARCHAR" />
     <result column="shops_pic" property="shopsPic" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     shops_id, scenic_spot_id, shops_name, shops_phone, shops_address, shops_gps, shops_pic, 
-    create_time, update_time
+    introduction, create_time, update_time
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -22,6 +23,7 @@
     from sys_scenic_spot_shops
     where shops_id = #{shopsId,jdbcType=BIGINT}
   </select>
+
 
   <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops">
     <id column="shops_id" property="shopsId" jdbcType="BIGINT" />
@@ -31,6 +33,7 @@
     <result column="shops_address" property="shopsAddress" jdbcType="VARCHAR" />
     <result column="shops_gps" property="shopsGps" jdbcType="VARCHAR" />
     <result column="shops_pic" property="shopsPic" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
     <collection property="sysScenicSpotShopsType" column="shops_id"
@@ -70,12 +73,12 @@
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
     insert into sys_scenic_spot_shops (shops_id, scenic_spot_id, shops_name, 
       shops_phone, shops_address, shops_gps, 
-      shops_pic, create_time, update_time
-      )
+      shops_pic, introduction, create_time, 
+      update_time)
     values (#{shopsId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{shopsName,jdbcType=VARCHAR}, 
       #{shopsPhone,jdbcType=VARCHAR}, #{shopsAddress,jdbcType=VARCHAR}, #{shopsGps,jdbcType=VARCHAR}, 
-      #{shopsPic,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}
-      )
+      #{shopsPic,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
     insert into sys_scenic_spot_shops
@@ -100,6 +103,9 @@
       </if>
       <if test="shopsPic != null" >
         shops_pic,
+      </if>
+      <if test="introduction != null" >
+        introduction,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -130,6 +136,9 @@
       <if test="shopsPic != null" >
         #{shopsPic,jdbcType=VARCHAR},
       </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=VARCHAR},
       </if>
@@ -159,6 +168,9 @@
       <if test="shopsPic != null" >
         shops_pic = #{shopsPic,jdbcType=VARCHAR},
       </if>
+      <if test="introduction != null" >
+        introduction = #{introduction,jdbcType=VARCHAR},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=VARCHAR},
       </if>
@@ -176,6 +188,7 @@
       shops_address = #{shopsAddress,jdbcType=VARCHAR},
       shops_gps = #{shopsGps,jdbcType=VARCHAR},
       shops_pic = #{shopsPic,jdbcType=VARCHAR},
+      introduction = #{introduction,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=VARCHAR}
     where shops_id = #{shopsId,jdbcType=BIGINT}

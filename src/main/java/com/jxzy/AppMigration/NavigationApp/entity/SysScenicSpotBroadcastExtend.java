@@ -14,6 +14,10 @@ public class SysScenicSpotBroadcastExtend {
 
     private String mediaType;
 
+    private String fabulous;
+
+    private String collection;
+
     private String createDate;
 
     private String updateDate;

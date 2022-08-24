@@ -20,6 +20,8 @@ public class SysScenicSpotShops {
 
     private String shopsPic;
 
+    private String introduction;
+
     private String createTime;
 
     private String updateTime;

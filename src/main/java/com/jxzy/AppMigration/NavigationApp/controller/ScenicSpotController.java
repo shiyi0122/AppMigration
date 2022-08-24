@@ -18,11 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 @Api(tags = "游小伴景区资源相关")
@@ -874,9 +870,11 @@ public class ScenicSpotController extends PublicUtil {
                         search.put("type","5");
                         search.put("scenicDistrictId",scenicDistrictId);
                         SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
-                        rankings.setSameDay(rankings.getSameDay()-1);
-                        rankings.setTotal(rankings.getTotal()-1);
-                        sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        if (rankings != null) {
+                            rankings.setSameDay(rankings.getSameDay()-1);
+                            rankings.setTotal(rankings.getTotal()-1);
+                            sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        }
                         scenic.setFabulous("0");
                         sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
                         returnModel.setData("");
@@ -887,9 +885,11 @@ public class ScenicSpotController extends PublicUtil {
                         search.put("type","4");
                         search.put("scenicDistrictId",scenicDistrictId);
                         SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
-                        rankings.setSameDay(rankings.getSameDay()-1);
-                        rankings.setTotal(rankings.getTotal()-1);
-                        sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        if (rankings != null) {
+                            rankings.setSameDay(rankings.getSameDay()-1);
+                            rankings.setTotal(rankings.getTotal()-1);
+                            sysScenicDistrictRankingService.updatebestRanking(rankings);
+                        }
                         scenic.setCollection("0");
                         sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
                         returnModel.setData("");
@@ -969,6 +969,7 @@ public class ScenicSpotController extends PublicUtil {
     public ReturnModel queryScenicDistrictRankingList(@ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=false)String type,
                                                       @ApiParam(name="types",value="判定type条件，类型和type类型一样(1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜)",required=false)String types,
                                                       @ApiParam(name="scenicSpotId",value="景区ID",required=false)String scenicSpotId,
+                                                      @ApiParam(name="userId",value="用户ID",required=false)String userId,
                                                       @ApiParam(name="broadcastId",value="景点ID",required=false)String broadcastId,
                                                       @ApiParam(name="broadcastName",value="景点名称",required=false)String broadcastName,
                                                       @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
@@ -996,6 +997,7 @@ public class ScenicSpotController extends PublicUtil {
                 return returnModel;
             }else if (broadcastId != null) {
                 search.put("broadcastId",broadcastId);
+                search.put("userId",userId);
                 SysScenicSpotBroadcastExtendWithBLOBs extend = sysScenicSpotBroadcastService.queryscenicSpotContent(search);
                 returnModel.setData(extend);
                 returnModel.setMsg("成功获取景区排行列表！");
@@ -1059,9 +1061,13 @@ public class ScenicSpotController extends PublicUtil {
                 if ("4".equals(type)) {//收藏
                     List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicCollection(pageNum,pageSize,search);
                     for (int i = 0; i < broadcast.size(); i++) {
-                        String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(i).getPictureUrl();
-                        if (pictureUrl != null && !"".equals(pictureUrl)) {
-                            broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                        if (broadcast.size() > 0) {
+                            for (int j = 0; j < broadcast.get(i).getSysScenicSpotBroadcasts().size(); j++) {
+                                String pictureUrl = broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl()=="" ?"":broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
+                                if (pictureUrl != null && !"".equals(pictureUrl)) {
+                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                                }
+                            }
                         }
                     }
                     //PageInfo就是一个分页Bean
@@ -1073,9 +1079,13 @@ public class ScenicSpotController extends PublicUtil {
                 }else if ("5".equals(type)) {//点赞
                     List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicLike(pageNum,pageSize,search);
                     for (int i = 0; i < broadcast.size(); i++) {
-                        String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(i).getPictureUrl();
-                        if (pictureUrl != null && !"".equals(pictureUrl)) {
-                            broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                        if (broadcast.size() > 0) {
+                            for (int j = 0; j < broadcast.get(i).getSysScenicSpotBroadcasts().size(); j++) {
+                                String pictureUrl = broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl()==null ?"":broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
+                                if (pictureUrl != null && !"".equals(pictureUrl)) {
+                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                                }
+                            }
                         }
                     }
                     //PageInfo就是一个分页Bean

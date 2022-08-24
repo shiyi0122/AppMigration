@@ -81,6 +81,16 @@
       <result column="GIFT_USAGE_SETTING" property="giftUsageSetting" jdbcType="VARCHAR" />
       <result column="SCNEIC_SPOT_IMG_URL" property="scneicSpotImgUrl" jdbcType="VARCHAR" />
       <result column="HEAT" property="heat" jdbcType="BIGINT" />
+      <collection property="heatList" column="scenicSpotId"
+                  ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotHeat">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="scenic_spot_id" property="scenicSpotId" jdbcType="BIGINT" />
+        <result column="same_day" property="sameDay" jdbcType="INTEGER" />
+        <result column="total" property="total" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      </collection>
     </collection>
   </resultMap>
   <!--查询用户景区收藏列表-->
@@ -92,6 +102,8 @@
         LEFT JOIN SYS_SCENIC_SPOT b ON a.scenic_spot_id = b.SCENIC_SPOT_ID
         AND a.collection = 1
         LEFT JOIN SYS_SCENIC_SPOT_IMG c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+        LEFT JOIN sys_scenic_spot_heat d ON a.scenic_spot_id = d.scenic_spot_id
+        AND d.type = 2
     WHERE
       a.user_id = #{userId,jdbcType=BIGINT}
     ORDER BY a.update_time DESC
@@ -105,6 +117,8 @@
         LEFT JOIN SYS_SCENIC_SPOT b ON a.scenic_spot_id = b.SCENIC_SPOT_ID
         AND a.fabulous = 1
         LEFT JOIN SYS_SCENIC_SPOT_IMG c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+        LEFT JOIN sys_scenic_spot_heat d ON a.scenic_spot_id = d.scenic_spot_id
+        AND d.type = 2
     WHERE
       a.user_id = #{userId,jdbcType=BIGINT}
     ORDER BY a.update_time DESC

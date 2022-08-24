@@ -46,6 +46,16 @@
       <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
       <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
       <result column="PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR" />
+      <collection property="rankings" column="broadcastId"
+                  ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="broadcast_id" property="broadcastId" jdbcType="BIGINT" />
+        <result column="same_day" property="sameDay" jdbcType="INTEGER" />
+        <result column="total" property="total" jdbcType="INTEGER" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      </collection>
     </collection>
   </resultMap>
 
@@ -57,6 +67,7 @@
         LEFT JOIN SYS_SCENIC_SPOT_BROADCAST b ON a.scenic_district_id = b.BROADCAST_ID
         LEFT JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND d ON b.BROADCAST_ID = d.BROADCAST_ID
         LEFT JOIN SYS_SCENIC_SPOT c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+        LEFT JOIN sys_scenic_district_ranking e ON a.scenic_district_id = e.broadcast_id and e.type = 2
     WHERE
       a.user_id = #{userId,jdbcType=BIGINT}
       AND a.collection = 1
@@ -72,6 +83,7 @@
         LEFT JOIN SYS_SCENIC_SPOT_BROADCAST b ON a.scenic_district_id = b.BROADCAST_ID
         LEFT JOIN SYS_SCENIC_SPOT_BROADCAST_EXTEND d ON b.BROADCAST_ID = d.BROADCAST_ID
         LEFT JOIN SYS_SCENIC_SPOT c ON b.SCENIC_SPOT_ID = c.SCENIC_SPOT_ID
+        LEFT JOIN sys_scenic_district_ranking e ON a.scenic_district_id = e.broadcast_id and e.type = 2
     WHERE
       a.user_id = #{userId,jdbcType=BIGINT}
       AND a.fabulous = 1

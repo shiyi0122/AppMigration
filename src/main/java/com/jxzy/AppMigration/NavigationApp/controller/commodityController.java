@@ -3,8 +3,6 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotShopsService;
-import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
-import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;

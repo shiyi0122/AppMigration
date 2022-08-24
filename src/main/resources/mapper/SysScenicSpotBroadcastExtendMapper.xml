@@ -6,6 +6,8 @@
     <result column="BROADCAST_ID" property="broadcastId" jdbcType="BIGINT" />
     <result column="MEDIA_RESOURCE_URL" property="mediaResourceUrl" jdbcType="VARCHAR" />
     <result column="MEDIA_TYPE" property="mediaType" jdbcType="VARCHAR" />
+    <result column="fabulous" property="fabulous" jdbcType="VARCHAR" />
+    <result column="collection" property="collection" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
   </resultMap>
@@ -14,7 +16,7 @@
     <result column="PICTURE_URL" property="pictureUrl" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    BROADCAST_RES_ID, BROADCAST_ID, MEDIA_RESOURCE_URL, MEDIA_TYPE, CREATE_DATE, UPDATE_DATE
+    BROADCAST_RES_ID, BROADCAST_ID, MEDIA_RESOURCE_URL, MEDIA_TYPE, fabulous, collection,CREATE_DATE, UPDATE_DATE
   </sql>
   <sql id="Blob_Column_List" >
     BROADCAST_CONTENT, PICTURE_URL
@@ -33,8 +35,12 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from SYS_SCENIC_SPOT_BROADCAST_EXTEND
-    where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
+    FROM
+    SYS_SCENIC_SPOT_BROADCAST_EXTEND a
+    LEFT JOIN sys_user_scenic_fabulous_collection b
+    ON a.BROADCAST_ID = b.scenic_district_id
+        and b.user_id = #{userId,jdbcType=BIGINT}
+    WHERE a.BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from SYS_SCENIC_SPOT_BROADCAST_EXTEND
