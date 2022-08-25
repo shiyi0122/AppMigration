@@ -155,7 +155,7 @@ public class UserController extends PublicUtil {
                     String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
                     //重新随机生成名字
                     filename = UUID.randomUUID().toString() +suffixName;//重命名
-                    File localFile = new File(uploadPath+"\\"+filename);
+                    File localFile = new File(uploadPath+filename);
                     //保存文件
                     //saveFile(files, uploadPath);
 //                    files.transferTo(localFile); //把上传的文件保存至本地
@@ -346,7 +346,7 @@ public class UserController extends PublicUtil {
             String suffixName = OriginalFilename.substring(OriginalFilename.lastIndexOf("."));//获取文件后缀名
             //重新随机生成名字
             String filename = UUID.randomUUID().toString() +suffixName;//重命名
-            File localFile = new File(uploadPath+"\\"+filename);
+            File localFile = new File(uploadPath+filename);
             try {
                 FileUtils.copyInputStreamToFile(file.getInputStream(), localFile);
 //                file.transferTo(localFile); //把上传的文件保存至本地
