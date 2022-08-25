@@ -1,22 +1,20 @@
 package com.jxzy.AppMigration.NavigationApp.controller;
 
-
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.*;
 import com.jxzy.AppMigration.NavigationApp.entity.*;
 import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
 import com.jxzy.AppMigration.NavigationApp.util.*;
 import com.jxzy.AppMigration.common.utils.DateUtil;
 import com.jxzy.AppMigration.common.utils.IdUtils;
 import io.swagger.annotations.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -48,7 +46,7 @@ public class ScenicSpotController extends PublicUtil {
     @Autowired
     private SysScenicSpotParkingService sysScenicSpotParkingService;
     @Autowired
-    private SysScenicSpotHeatService sysScenicSpotHeatService;
+    private  SysScenicSpotHeatService sysScenicSpotHeatService;
     @Autowired
     private SysScenicDistrictRankingService sysScenicDistrictRankingService;
     @Autowired
@@ -80,7 +78,8 @@ public class ScenicSpotController extends PublicUtil {
                                                 @ApiParam(name="city",value="省市名称",required=false)String city,
                                                 @ApiParam(name="type",value="空代表查询全部，1代表热度查询",required=false)String type,
                                                 @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                                @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                                @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                                @ApiParam(name="baseDTO",value="token",required=true)BaseDTO baseDTO){
             ReturnModel returnModel = new ReturnModel();
             Map<String,Object> search = new HashMap<>();
             try {
@@ -125,7 +124,7 @@ public class ScenicSpotController extends PublicUtil {
         @ApiImplicitParams({
                 @ApiImplicitParam(name="longinTokenId", value="登录令牌,状态码202为登录失效", dataType="string", required = true),
                 @ApiImplicitParam(name="scenicSpotId",value="景区ID",dataType="string",required = true)})
-        public ReturnModel addScenicSpotHeat(String longinTokenId,String scenicSpotId) {
+        public ReturnModel addScenicSpotHeat(String longinTokenId,String scenicSpotId,BaseDTO baseDTO) {
             ReturnModel returnModel = new ReturnModel();
             try {
                 SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
@@ -180,7 +179,8 @@ public class ScenicSpotController extends PublicUtil {
                                             @ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
                                             @ApiParam(name="type",value="type=1查询景点列表,type=2查询停靠点,type=3卫生间列表,type=4经典路线列表",required=true)String type,
                                             @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                            @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                            @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                            @ApiParam(name="baseDTO",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -252,7 +252,8 @@ public class ScenicSpotController extends PublicUtil {
     @ApiOperation("景区电子围栏")
     @GetMapping("/queryScenicSpotElectronicFence")
     public ReturnModel queryScenicSpotElectronicFence(@ApiParam(name="longinTokenId",value="登录令牌,状态码202为登录失效",required=true)String longinTokenId,
-                                                   @ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId){
+                                                   @ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
+                                                   @ApiParam(name="scenicSpotId",value="景区ID",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -290,7 +291,8 @@ public class ScenicSpotController extends PublicUtil {
     @ApiOperation("查询地图资源")
     @GetMapping("/queryMapRes")
     public ReturnModel queryMapRes(@ApiParam(name="longinTokenId",value="登录令牌,状态码202为登录失效",required=true)String longinTokenId,
-                                                   @ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId){
+                                   @ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
+                                   @ApiParam(name="scenicSpotId",value="景区名称",required=true) BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -327,7 +329,7 @@ public class ScenicSpotController extends PublicUtil {
     @ApiOperation("兑换奖品")
     @PostMapping("/exchangePrize")
     @ApiImplicitParams({@ApiImplicitParam(name ="exchangeNumber", value = "兑奖编号",dataType="string", required = true)})
-    public ReturnModel exchangePrize(String exchangeNumber){
+    public ReturnModel exchangePrize(String exchangeNumber,BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -368,9 +370,10 @@ public class ScenicSpotController extends PublicUtil {
     @ApiOperation("奖品列表")
     @GetMapping("/queryExchangePrizeList")
     public ReturnModel queryExchangePrizeList(@ApiParam(name="exchangeState",value="兑换状态exchangeState=1已兑换奖品，exchangeState=0为兑换奖品，不传查询所有",required=false)String exchangeState,
-                                   @ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
+                                              @ApiParam(name="scenicSpotId",value="景区名称",required=true)String scenicSpotId,
                                               @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                              @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                              @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                              @ApiParam(name="scenicSpotId",value="景区名称",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -407,7 +410,8 @@ public class ScenicSpotController extends PublicUtil {
                                       @ApiParam(name="userCoordinates",value="用户坐标(type=1的时候不传此参数)",required=false)String userCoordinates,
                                       @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
                                       @ApiParam(name="sameDay",value="当日数据",required=true)int sameDay,
-                                      @ApiParam(name="total",value="累计数据",required=true)int total) {
+                                      @ApiParam(name="total",value="累计数据",required=true)int total,
+                                      @ApiParam(name="baseDTO",value="token",required=true)BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         Map<String, Object> search = new HashMap<>();
         SysScenicSpotGpsCoordinateWithBLOBs coordinate = null;//初始化电子围栏对象
@@ -540,7 +544,8 @@ public class ScenicSpotController extends PublicUtil {
      */
     @ApiOperation("查询用户是否在景区范围内")
     @GetMapping("/queryLocationScenicSpot")
-    public ReturnModel queryLocationScenicSpot (@ApiParam(name="userCoordinates",value="当前页,输入0不分页",required=true)String userCoordinates){
+    public ReturnModel queryLocationScenicSpot (@ApiParam(name="userCoordinates",value="当前页,输入0不分页",required=true)String userCoordinates,
+                                                @ApiParam(name="baseDto",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         boolean flag = false;
@@ -600,7 +605,8 @@ public class ScenicSpotController extends PublicUtil {
                                       @ApiParam(name="userCoordinates",value="用户坐标",required=false)String userCoordinates,
                                       @ApiParam(name="type",value="1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜",required=true)String type,
                                       @ApiParam(name="sameDay",value="当日数据",required=true)int sameDay,
-                                      @ApiParam(name="total",value="累计数据",required=true)int total) {
+                                      @ApiParam(name="total",value="累计数据",required=true)int total,
+                                      @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         Map<String, Object> search = new HashMap<>();
         SysScenicSpotGpsCoordinateWithBLOBs coordinate = null;//初始化电子围栏对象
@@ -741,7 +747,8 @@ public class ScenicSpotController extends PublicUtil {
                                               @ApiParam(name="type",value="区分景区点赞收藏还是景点点赞收藏：1景区，2景点",required=true)String type,
                                               @ApiParam(name="part",value="区分点赞还是收藏：1点赞，2收藏,3取消点赞,4取消收藏",required=true)String part,
                                               @ApiParam(name="scenicSpotId",value="景区ID",required=false)String scenicSpotId,
-                                              @ApiParam(name="scenicDistrictId",value="景点ID",required=false)String scenicDistrictId){
+                                              @ApiParam(name="scenicDistrictId",value="景点ID",required=false)String scenicDistrictId,
+                                              @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         SysUserDistrictFabulousCollection users = new SysUserDistrictFabulousCollection();
@@ -925,7 +932,8 @@ public class ScenicSpotController extends PublicUtil {
                                                   @ApiParam(name="types",value="判定type条件，类型和type类型一样(1热搜榜、2人气榜、3欢迎榜、4收藏榜、5点赞榜)",required=false)String types,
                                                   @ApiParam(name="scenicSpotName",value="景区名称",required=false)String scenicSpotName,
                                                   @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                                  @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                                  @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                                  @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -973,7 +981,8 @@ public class ScenicSpotController extends PublicUtil {
                                                       @ApiParam(name="broadcastId",value="景点ID",required=false)String broadcastId,
                                                       @ApiParam(name="broadcastName",value="景点名称",required=false)String broadcastName,
                                                       @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                                      @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                                      @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                                      @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -1034,7 +1043,8 @@ public class ScenicSpotController extends PublicUtil {
                                                @ApiParam(name="userId",value="用户ID",required=true)String userId,
                                                @ApiParam(name="baseDto",value="登录令牌(测试阶段暂时可以随便传参)",required=true) BaseDTO baseDto,
                                                @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                               @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                               @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                               @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -1105,6 +1115,34 @@ public class ScenicSpotController extends PublicUtil {
             return returnModel;
         }
     }
+
+    /**
+     * 根据用户id和景区查询景区是否点赞收藏
+     * zhang
+     * @param searchDTO
+     * @return
+     */
+    @ApiOperation("根据用户查询景区是否点赞收藏")
+    @GetMapping("/ifUserLikeCollection")
+    public ReturnModel ifUserLikeCollection(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(searchDTO.getSpotId()) && StringUtils.isEmpty(searchDTO.getUid())){
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setData("");
+            returnModel.setMsg("景区id或者用户id为空，无法查询！");
+            return returnModel;
+        }
+
+        SysUserDistrictFabulousCollection sysUserDistrictFabulousCollection = sysUserDistrictFabulousCollectionService.ifUserLikeCollection(searchDTO.getSpotId(),searchDTO.getUid());
+
+        returnModel.setData(sysUserDistrictFabulousCollection);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功");
+        return  returnModel;
+    }
+
 
 
 

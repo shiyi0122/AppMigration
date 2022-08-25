@@ -4,6 +4,8 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotShopsService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
@@ -12,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +49,8 @@ public class commodityController extends PublicUtil {
     @GetMapping("/queryScenicShopsList")
     public ReturnModel queryScenicShopsList(@ApiParam(name="shopsId",value="商铺ID",required=true)String shopsId,
                                             @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                            @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize){
+                                            @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                            @ApiParam(name="baseDTO",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {
@@ -80,4 +84,31 @@ public class commodityController extends PublicUtil {
             return returnModel;
         }
     }
+
+    /**
+     * zhang
+     * 景区全景中的最近店铺展示
+     * @return
+     */
+    @ApiOperation("景区全景中的最近店铺展示")
+    @GetMapping("/getLatelyScenicShops")
+    public ReturnModel getLatelyScenicShops(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+        if (StringUtils.isEmpty(searchDTO.getSpotId()) && StringUtils.isEmpty(searchDTO.getLng()) && StringUtils.isEmpty(searchDTO.getLat())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景区id或坐标为空，无法查询!");
+        }
+        SysScenicSpotShops sysScenicSpotShops =  sysScenicSpotShopsService.getLatelyScewnicShops(searchDTO.getSpotId(),searchDTO.getLng(),searchDTO.getLat());
+
+        returnModel.setData(sysScenicSpotShops);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功!");
+
+        return returnModel;
+
+    }
+
+
 }

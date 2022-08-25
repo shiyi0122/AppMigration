@@ -1,6 +1,8 @@
 package com.jxzy.AppMigration.NavigationApp.entity.dto;
 
 import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -33,18 +35,24 @@ public class PageDTO extends BaseDTO {
     @NotNull
     private Integer pageSize;
 
+    //景区id
+    @ApiModelProperty(value = "景区id")
+    private Long spotId;
+
     //经度
+    @ApiModelProperty(value = "经度")
     private String lng;
     //纬度
+    @ApiModelProperty(value = "纬度")
     private String lat;
 
     //排序
+    @ApiModelProperty(value = "排序")
     private Integer sort;
-
+    @ApiModelProperty(value = "景区名称")
     private String spotName;
-
+    @ApiModelProperty(value = "城市id")
     private Long cityId;
-
 
 
 

@@ -33,6 +33,9 @@ public class SysScenicSpotBroadcast {
 
     private String updateDate;
 
+
+    private String heat;
+
     private List<SysScenicSpotBroadcastExtendWithBLOBs> SysScenicSpotBroadcastExtend;
 
     private List<SysScenicSpot> spotList;
@@ -42,6 +45,20 @@ public class SysScenicSpotBroadcast {
     private String scenicSpotAddres;
 
     private String pictureUrl;
+
+    // 新添加
+
+    //是否特色景点
+    private String isFeature;
+    //景点介绍
+    private String introduce;
+    //承受人数
+    private Long bearPeople;
+    //距离
+    private  double distance;
+    //景点地址
+    private String spotBroadcastAddress;
+
 
 
 }

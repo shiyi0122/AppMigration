@@ -3,6 +3,7 @@ package com.jxzy.AppMigration.NavigationApp.util;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 封装分页数据（记录数和所有记录）
@@ -24,7 +25,7 @@ public class PageDataResult {
 
     private List<?> list;
 
-    private List<?> data;
+    private Object data;
 
     private Object dataNew;
 

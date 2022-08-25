@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
+import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
 
 import java.util.List;
@@ -33,4 +34,6 @@ public interface SysGuideAppUsersHelpService {
      * @date: 2022/8/19 0019
      */
     List<SysGuideAppUsersHelp> queryUserHelpData(String helpName);
+
+
 }

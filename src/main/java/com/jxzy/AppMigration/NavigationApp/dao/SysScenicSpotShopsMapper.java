@@ -27,4 +27,13 @@ public interface SysScenicSpotShopsMapper {
      * @date: 2022/8/19 0019
      */
     List<SysScenicSpotShops> queryScenicShopsList(Map<String, Object> search);
+
+    /**
+     * 查询景区中的商店
+     * 张
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotShops> searchScenicShopsList(Map<String, Object> search);
+
 }

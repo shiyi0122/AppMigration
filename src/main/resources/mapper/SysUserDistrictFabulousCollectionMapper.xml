@@ -228,4 +228,19 @@
       update_time = #{updateTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="ifUserLikeCollection" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection">
+    select *
+    from  sys_user_district_fabulous_collection
+    <where>
+      <if test="spotId != null and spotId != ''">
+        scenic_spot_id = #{spotId}
+      </if>
+      <if test="uid != null and uid != ''">
+        and user_id = #{uid}
+      </if>
+    </where>
+  </select>
+
+
 </mapper>

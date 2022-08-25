@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 
 import com.jxzy.AppMigration.NavigationApp.util.JWTUtils;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date 2022/7/21 14:54
  */
 
+@Api(tags = "游客token")
 @RestController
 @RequestMapping("/api")
 public class CommonsController {
@@ -20,7 +22,7 @@ public class CommonsController {
      *
      * @return token
      */
-    @GetMapping("/app/tourists")
+    @GetMapping("/touristsGetToken")
     public ReturnModel touristsGetToken() {
         ReturnModel returnModel = new ReturnModel();
 

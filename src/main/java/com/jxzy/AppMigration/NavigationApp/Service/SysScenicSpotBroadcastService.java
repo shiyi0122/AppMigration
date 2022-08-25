@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
+import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,21 @@ public interface SysScenicSpotBroadcastService {
      * @date: 2022/8/5 0005
      */
     SysScenicSpotBroadcastExtendWithBLOBs queryscenicSpotContent(Map<String, Object> search);
+
+    /**
+     * 获取景点列表
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
+    PageDataResult getSpotBroadcastList(Integer pageNum, Integer pageSize, Integer sort, Map<String, Object> search);
+
+    /**
+     * 景点热度加一
+     * @param id
+     * @return
+     */
+    int addHotSpotBroadcast(Long id);
+
 }

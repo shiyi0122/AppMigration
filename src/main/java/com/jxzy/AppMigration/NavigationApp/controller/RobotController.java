@@ -7,6 +7,7 @@ import com.jxzy.AppMigration.NavigationApp.Service.SysRobotService;
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotWifiDataService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysRobot;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotWifiData;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
@@ -45,7 +46,8 @@ public class RobotController extends PublicUtil {
 
     @ApiOperation("查询机器人列表")
     @GetMapping("/queryRobotList")
-    public ReturnModel queryCityAndScenicSpotLists(@ApiParam(name="robotCode",value="机器人编号",required=false)String robotCode){
+    public ReturnModel queryCityAndScenicSpotLists(@ApiParam(name="robotCode",value="机器人编号",required=false)String robotCode,
+                                                   @ApiParam(name="baseDTO",value="登录令牌",required=false)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
         try {

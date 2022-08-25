@@ -34,4 +34,7 @@ public interface SysScenicSpotMapper {
      * @date: 2022/8/4 0004
      */
     List<SysScenicSpot> queryScenicSpotRankingList(Map<String, Object> search);
+
+    List<SysScenicSpot> getScenicSpotAll(HashMap<String, Object> search);
+
 }

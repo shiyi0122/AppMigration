@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,5 +82,21 @@ public class SysUserDistrictFabulousCollectionServiceImpl implements SysUserDist
     public List<SysUserDistrictFabulousCollection> queryUserLike(int pageNum, int pageSize, Map<String, Object> search) {
         PageHelper.startPage(pageNum,pageSize);
         return sysUserDistrictFabulousCollectionMapper.queryUserLike(search);
+    }
+
+    /**
+     * 根据用户id和景区查询景区是否点赞收藏
+     * zhang
+     * @param
+     * @return
+     */
+    @Override
+    public SysUserDistrictFabulousCollection ifUserLikeCollection(String spotId, String uid) {
+
+        Map<String, Object> search = new HashMap<>();
+        search.put("spotId",spotId);
+        search.put("uid",uid);
+        SysUserDistrictFabulousCollection sysUserDistrictFabulousCollection = sysUserDistrictFabulousCollectionMapper.ifUserLikeCollection(search);
+        return sysUserDistrictFabulousCollection;
     }
 }

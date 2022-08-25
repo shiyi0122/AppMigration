@@ -40,7 +40,7 @@ pagehelper:
   support-methods-arguments: true
 ## 端口号设置
 server:
-  port: 8082
+  port: 8081
   max-http-header-size: 1024000
   #日志机别
   logging:
@@ -61,10 +61,27 @@ TENCENT_KEY: f4eeb442e910c057d2579c90fa0a3f4d
 TENCENT_TEMPLATE: 500066
 TENCENT_MINUTE: 5
 
+#本地访问图片测试使用
+cbs:
+  imagesPath: file:/F:/pro/
+
+#意见反馈图片上传
+userFeedbackPatheGetPicUrl: static/userFeedback/
+userFeedbackGetPicPaht: /pro/static/userFeedback/
+#用户头像上传路径
+userHeadPortraitPatheGetPicUrl: static/userHeadPortrait/
+userHeadPortraitGetPicPaht: /pro/static/userHeadPortrait/
 
 #首页轮播图上传路径
 bannerPatheGetPicUrl: static/banner_pic/
 bannerPatheGetPicPaht: /pro/static/banner_pic/
+#首页榜单图片
+spotHotListPatheGetPicUrl: static/hotList/
+spotHotListPatheGetPicPaht: /pro/static/hotList/
+
+#景点图片
+spotBroadcastPatheGetPicUrl: static/broadcast/
+spotBroadcastPatheGetPicPaht: /pro/static/broadcast/
 
 #支付相关
 #微信支付

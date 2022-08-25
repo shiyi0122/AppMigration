@@ -17,4 +17,14 @@ public interface SysScenicSpotShopsService {
      * @date: 2022/8/19 0019
      */
     List<SysScenicSpotShops> queryScenicShopsList(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 查询最近的店铺信息
+     * @param spotId
+     * @param lng
+     * @param lat
+     * @return
+     */
+    SysScenicSpotShops getLatelyScewnicShops(String spotId, String lng, String lat);
+
 }

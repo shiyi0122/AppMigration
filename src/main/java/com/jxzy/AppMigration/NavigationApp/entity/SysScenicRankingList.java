@@ -1,5 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.entity;
 
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDtoConvert;
 import lombok.Data;
 
 /**
@@ -7,7 +9,7 @@ import lombok.Data;
  * @Date 2022/8/3 18:20
  */
 @Data
-public class SysScenicRankingList {
+public class SysScenicRankingList extends BaseDTO {
 
     private Long  id ;
 
@@ -20,4 +22,6 @@ public class SysScenicRankingList {
     private String createTime;
 
     private String updateTime;
+
+    private String pictureUrl;
 }

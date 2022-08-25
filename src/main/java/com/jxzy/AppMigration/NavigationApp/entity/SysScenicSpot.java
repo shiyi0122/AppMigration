@@ -119,7 +119,8 @@ public class SysScenicSpot {
 
     private List<SysScenicSpotHeat> heatList;
 
-
+    //景区星级
+    private Long startLevel;
     //景区介绍
     private String  introduction;
     //距离
@@ -128,6 +129,7 @@ public class SysScenicSpot {
     private Integer scenicSpotBroadcastCount;
     //景区轮播图
     private String url;
+
 
 
 

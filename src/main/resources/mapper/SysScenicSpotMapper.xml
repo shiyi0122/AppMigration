@@ -775,5 +775,24 @@
     where sss.SCENIC_SPOT_ID = #{spotId}
   </select>
 
+  <select id="getScenicSpotAll" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
+    select sss.*,sssi.SCNEIC_SPOT_IMG_URL as scenicSpotImgUtl
+    from SYS_SCENIC_SPOT sss
+    left join SYS_SCENIC_SPOT_IMG sssi
+    on sss.SCENIC_SPOT_ID = sssi.SCENIC_SPOT_ID
+    <where>
+      <if test="spotName != null and spotName != ''">
+        sss.SCENIC_SPOT_NAME like CONCAT('%',#{spotName},'%')
+      </if>
+        and  sss.ROBOT_WAKEUP_WORDS = 1
+    </where>
+    <if test="sort == 1">
+      order by sss.START_LEVEL DESC
+    </if>
+    <if test="sort == 2">
+      order by sss.HEAT DESC
+    </if>
+  </select>
+
 
 </mapper>

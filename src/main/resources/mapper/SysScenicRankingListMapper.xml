@@ -8,6 +8,7 @@
         <result column="type" property="type" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="VARCHAR" />
         <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+        <result column="picture_url" property="pictureUrl" jdbcType="VARCHAR"/>
     </resultMap>
 
     <select id="searchRankingList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicRankingList">
@@ -40,6 +41,9 @@
             <if test="updateTime != null" >
                 update_time,
             </if>
+            <if test="pictureUrl != null">
+                picture_url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -59,6 +63,9 @@
             </if>
             <if test="updateTime != null" >
                 #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                #{pictureUrl,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>

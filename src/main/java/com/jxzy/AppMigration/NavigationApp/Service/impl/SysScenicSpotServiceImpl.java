@@ -11,6 +11,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
 import com.jxzy.AppMigration.NavigationApp.util.DistanceUtil;
+import com.jxzy.AppMigration.NavigationApp.util.LngLonUtil;
 import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.awt.geom.Point2D;
 import java.util.*;
 
 @Service
@@ -40,62 +42,6 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
     }
 
     /**
-     * 游小伴pp首页全部景区
-     * @param cityName
-     * @return
-     */
-    @Override
-    public PageDataResult currentCity(String lng,String lat,String cityName, Integer sort, Integer pageNum, Integer pageSize) {
-        PageDataResult pageDataResult = new PageDataResult();
-        List<SysScenicSpot> sysScenicSpots = new ArrayList<>();
-        Map<String, Object> search = new HashMap<>();
-        HashMap<String, Object> map = new HashMap<>();
-        SysScenicSpotBinding sysScenicSpotBinding = sysScenicSpotBindingMapper.selectSpotByFname(cityName);
-        if (StringUtils.isEmpty(sysScenicSpotBinding)){
-            return pageDataResult;
-        }
-        PageHelper.startPage(pageNum,pageSize);
-        search.put("scenicSpotPid",sysScenicSpotBinding.getScenicSpotFid());
-        search.put("sort",sort);
-        List<SysScenicSpot> scenicSpots = sysScenicSpotBindingMapper.selectBySearch(search);
-        //计算当前坐标与景点坐标之间的距离
-        for (SysScenicSpot scenicSpot : scenicSpots) {
-            String coordinateRange = scenicSpot.getCoordinateRange();
-            if (StringUtils.isEmpty(coordinateRange)){
-                continue;
-            }
-            String[] split = coordinateRange.split(",");
-            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lat),Double.valueOf(lng),Double.valueOf(split[0]),Double.valueOf(split[1]));
-            scenicSpot.setDistance(distanceOne);
-            //计算景区中景区有多少景点讲解
-            Integer spotCount = sysScenicSpotBroadcastMapper.selectSpotByCount(scenicSpot.getScenicSpotId());
-            scenicSpot.setScenicSpotBroadcastCount(spotCount);
-        }
-
-        //判断是否是根据距离排序
-        if (sort==2){
-
-            Collections.sort(scenicSpots, new Comparator<SysScenicSpot>() {
-                @Override
-                public int compare(SysScenicSpot o1, SysScenicSpot o2) {
-                    Double i = o2.getDistance() - o1.getDistance();
-                    return  i.intValue() ;
-                }
-            });
-        }
-        map.put("city",sysScenicSpotBinding.getScenicSpotFid());
-        map.put("cityName",sysScenicSpotBinding.getScenicSpotFname());
-        map.put("scenicSpot",scenicSpots);
-        if (scenicSpots.size()>0){
-            PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(scenicSpots);
-            //pageDataResult.setData(pageInfo.getList());
-            pageDataResult.setDataNew(map);
-            pageDataResult.setTotals((int)pageInfo.getTotal());
-        }
-        return pageDataResult;
-    }
-
-    /**
      * 景区搜索
      * @param pageDTO
      * @return
@@ -104,41 +50,86 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
     public PageDataResult searchSpot(PageDTO pageDTO) {
         PageDataResult pageDataResult = new PageDataResult();
 
-        String lng = pageDTO.getLng();
-        String lat = pageDTO.getLat();
-        HashMap<String, Object> search = new HashMap<>();
-        search.put("spotName",pageDTO.getSpotName());
-        search.put("cityId",pageDTO.getCityId());
-        search.put("sort",pageDTO.getSort());
-        PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
-        List<SysScenicSpot> spotList = sysScenicSpotMapper.selectBySearch(search);
-        for (SysScenicSpot sysScenicSpot : spotList) {
-            if (StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
-                continue;
-            }
-            String[] split = sysScenicSpot.getCoordinateRange().split(",");
-            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lng),Double.valueOf(lat),Double.valueOf(split[0]),Double.valueOf(split[1]));
-            sysScenicSpot.setDistance(distanceOne);
-        }
-        //判断是否是根据距离排序
-        if (pageDTO.getSort()==2){
-
-            Collections.sort(spotList, new Comparator<SysScenicSpot>() {
-                @Override
-                public int compare(SysScenicSpot o1, SysScenicSpot o2) {
-                    Double i = o2.getDistance() - o1.getDistance();
-                    return  i.intValue() ;
+        if (!StringUtils.isEmpty(pageDTO.getLng()) && !StringUtils.isEmpty(pageDTO.getLat())){
+            Point2D.Double from=new Point2D.Double();
+            Point2D.Double to=new Point2D.Double();
+            String lng = pageDTO.getLng();
+            String lat = pageDTO.getLat();
+            HashMap<String, Object> search = new HashMap<>();
+            search.put("spotName",pageDTO.getSpotName());
+            search.put("cityId",pageDTO.getCityId());
+            search.put("sort",pageDTO.getSort());
+            PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
+            List<SysScenicSpot> spotList = sysScenicSpotMapper.selectBySearch(search);
+            for (SysScenicSpot sysScenicSpot : spotList) {
+                if (StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
+                    continue;
                 }
-            });
+                String[] split = sysScenicSpot.getCoordinateRange().split(",");
+                from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+                double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+//            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lng),Double.valueOf(lat),Double.valueOf(split[0]),Double.valueOf(split[1]));
+                sysScenicSpot.setDistance(distanceOne);
+            }
+            //判断是否是根据距离排序
+            if (pageDTO.getSort()==2){
+                Collections.sort(spotList, new Comparator<SysScenicSpot>() {
+                    @Override
+                    public int compare(SysScenicSpot o1, SysScenicSpot o2) {
+                        Double i = o2.getDistance() - o1.getDistance();
+                        return  i.intValue() ;
+                    }
+                });
+            }
+            if (spotList.size()>0){
+                PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(spotList);
+                pageDataResult.setData(pageInfo.getList());
+                pageDataResult.setTotals((int)pageInfo.getTotal());
+            }
+            return pageDataResult;
+        }else{
+
+            HashMap<String, Object> search = new HashMap<>();
+            search.put("spotName",pageDTO.getSpotName());
+//            search.put("cityId",pageDTO.getCityId());
+            search.put("sort",pageDTO.getSort());
+            PageHelper.startPage(pageDTO.getPageNum(),pageDTO.getPageSize());
+            List<SysScenicSpot> spotList = sysScenicSpotMapper.getScenicSpotAll(search);
+//            for (SysScenicSpot sysScenicSpot : spotList) {
+//                if (StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
+//                    continue;
+//                }
+//                String[] split = sysScenicSpot.getCoordinateRange().split(",");
+//                from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+//                to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+//                double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+////            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lng),Double.valueOf(lat),Double.valueOf(split[0]),Double.valueOf(split[1]));
+//                sysScenicSpot.setDistance(distanceOne);
+//            }
+
+            if (pageDTO.getSort()==2){
+                Collections.sort(spotList, new Comparator<SysScenicSpot>() {
+                    @Override
+                    public int compare(SysScenicSpot o1, SysScenicSpot o2) {
+                        if (StringUtils.isEmpty(o2.getDistance()) && StringUtils.isEmpty(o1.getDistance())){
+                            return 0;
+                        }
+                        Double i = o2.getDistance() - o1.getDistance();
+                        return  i.intValue() ;
+                    }
+                });
+            }
+            if (spotList.size()>0){
+                PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(spotList);
+                pageDataResult.setData(pageInfo.getList());
+                pageDataResult.setTotals((int)pageInfo.getTotal());
+            }
+            return pageDataResult;
+
 
         }
-        if (spotList.size()>0){
-            PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(spotList);
-            pageDataResult.setData(pageInfo.getList());
-            pageDataResult.setTotals((int)pageInfo.getTotal());
-        }
 
-        return pageDataResult;
     }
 
     /**
@@ -147,12 +138,18 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
      * @return
      */
     @Override
-    public SysScenicSpot spotDetails(String spotId, String lat, String lng) {
+    public SysScenicSpot  spotDetails(String spotId, String lat, String lng) {
         SysScenicSpot scenicSpot = sysScenicSpotMapper.spotDetails(spotId);
-        if (StringUtils.isEmpty(scenicSpot.getCoordinateRange())) {
-            String[] split = scenicSpot.getCoordinateRange().split(",");
-            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lat), Double.valueOf(lng), Double.valueOf(split[0]), Double.valueOf(split[1]));
-            scenicSpot.setDistance(distanceOne);
+        if (!StringUtils.isEmpty(lng) && !StringUtils.isEmpty(lat)){
+            Point2D.Double from=new Point2D.Double();
+            Point2D.Double to=new Point2D.Double();
+            if (StringUtils.isEmpty(scenicSpot.getCoordinateRange())) { String[] split = scenicSpot.getCoordinateRange().split(",");
+                from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+                double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+//            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lat), Double.valueOf(lng), Double.valueOf(split[0]), Double.valueOf(split[1]));
+                scenicSpot.setDistance(distanceOne);
+            }
         }
         return scenicSpot;
     }
@@ -196,4 +193,122 @@ public class SysScenicSpotServiceImpl implements SysScenicSpotService {
         List<SysScenicSpot> spotList = sysScenicSpotMapper.queryScenicSpotRankingList(search);
         return spotList;
     }
+
+    /**
+     * 获取全国景区列表
+     * 无当前坐标
+     * zhang
+     * @param sort
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageDataResult currentCityAll(Integer sort, Integer pageNum, Integer pageSize) {
+
+        PageDataResult pageDataResult = new PageDataResult();
+        HashMap<String, Object> map = new HashMap<>();
+        HashMap<String, Object> search = new HashMap<>();
+        search.put("sort",sort);
+//        List<SysScenicSpot> scenicSpots = sysScenicSpotBindingMapper.selectBySearch(search);
+        PageHelper.startPage(pageNum,pageSize);
+        List<SysScenicSpot> scenicSpots = sysScenicSpotMapper.getScenicSpotAll(search);
+        //计算当前坐标与景点坐标之间的距离
+        for (SysScenicSpot scenicSpot : scenicSpots) {
+            String coordinateRange = scenicSpot.getCoordinateRange();
+            if (StringUtils.isEmpty(coordinateRange)){
+                continue;
+            }
+            //计算景区中景区有多少景点讲解
+            Integer spotCount = sysScenicSpotBroadcastMapper.selectSpotByCount(scenicSpot.getScenicSpotId());
+            scenicSpot.setScenicSpotBroadcastCount(spotCount);
+        }
+
+        //判断是否是根据距离排序
+        if (sort==2){
+
+            Collections.sort(scenicSpots, new Comparator<SysScenicSpot>() {
+                @Override
+                public int compare(SysScenicSpot o1, SysScenicSpot o2) {
+                    Double i = o2.getDistance() - o1.getDistance();
+                    return  i.intValue() ;
+                }
+            });
+        }
+        map.put("scenicSpot",scenicSpots);
+        if (scenicSpots.size()>0){
+            PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(scenicSpots);
+            //pageDataResult.setData(pageInfo.getList());
+            pageDataResult.setDataNew(map);
+            pageDataResult.setTotals((int)pageInfo.getTotal());
+        }
+        return pageDataResult;
+    }
+
+    /**
+     * 游小伴pp首页全部景区
+     * 有当前坐标
+     * @param cityName
+     * @return
+     */
+    @Override
+    public PageDataResult currentCity(String lng,String lat,String cityName, Integer sort, Integer pageNum, Integer pageSize) {
+        PageDataResult pageDataResult = new PageDataResult();
+        List<SysScenicSpot> sysScenicSpots = new ArrayList<>();
+
+        Point2D.Double from=new Point2D.Double();
+        Point2D.Double to=new Point2D.Double();
+
+        Map<String, Object> search = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
+        SysScenicSpotBinding sysScenicSpotBinding = sysScenicSpotBindingMapper.selectSpotByFname(cityName);
+        if (StringUtils.isEmpty(sysScenicSpotBinding)){
+            return pageDataResult;
+        }
+        PageHelper.startPage(pageNum,pageSize);
+        search.put("scenicSpotPid",sysScenicSpotBinding.getScenicSpotFid());
+        search.put("sort",sort);
+        List<SysScenicSpot> scenicSpots = sysScenicSpotBindingMapper.selectBySearch(search);
+        //计算当前坐标与景点坐标之间的距离
+        for (SysScenicSpot scenicSpot : scenicSpots) {
+            String coordinateRange = scenicSpot.getCoordinateRange();
+            if (StringUtils.isEmpty(coordinateRange)){
+                continue;
+            }
+            String[] split = coordinateRange.split(",");
+            from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+            to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+            double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+//            double distanceOne = DistanceUtil.getDistanceOne(Double.valueOf(lat),Double.valueOf(lng),Double.valueOf(split[0]),Double.valueOf(split[1]));
+            scenicSpot.setDistance(distanceOne);
+            //计算景区中景区有多少景点讲解
+            Integer spotCount = sysScenicSpotBroadcastMapper.selectSpotByCount(scenicSpot.getScenicSpotId());
+            scenicSpot.setScenicSpotBroadcastCount(spotCount);
+        }
+
+        //判断是否是根据距离排序
+        if (sort==2){
+
+            Collections.sort(scenicSpots, new Comparator<SysScenicSpot>() {
+                @Override
+                public int compare(SysScenicSpot o1, SysScenicSpot o2) {
+                    Double i = o2.getDistance() - o1.getDistance();
+                    return  i.intValue() ;
+                }
+            });
+        }
+        map.put("city",sysScenicSpotBinding.getScenicSpotFid());
+        map.put("cityName",sysScenicSpotBinding.getScenicSpotFname());
+        map.put("scenicSpot",scenicSpots);
+        if (scenicSpots.size()>0){
+            PageInfo<SysScenicSpot> pageInfo = new PageInfo<>(scenicSpots);
+            //pageDataResult.setData(pageInfo.getList());
+            pageDataResult.setDataNew(map);
+            pageDataResult.setTotals((int)pageInfo.getTotal());
+        }
+        return pageDataResult;
+    }
+
+
+
 }

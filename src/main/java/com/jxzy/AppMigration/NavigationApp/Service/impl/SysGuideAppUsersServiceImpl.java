@@ -303,4 +303,34 @@ public class SysGuideAppUsersServiceImpl implements SysGuideAppUsersService {
 
 
     }
+
+    /**
+     * 根据手机号查询是否已存在用户
+     * @param phoneNew
+     * @return
+     * 张
+     */
+    @Override
+    public SysGuideAppUsers selectPhoneByUser(String phoneNew) {
+
+        SysGuideAppUsers sysGuideAppUsers = sysGuideAppUsersMapper.selectPhoneByUser(phoneNew);
+        return sysGuideAppUsers;
+    }
+
+    /**
+     * 根据用户uid获取详细信息
+     * @param uid
+     * @return
+     */
+    @Override
+    public SysGuideAppUsers userDetails(String uid) {
+        SysGuideAppUsers appUsers = sysGuideAppUsersMapper.getUid(Long.valueOf(uid));
+        if (!StringUtils.isEmpty(appUsers)){
+            appUsers.setQqId("");
+            appUsers.setWeChatId("");
+            appUsers.setAppleId("");
+            appUsers.setPhoneSign("");
+        }
+        return appUsers;
+    }
 }

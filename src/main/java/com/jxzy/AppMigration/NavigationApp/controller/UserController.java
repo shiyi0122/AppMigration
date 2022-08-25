@@ -6,6 +6,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysConfigs;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedbacks;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
@@ -14,8 +15,10 @@ import com.jxzy.AppMigration.common.utils.IdUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +50,17 @@ public class UserController extends PublicUtil {
     @Value("${FEEDBACK_PIC}")
     private String FEEDBACK_PIC;//用户反馈上传图片地址
 
+    @Value("${userHeadPortraitPatheGetPicUrl}")
+    private String USER_HEAD_PORTRAIT_PATHE_GET_PIC_URL;//用户头像上传路径
+    @Value("${userHeadPortraitGetPicPaht}")
+    private String USER_HEAD_PORTRAIT_GET_PICPAHT;//用户头像上传路径
+
+    @Value("${userFeedbackPatheGetPicUrl}")
+    private String USER_FEEDBACK_PATHE_GET_PIC_URL ;//意见反馈上传路径
+    @Value("${userFeedbackGetPicPaht}")
+    private String USER_FEEDBACK_GET_PIC_PAHT; //意见反馈上传路径
+
+
     /**
      * 用户意见反馈
      * @param: file
@@ -61,7 +75,8 @@ public class UserController extends PublicUtil {
     public ReturnModel userFeedback(@RequestPart("file") MultipartFile file, HttpServletRequest request){
         ReturnModel returnModel = new ReturnModel();
         if(!file.isEmpty()){
-            String uploadPath = FEEDBACK_PIC;
+//            String uploadPath = FEEDBACK_PIC;
+            String uploadPath = USER_FEEDBACK_GET_PIC_PAHT;
             // 如果目录不存在则创建
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -79,7 +94,8 @@ public class UserController extends PublicUtil {
                 user.setId(IdUtils.getSeqId());
                 user.setUserId(Long.parseLong(request.getParameter("userId")));
                 user.setContent(request.getParameter("content"));
-                user.setUrlPic("static/uploadPIC/"+filename);
+//                user.setUrlPic("static/uploadPIC/"+filename);
+                user.setUrlPic(USER_FEEDBACK_PATHE_GET_PIC_URL+filename);
                 user.setCreateTime(DateUtil.currentDateTime());
                 user.setUpdateTime(DateUtil.currentDateTime());
                 sysGuideAppUsersFeedbacksService.insetUserFeedback(user);
@@ -120,11 +136,12 @@ public class UserController extends PublicUtil {
      */
     @ApiOperation("用户意见反馈")
     @PostMapping(value ="/userFeedback")
-    public ReturnModel userFeedback(@RequestPart("file") MultipartFile[] file, HttpServletRequest request){
+    public ReturnModel userFeedback(@RequestPart("file") MultipartFile[] file, HttpServletRequest request,BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         String filename = null;
         if(file!=null&&file.length>0){
-            String uploadPath = FEEDBACK_PIC;
+//            String uploadPath = FEEDBACK_PIC;
+            String uploadPath = USER_FEEDBACK_GET_PIC_PAHT;
             // 如果目录不存在则创建
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -141,14 +158,16 @@ public class UserController extends PublicUtil {
                     File localFile = new File(uploadPath+"\\"+filename);
                     //保存文件
                     //saveFile(files, uploadPath);
-                    files.transferTo(localFile); //把上传的文件保存至本地
+//                    files.transferTo(localFile); //把上传的文件保存至本地
+                    FileUtils.copyInputStreamToFile(files.getInputStream(), localFile);
                 }
                 //这里应该把filename保存到数据库,供前端访问时使用
                 SysGuideAppUsersFeedbacks user = new SysGuideAppUsersFeedbacks();
                 user.setId(IdUtils.getSeqId());
                 user.setUserId(Long.parseLong(request.getParameter("userId")));
                 user.setContent(request.getParameter("content"));
-                user.setUrlPic("static/uploadPIC/"+filename);
+//                user.setUrlPic("static/uploadPIC/"+filename);
+                user.setUrlPic(USER_FEEDBACK_PATHE_GET_PIC_URL+filename);
                 user.setCreateTime(DateUtil.currentDateTime());
                 user.setUpdateTime(DateUtil.currentDateTime());
                 sysGuideAppUsersFeedbacksService.insetUserFeedback(user);
@@ -213,16 +232,17 @@ public class UserController extends PublicUtil {
                                         @ApiParam(name = "helpId", value = "使用帮助ID", required = false)
                                                 String helpId,
                                          @ApiParam(name = "helpTitle", value = "使用帮助搜索", required = false)
-                                                     String helpTitle) {
+                                                     String helpTitle,
+                                         @ApiParam(name="baseDTO",value="登录令牌",required=true)BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         try {
             SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
-            if (user == null) {
-                returnModel.setData("");
-                returnModel.setMsg("令牌失效，请重新登录！");
-                returnModel.setState(Constant.LOGIN_FAILURE);
-                return returnModel;
-            }
+//            if (user == null) {
+//                returnModel.setData("");
+//                returnModel.setMsg("令牌失效，请重新登录！");
+//                returnModel.setState(Constant.LOGIN_FAILURE);
+//                return returnModel;
+//            }
             if (helpTitle != null) {
                 List<SysGuideAppUsersHelp> help = sysGuideAppUsersHelpService.queryUserHelpData(helpTitle);
                 returnModel.setData(help);
@@ -266,16 +286,17 @@ public class UserController extends PublicUtil {
     public ReturnModel queryAboutUs(@ApiParam(name = "longinTokenId", value = "登录令牌,状态码202为登录失效", required = true)
                                                  String longinTokenId,
                                     @ApiParam(name = "type", value = "1、关于我们，2、用户协议和隐私协议", required = true)
-                                            String type) {
+                                            String type,
+                                    @ApiParam(name="baseDTO",value="登录令牌",required=true)BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         try {
-            SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
-            if (user == null) {
-                returnModel.setData("");
-                returnModel.setMsg("令牌失效，请重新登录！");
-                returnModel.setState(Constant.LOGIN_FAILURE);
-                return returnModel;
-            }
+//            SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
+//            if (user == null) {
+//                returnModel.setData("");
+//                returnModel.setMsg("令牌失效，请重新登录！");
+//                returnModel.setState(Constant.LOGIN_FAILURE);
+//                return returnModel;
+//            }
             if ("1".equals(type)) {
                 SysConfigs help = sysConfigsService.queryAboutUs(Long.parseLong("91711212312291"));
                 returnModel.setData(help);
@@ -310,11 +331,12 @@ public class UserController extends PublicUtil {
      */
     @ApiOperation("上传用户头像")
     @PostMapping(value ="/uploadPic")
-    public ReturnModel upload(@RequestPart("file") MultipartFile file,HttpServletRequest request){
+    public ReturnModel upload(@RequestPart("file") MultipartFile file, HttpServletRequest request,BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         SysGuideAppUsers user = new SysGuideAppUsers();
         if(!file.isEmpty()){
-            String uploadPath = UPLOAD_PIC;
+//            String uploadPath = UPLOAD_PIC;
+            String uploadPath = USER_HEAD_PORTRAIT_GET_PICPAHT;
             // 如果目录不存在则创建
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -326,8 +348,8 @@ public class UserController extends PublicUtil {
             String filename = UUID.randomUUID().toString() +suffixName;//重命名
             File localFile = new File(uploadPath+"\\"+filename);
             try {
-
-                file.transferTo(localFile); //把上传的文件保存至本地
+                FileUtils.copyInputStreamToFile(file.getInputStream(), localFile);
+//                file.transferTo(localFile); //把上传的文件保存至本地
                 //这里应该把filename保存到数据库,供前端访问时使用
                 String userName = request.getParameter("userName");
                 String userPhone = request.getParameter("userPhone");
@@ -340,7 +362,8 @@ public class UserController extends PublicUtil {
                     return returnModel;
                 }
                 user.setUserId(Long.parseLong(userId));
-                user.setPortraitPic("static/uploadPIC/"+filename);
+//                user.setPortraitPic("static/uploadPIC/"+filename);
+                user.setPortraitPic(USER_HEAD_PORTRAIT_PATHE_GET_PIC_URL+filename);
                 user.setUserPhone(userPhone);
                 user.setUserName(userName);
                 user.setUserGender(userGender);
@@ -372,4 +395,32 @@ public class UserController extends PublicUtil {
             return returnModel;
         }
     }
+    /**
+     * 根据用户id获取用户详细信息
+     * @param baseDTO
+     * @return
+     */
+    @ApiOperation("用户个人信息")
+    @GetMapping("/userDetails")
+    public ReturnModel userDetails(BaseDTO baseDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(baseDTO.getUid())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("用户id为空！");
+        }
+        SysGuideAppUsers sysGuideAppUsers =  sysGuideAppUsersService.userDetails(baseDTO.getUid());
+        returnModel.setData(sysGuideAppUsers);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取成功！");
+        return returnModel;
+    }
+
+
+
+
+
+
 }

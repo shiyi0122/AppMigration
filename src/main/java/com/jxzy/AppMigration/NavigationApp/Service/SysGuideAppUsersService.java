@@ -71,4 +71,8 @@ public interface SysGuideAppUsersService {
 
     SysGuideAppUsers appleSignIn(SysGuideAppUsers sysGuideAppUsers);
 
+    SysGuideAppUsers selectPhoneByUser(String phoneNew);
+
+
+    SysGuideAppUsers userDetails(String uid);
 }

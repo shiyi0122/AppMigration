@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -42,10 +43,10 @@ public class SysScenicRankingListController {
 
     @ApiOperation("添加榜单标签")
     @PostMapping("addRankingList")
-    public ReturnModel addRankingList(@RequestBody SysScenicRankingList sysScenicRankingList){
+    public ReturnModel addRankingList(@RequestPart("file") MultipartFile file, SysScenicRankingList sysScenicRankingList){
 
         ReturnModel returnModel = new ReturnModel();
-        int i = sysScenicRankingListService.addRankingList(sysScenicRankingList);
+        int i = sysScenicRankingListService.addRankingList(file, sysScenicRankingList);
         if (i>0){
             returnModel.setData(i);
             returnModel.setState(Constant.STATE_SUCCESS);

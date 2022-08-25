@@ -28,4 +28,6 @@ public class SysScenicSpotShops {
 
     private List<SysScenicSpotShopsType> sysScenicSpotShopsType;
 
+    private Double distance;
+
 }

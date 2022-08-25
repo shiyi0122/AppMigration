@@ -32,6 +32,7 @@ public class ScenicSpotBannerController {
 
     @ApiOperation("获取首页轮播图")
     @GetMapping("getScenicSpotBanner")
+    @ResponseBody
     public ReturnModel getScenicSpotBanner(SearchDTO searchDTO){
         ReturnModel returnModel = new ReturnModel();
 
@@ -50,6 +51,7 @@ public class ScenicSpotBannerController {
 
     @ApiOperation("添加首页轮播图")
     @PostMapping("/addBroadcastHuntRule")
+    @ResponseBody
     public ReturnModel addScenicSpotBanner(@RequestPart("file") MultipartFile file,SysScenicSpotBanner sysScenicSpotBanner){
 
         ReturnModel returnModel = new ReturnModel();
@@ -70,6 +72,7 @@ public class ScenicSpotBannerController {
 
     @ApiOperation("修改轮播图首页轮播图")
     @PostMapping("/editBroadcastHuntRule")
+    @ResponseBody
     public ReturnModel editScenicSpotBanner(@RequestPart("file") MultipartFile file,SysScenicSpotBanner sysScenicSpotBanner){
 
         ReturnModel returnModel = new ReturnModel();

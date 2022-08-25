@@ -27,4 +27,39 @@ public interface SysScenicSpotRecommendedRouteMapper {
      * @date: 2021/11/4 0004
      */
     List<SysScenicSpotRecommendedRoute> queryScenicSpotRecommendedRouteList(Map<String, Object> search);
+
+    /**
+     * 查询热门线路
+     * 张
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotRecommendedRoute> searchRouteList(Map<String, Object> search);
+
+
+    /**
+     * 获取数据总条数
+     * 张
+     * @param search
+     * @return
+     */
+    Integer selectTotals(Map<String, Object> search);
+
+    /**
+     * 全部线路
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotRecommendedRoute> getRouteInBroadcastAll(Map<String, Object> search);
+
+    int addHotRouteInBroadcast(Long id);
+
+    /**
+     * 查询线路列表中有某个坐标的的线路列表
+     * @param broadcastGps
+     * @param spotId
+     * @return
+     */
+    List<SysScenicSpotRecommendedRoute> selectByRouteGps(Long spotId,String broadcastGps);
+
 }

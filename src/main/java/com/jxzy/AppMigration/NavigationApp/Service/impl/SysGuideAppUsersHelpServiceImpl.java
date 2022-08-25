@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersHelpService;
 import com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersHelpMapper;
+import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,4 +50,5 @@ public class SysGuideAppUsersHelpServiceImpl implements SysGuideAppUsersHelpServ
     public List<SysGuideAppUsersHelp> queryUserHelpData(String helpTitle) {
         return sysGuideAppUsersHelpMapper.queryUserHelpData(helpTitle);
     }
+
 }

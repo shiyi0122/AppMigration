@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.entity.dto;
 
 import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,11 +21,18 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 public class SearchDTO extends BaseDTO {
 
+    @ApiModelProperty(value = "id")
+    private String  id;
 
+    @ApiModelProperty(value = "景区id或者景点id")
     private String  spotId;
 
-    private String city;
+    @ApiModelProperty(value = "商铺id")
+    private String  shopsId;
 
+    @ApiModelProperty(value = "城市名称")
+    private String cityName;
+    @ApiModelProperty(value = "手机号")
     private String phone;
 
 
@@ -39,18 +47,15 @@ public class SearchDTO extends BaseDTO {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
-    //省
-    private String province;
-    //市
-    private String market;
-
-    //
 
     //经度
+    @ApiModelProperty(value = "经度")
     private String lng;
     //纬度
+    @ApiModelProperty(value = "纬度")
     private String lat;
     //排序
+    @ApiModelProperty(value = "排序")
     private Integer sort;
 
 

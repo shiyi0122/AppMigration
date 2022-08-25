@@ -6,6 +6,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppAgreement;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.BaseDataDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
@@ -14,6 +15,7 @@ import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -49,7 +51,8 @@ public class TextRelatedController extends PublicUtil {
     public ReturnModel queryGuideAppNewsLists(@ApiParam(name = "longinTokenId", value = "登录令牌,状态码202为登录失效", required = true) String longinTokenId,
                                               @ApiParam(name = "guideTitle", value = "传参按条件查询，不传参则查询全部", required = false) String guideTitle,
                                               @ApiParam(name = "pageNum", value = "当前页,输入0不分页", required = true) int pageNum,
-                                              @ApiParam(name = "pageSize", value = "总条数,输入0不分页", required = true) int pageSize) {
+                                              @ApiParam(name = "pageSize", value = "总条数,输入0不分页", required = true) int pageSize,
+                                              @ApiParam(name="baseDTO",value="登录令牌",required=true) BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         Map<String, Object> search = new HashMap<>();
         try {
@@ -92,8 +95,9 @@ public class TextRelatedController extends PublicUtil {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "longinTokenId", value = "登录令牌,状态码202为登录失效", dataType = "string", required = true),
             @ApiImplicitParam(name = "guideId", value = "消息主键ID,不传为清除未读", dataType = "string", required = false),
-            @ApiImplicitParam(name = "type", value = "type=2代表删除,type=1代表已读,type=0清除未读", dataType = "string", required = true)})
-    public ReturnModel deleteGuideAppNews(String longinTokenId, String guideId, String type) {
+            @ApiImplicitParam(name = "type", value = "type=2代表删除,type=1代表已读,type=0清除未读", dataType = "string", required = true),
+            @ApiImplicitParam(name="baseDTO",value="登录令牌",required=true)})
+    public ReturnModel deleteGuideAppNews(String longinTokenId, String guideId, String type, BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         try {
             SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
@@ -148,8 +152,9 @@ public class TextRelatedController extends PublicUtil {
     @PostMapping("/insetUsersFeedback")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "longinTokenId", value = "登录令牌,状态码202为登录失效", dataType = "string", required = true),
-            @ApiImplicitParam(name = "feedbackContent", value = "反馈内容", dataType = "string", required = true)})
-    public ReturnModel insetUsersFeedback(String longinTokenId, String feedbackContent) {
+            @ApiImplicitParam(name = "feedbackContent", value = "反馈内容", dataType = "string", required = true),
+            @ApiImplicitParam(name="baseDTO",value="登录令牌",required=true)})
+    public ReturnModel insetUsersFeedback(String longinTokenId, String feedbackContent,BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         try {
             SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
@@ -180,8 +185,14 @@ public class TextRelatedController extends PublicUtil {
         }
     }
 
-
-    @ApiOperation("使用帮助")
+    /**
+     * 使用帮助
+     * 张
+     * @param longinTokenId
+     * @return
+     */
+    @CrossOrigin
+    @ApiOperation("使用帮助（暂不使用）")
     @GetMapping("/queryUserHelpList")
     public ReturnModel queryUserHelpList(@ApiParam(name = "longinTokenId", value = "登录令牌,状态码202为登录失效", required = true)
                                                  String longinTokenId) {
@@ -208,6 +219,7 @@ public class TextRelatedController extends PublicUtil {
         }
     }
 
+    @CrossOrigin
     @ApiOperation("使用协议")
     @GetMapping("/getSysGuideAppAgreement")
     public ReturnModel getSysGuideAppAgreement(String type) {
@@ -231,6 +243,7 @@ public class TextRelatedController extends PublicUtil {
      */
     @ApiOperation("查询通知消息")
     @GetMapping("/getSysGuideAppNews")
+    @ResponseBody
     public ReturnModel getSysGuideAppNews(PageDTO pageDTO) {
         ReturnModel returnModel = new ReturnModel();
         HashMap<String, Object> search = new HashMap<>();
@@ -255,6 +268,7 @@ public class TextRelatedController extends PublicUtil {
      */
     @ApiOperation("读取通知消息")
     @GetMapping("/getSysGuideAppNewsRead")
+    @ResponseBody
     public ReturnModel getSysGuideAppNewsRead(BaseDataDTO dataDTO) {
 
         ReturnModel returnModel = new ReturnModel();
@@ -276,6 +290,7 @@ public class TextRelatedController extends PublicUtil {
      */
     @ApiOperation("全部已读")
     @GetMapping("/allRead")
+    @ResponseBody
     public ReturnModel allRead(BaseDataDTO dataDTO) {
 
         ReturnModel returnModel = new ReturnModel();

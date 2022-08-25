@@ -3,6 +3,7 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
+import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.util.Constant;
 import com.jxzy.AppMigration.NavigationApp.util.PublicUtil;
 import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
@@ -27,14 +28,14 @@ public class WeatherController extends PublicUtil {
     @ApiOperation("获取未来五天天气情况")
     @GetMapping("/weatherList")
     @ResponseBody
-    public String queryUserHelpList(@ApiParam(name="longinTokenId",value="登录令牌,状态码202为登录失效",required=true)String longinTokenId,
-                                         @ApiParam(name="cityName",value="城市",required=true)String cityName) {
+    public String queryUserHelpList(@ApiParam(name="cityName",value="城市",required=true)String cityName,
+                                    @ApiParam(name="baseDTO",value="登录令牌",required=true)BaseDTO baseDTO) {
         ReturnModel returnModel = new ReturnModel();
         try {
-            SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
-            if (user == null) {
-                return "false";
-            }
+//            SysGuideAppUsers user = sysGuideAppUsersService.getToken(longinTokenId);
+//            if (user == null) {
+//                return "false";
+//            }
             String cityNames = WeatherUtil.GetWeatherData(cityName);
             return cityNames;
         } catch (Exception e) {

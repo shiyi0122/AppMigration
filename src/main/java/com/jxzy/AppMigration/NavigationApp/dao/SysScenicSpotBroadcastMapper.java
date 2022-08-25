@@ -1,7 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
-import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
 
 import java.util.List;
 import java.util.Map;
@@ -48,5 +47,12 @@ public interface SysScenicSpotBroadcastMapper {
      * @date: 2022/8/4 0004
      */
     List<SysScenicSpotBroadcast> queryWordsScenicSpotBroadcastList(Map<String, Object> search);
+
+    List<SysScenicSpotBroadcast> getSpotBroadcastList(Map<String, Object> search);
+
+
+    int addHotSpotBroadcast(Long id);
+
+    List<SysScenicSpotBroadcast> getSpotBroadcastGps(String s);
 
 }

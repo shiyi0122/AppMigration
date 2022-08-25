@@ -50,4 +50,16 @@ public interface SysScenicSpotService {
      * @date: 2022/8/4 0004
      */
     List<SysScenicSpot> queryScenicSpotRankingList(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 获取全国景区列表
+     * 张
+     * @param sort
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    PageDataResult currentCityAll(Integer sort, Integer pageNum, Integer pageSize);
+
+
 }

@@ -60,4 +60,13 @@ public interface SysUserDistrictFabulousCollectionService {
      * @date: 2022/8/15 0015
      */
     List<SysUserDistrictFabulousCollection> queryUserLike(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 根据用户id和景区查询景区是否点赞收藏
+     * zhang
+     * @param
+     * @return
+     */
+    SysUserDistrictFabulousCollection ifUserLikeCollection(String spotId, String uid);
+
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysUserMapSignRemarksMapper" >
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysUserMapSignRemarks">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="spot_id" property="spotId" jdbcType="BIGINT" />
+        <result column="app_users_id" property="appUsersId" jdbcType="BIGINT"/>
+        <result column="remarks_content" property="remarksContent" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="coordinate" property="coordinate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="addUserMapSignRemarks" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysUserMapSignRemarks">
+        insert into  sys_user_map_sign_remarks
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotId != null">
+                spot_id,
+            </if>
+            <if test="appUsersId != null">
+                app_users_id,
+            </if>
+            <if test="remarksContent != null">
+                remarks_content,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="update_time != null">
+                update_time,
+            </if>
+            <if test="coordinate != null">
+                coordinate,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null">
+                #{spotId,jdbcType = BIGINT},
+            </if>
+            <if test="appUsersId != null">
+                #{appUsersId,jdbcType = BIGINT},
+            </if>
+            <if test="remarksContent != null">
+                #{remarksCOntent,jdbcType = VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType = VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType = VARCHAR},
+            </if>
+            <if test="coordinate != null">
+                #{coordinate,jdbcTye = VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="getUserMapSignRemarksList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserMapSignRemarks">
+        select *
+        from sys_user_map_sign_remarks
+        <where>
+            <if test="spotId != null">
+                and spot_id = #{spotId}
+            </if>
+            <if test="userId != null">
+                and app_users_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

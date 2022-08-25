@@ -35,6 +35,8 @@ public class SysGuideAppUsers {
 
     private String userGender;
 
+    private String userState;
+
 
 
 

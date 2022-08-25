@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicRankingList;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface SysScenicRankingListService {
     List<SysScenicRankingList> getRankingList(SearchDTO searchDTO);
 
 
-    int addRankingList(SysScenicRankingList sysScenicRankingList);
+    int addRankingList(MultipartFile file, SysScenicRankingList sysScenicRankingList);
 
 }

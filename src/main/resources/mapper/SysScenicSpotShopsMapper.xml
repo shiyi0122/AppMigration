@@ -193,4 +193,21 @@
       update_time = #{updateTime,jdbcType=VARCHAR}
     where shops_id = #{shopsId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="searchScenicShopsList" resultMap="BaseResultMapMax" parameterType="java.util.HashMap">
+    SELECT
+      *
+    FROM
+    sys_scenic_spot_shops a
+    LEFT JOIN sys_scenic_spot_shops_type b ON a.shops_id = b.shops_id
+    LEFT JOIN sys_scenic_spot_shops_details c ON b.type_id = c.type_id
+    <where>
+      <if test="scenicSpotId != null and scenicSpotId != ''">
+          a.scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+
+
 </mapper>

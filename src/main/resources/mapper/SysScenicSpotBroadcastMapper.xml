@@ -15,11 +15,15 @@
     <result column="SORT_TYPE" property="sortType" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="HEAT" property="heat" jdbcType="VARCHAR"/>
+    <result column="IS_FEATURE" property="heat" jdbcType="VARCHAR"/>
+    <result column="INTRODUCE" property="introduce" jdbcType="VARCHAR"/>
+    <result column="BEAR_PEOPLE" property="bearPeople" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     BROADCAST_ID, SCENIC_SPOT_ID, BROADCAST_GPS, BROADCAST_GPS_BAI_DU, SCENIC_SPOT_RANGE, 
     BROADCAST_NAME, PIN_YIN_NAME, INTRODUCTION_TYPES, NAVIGATION_TYPE, BROADCAST_PRIORITY, 
-    SORT_TYPE, CREATE_DATE, UPDATE_DATE
+    SORT_TYPE, CREATE_DATE, UPDATE_DATE, HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE
   </sql>
 
   <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
@@ -136,13 +140,14 @@
     insert into SYS_SCENIC_SPOT_BROADCAST (BROADCAST_ID, SCENIC_SPOT_ID, BROADCAST_GPS, 
       BROADCAST_GPS_BAI_DU, SCENIC_SPOT_RANGE, BROADCAST_NAME, 
       PIN_YIN_NAME, INTRODUCTION_TYPES, NAVIGATION_TYPE, 
-      BROADCAST_PRIORITY, SORT_TYPE, CREATE_DATE, 
+      BROADCAST_PRIORITY, SORT_TYPE, CREATE_DATE,HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE
       UPDATE_DATE)
     values (#{broadcastId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{broadcastGps,jdbcType=VARCHAR}, 
       #{broadcastGpsBaiDu,jdbcType=VARCHAR}, #{scenicSpotRange,jdbcType=VARCHAR}, #{broadcastName,jdbcType=VARCHAR}, 
       #{pinYinName,jdbcType=VARCHAR}, #{introductionTypes,jdbcType=VARCHAR}, #{navigationType,jdbcType=VARCHAR}, 
       #{broadcastPriority,jdbcType=VARCHAR}, #{sortType,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=VARCHAR})
+      #{updateDate,jdbcType=VARCHAR},#{heat,jdbcType=VARCHAR},#{isFeature,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},
+      #{bearPeople,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast" >
     insert into SYS_SCENIC_SPOT_BROADCAST
@@ -186,6 +191,18 @@
       <if test="updateDate != null" >
         UPDATE_DATE,
       </if>
+      <if test="HEAT != null">
+        HEAT,
+      </if>
+      <if test="IS_FEATURE != null">
+        IS_FEATURE,
+      </if>
+      <if test="INTRODUCE != null">
+        INTRODUCE,
+      </if>
+      <if test="BEAR_PEOPLE != null">
+        BEAR_PEOPLE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="broadcastId != null" >
@@ -226,6 +243,18 @@
       </if>
       <if test="updateDate != null" >
         #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="heat != null">
+        #{heat,jdbcType = VARCHAR},
+      </if>
+      <if test="isFeature != null">
+        #{isFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        #{introduce,jdbcType = VARCHAR},
+      </if>
+      <if test="bearPeople != null">
+        #{bearPeople,jdbcType = BIGINT},
       </if>
     </trim>
   </insert>
@@ -268,6 +297,18 @@
       <if test="updateDate != null" >
         UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
       </if>
+      <if test="heat  != null">
+        HEAT = #{heat,jdbcType=VARCHAR},
+      </if>
+      <if test="isFeature != null">
+        IS_FEATURE = #{isFeature ,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null">
+        INTRODUCE = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="bearPeople != null">
+        BEAR_PEOPLE = #{bearPeople,jdbcType=VARCHAR},
+      </if>
     </set>
     where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </update>
@@ -284,12 +325,49 @@
       BROADCAST_PRIORITY = #{broadcastPriority,jdbcType=VARCHAR},
       SORT_TYPE = #{sortType,jdbcType=VARCHAR},
       CREATE_DATE = #{createDate,jdbcType=VARCHAR},
-      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      HEAT = #{heat,jdbcType = VARCHAR},
+      IS_FEATURE = #{isFeature,jdbcType = VARCHAR},
+      INTRODUCE = #{introduce,jdbcType = VARCHAR},
+      BEAR_PEOPLE = #{bearPeople,jdbcType = BIGINT}
     where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </update>
 
+  <!--获取数据总条数-->
   <select id="selectSpotByCount" resultType="java.lang.Integer">
     select COUNT(*) from SYS_SCENIC_SPOT_BROADCAST where SCENIC_SPOT_ID = #{scenicSpotId}
+  </select>
+
+  <!-- 获取景点列表-->
+  <select id="getSpotBroadcastList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast" parameterType="java.util.Map">
+    select sssb.BROADCAST_ID,sssb.SCENIC_SPOT_ID,sssb.BROADCAST_GPS,sssb.BROADCAST_GPS_BAI_DU,sssb.SCENIC_SPOT_RANGE,sssb.BROADCAST_NAME,sssb.PIN_YIN_NAME,sssb.INTRODUCTION_TYPES,sssb.NAVIGATION_TYPE,
+    sssb.BROADCAST_PRIORITY,sssb.SORT_TYPE,sssb.CREATE_DATE,sssb.UPDATE_DATE,sssb.HEAT,sssb.IS_FEATURE,sssb.INTRODUCE,sssb.BEAR_PEOPLE,sssbe.PICTURE_URL
+    from SYS_SCENIC_SPOT_BROADCAST sssb
+    left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe
+    on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    <where>
+      <if test="spotId != null and spotId !=''">
+        and sssb.SCENIC_SPOT_ID = #{spotId}
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and sssb.BROADCAST_NAME like CONCAT('%',#{spotName},'%')
+      </if>
+        and sssb.SORT_TYPE = 0
+    </where>
+        <if test="sort == 1">
+          order by sssb.HEAT DESC
+        </if>
+  </select>
+
+  <update id="addHotSpotBroadcast">
+    UPDATE  SYS_SCENIC_SPOT_BROADCAST
+    SET     HEAT = HEAT + 1
+    WHERE   BROADCAST_ID = #{id}
+  </update>
+
+
+  <select id="getSpotBroadcastGps"  resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select * from SYS_SCENIC_SPOT_BROADCAST where BROADCAST_GPS = #{s}
   </select>
 
 </mapper>

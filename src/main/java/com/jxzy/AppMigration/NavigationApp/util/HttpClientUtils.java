@@ -24,7 +24,7 @@ import java.util.Map;
 public class HttpClientUtils {
 
     //传入经纬度, 返回查询的地区, lng: 纬度, lat: 经度
-    public static String findByLatAndLng(String lng, String lat) {
+    public static String findByLatAndLng(String lat, String lng) {
         try {
             //移除坐标前后的 空格
             /*lng = lng.trim();
@@ -32,7 +32,7 @@ public class HttpClientUtils {
 
             CloseableHttpClient httpClient = HttpClients.createDefault();
             // url中的ak值要替换成自己的:
-            String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=6RshCqt5hn9u6yAgCEQlIGvczjn2tTna&output=json&coordtype=wgs84ll&location=" + lng + "," + lat;
+            String url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=6RshCqt5hn9u6yAgCEQlIGvczjn2tTna&output=json&coordtype=wgs84ll&location=" + lat + "," + lng;
             //System.out.println(url);
             HttpGet httpGet = new HttpGet(url);
 

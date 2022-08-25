@@ -47,4 +47,13 @@ public interface SysUserDistrictFabulousCollectionMapper {
      * @date: 2022/8/15 0015
      */
     List<SysUserDistrictFabulousCollection> queryUserLike(Map<String, Object> search);
+
+    /**
+     * 根据用户id和景区查询景区是否点赞收藏
+     * zhang
+     * @param search
+     * @return
+     */
+    SysUserDistrictFabulousCollection ifUserLikeCollection(Map<String, Object> search);
+
 }
