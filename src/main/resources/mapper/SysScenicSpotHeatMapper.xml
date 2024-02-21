@@ -123,4 +123,24 @@
         update_time = #{updateTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <update id="updateHeat" >
+    update sys_scenic_spot_heat
+    set same_day = 0 , update_time = NOW()
+
+  </update>
+
+  <select id="selectSpotAndTypeByHeat" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotHeat">
+    select *
+    from sys_scenic_spot_heat
+    where scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT} AND type = #{type,jdbcType=VARCHAR}
+  </select>
+
+  <update id="addTotal">
+    update sys_scenic_spot_heat
+    set total = total + 1,
+    same_day = same_day + 1
+    where scenic_spot_id = #{scenicSpotId}
+    and type = #{type}
+  </update>
 </mapper>

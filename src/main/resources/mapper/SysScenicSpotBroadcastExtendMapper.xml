@@ -156,4 +156,38 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where BROADCAST_RES_ID = #{broadcastResId,jdbcType=BIGINT}
   </update>
+
+  <select id="getBroadcastBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs">
+    select *
+    from  SYS_SCENIC_SPOT_BROADCAST_EXTEND
+    <where>
+      <if test="broadcastId != null and broadcastId != ''">
+        BROADCAST_ID = #{broadcastId}
+      </if>
+      <if test="mediaType != null and mediaType != ''">
+        and  MEDIA_TYPE = #{mediaType}
+      </if>
+    </where>
+  </select>
+
+
+
+  <select id="qiliangxiugaichaxun" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs">
+    select sssbe.* from SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe
+    left join SYS_SCENIC_SPOT_BROADCAST sssb on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    left join SYS_SCENIC_SPOT sss on sss.SCENIC_SPOT_ID = sssb.SCENIC_SPOT_ID
+    where
+    sss.SCENIC_SPOT_ID = #{spotId}
+  </select>
+
+  <select id="getBroadcastId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs">
+    select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND
+    where BROADCAST_ID = #{broadcastId}
+  </select>
+
+  <select id="getBroadcastIdAndTypeByExtend" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtend">
+    select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND
+    where BROADCAST_ID = #{broadcastId}
+    and MEDIA_TYPE = #{type}
+  </select>
 </mapper>

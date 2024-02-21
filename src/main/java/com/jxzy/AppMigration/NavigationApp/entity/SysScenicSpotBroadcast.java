@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class SysScenicSpotBroadcast {
+public class    SysScenicSpotBroadcast {
     private Long broadcastId;
 
     private Long scenicSpotId;
@@ -33,6 +33,13 @@ public class SysScenicSpotBroadcast {
 
     private String updateDate;
 
+    private String  switchs;
+
+    private String  ifNeedAdmissionTicket;
+
+    private List<SysScenicSpotBroadcastAdmissionFee> admissionFeeList;
+
+    private String broadcastGpsGaoDe;
 
     private String heat;
 
@@ -50,14 +57,32 @@ public class SysScenicSpotBroadcast {
 
     //是否特色景点
     private String isFeature;
+    //特色景点介绍
+    private String featureIntroduce;
     //景点介绍
     private String introduce;
     //承受人数
     private Long bearPeople;
+
+    private String tourDuration;
     //距离
     private  double distance;
     //景点地址
     private String spotBroadcastAddress;
+
+    //景点播报内容
+    private String broadcastContent;
+
+    private String scenicSpotName;
+
+    private String videoUrl;
+
+    private String audioUrl;
+
+    //景点饱和度
+    private String  broadcastSaturation;
+
+
 
 
 

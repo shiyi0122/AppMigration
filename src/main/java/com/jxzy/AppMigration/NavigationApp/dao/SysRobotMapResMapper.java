@@ -27,4 +27,11 @@ public interface SysRobotMapResMapper {
      * @date: 2021/11/11 0011
      */
     List<SysRobotMapRes> queryMapRes(Map<String, Object> search);
+
+    /**
+     * 后台管理--地图列表查询
+     * @param search
+     * @return
+     */
+    List<SysRobotMapRes> getSysRobotMapResList(Map<String, Object> search);
 }

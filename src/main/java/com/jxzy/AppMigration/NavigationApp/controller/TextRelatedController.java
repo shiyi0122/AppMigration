@@ -2,10 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.*;
-import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppAgreement;
-import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews;
-import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
-import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
+import com.jxzy.AppMigration.NavigationApp.entity.*;
 import com.jxzy.AppMigration.NavigationApp.entity.base.BaseDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.BaseDataDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
@@ -36,6 +33,8 @@ public class TextRelatedController extends PublicUtil {
     private SysGuideAppUsersHelpService sysGuideAppUsersHelpService;
     @Autowired
     private SysGuideAppAgreementService sysGuideAppAgreementService;
+    @Autowired
+    private SysAboutUsService sysAboutUsService;
 
     /**
      * 查询消息列表
@@ -225,15 +224,48 @@ public class TextRelatedController extends PublicUtil {
     public ReturnModel getSysGuideAppAgreement(String type) {
 
         ReturnModel returnModel = new ReturnModel();
+        SysAboutUs sysAboutUs = sysAboutUsService.getSysUserFans(type);
 
-        SysGuideAppAgreement sysGuideAppAgreement = sysGuideAppAgreementService.getSysGuideAppAgreement(type);
-
-        returnModel.setData(sysGuideAppAgreement);
+        returnModel.setData(sysAboutUs);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("查询成功！");
         return returnModel;
 
     }
+
+
+    @CrossOrigin
+    @ApiOperation("使用协议(新)")
+    @GetMapping("/getSysGuideAppAgreementTwo")
+    public ReturnModel getSysGuideAppAgreementTwo(String type,String subversionId) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        SysAboutUs sysAboutUs = sysAboutUsService.getSysUserFansNew(type,subversionId);
+
+        returnModel.setData(sysAboutUs);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功！");
+        return returnModel;
+
+    }
+
+
+//    @CrossOrigin
+//    @ApiOperation("使用协议(奥森)")
+//    @GetMapping("/getSysGuideAppAgreementAs")
+//    public ReturnModel getSysGuideAppAgreementAs(String type,String subversionId) {
+//
+//        ReturnModel returnModel = new ReturnModel();
+//
+//        SysAboutUs sysAboutUs = sysAboutUsService.getSysUserFansNew(type,subversionId);
+//
+//        returnModel.setData(sysAboutUs);
+//        returnModel.setState(Constant.STATE_SUCCESS);
+//        returnModel.setMsg("查询成功！");
+//        return returnModel;
+//
+//    }
 
     /**
      *
@@ -249,9 +281,10 @@ public class TextRelatedController extends PublicUtil {
         HashMap<String, Object> search = new HashMap<>();
 
         search.put("userId", pageDTO.getUid());
-
+        if(!StringUtils.isEmpty(pageDTO.getGuideTitle())){
+            search.put("guideTitle",pageDTO.getGuideTitle());
+        }
         List<SysGuideAppNews> sysGuideAppNews = sysGuideAppNewsService.queryGuideAppNewsListsLimit(pageDTO.getPageNum(), pageDTO.getPageSize(), search);
-
         returnModel.setData(sysGuideAppNews);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("查询成功！");
@@ -272,9 +305,7 @@ public class TextRelatedController extends PublicUtil {
     public ReturnModel getSysGuideAppNewsRead(BaseDataDTO dataDTO) {
 
         ReturnModel returnModel = new ReturnModel();
-
         SysGuideAppNews sysGuideAppNews = sysGuideAppNewsService.getSysGuideAppNewsRead(dataDTO.getUid(),dataDTO.getId());
-
         returnModel.setData(sysGuideAppNews);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("读取成功！");
@@ -297,16 +328,19 @@ public class TextRelatedController extends PublicUtil {
 
         int i = sysGuideAppNewsService.allRead(dataDTO.getUid());
 
-        if (i>0){
+        if (i == 2){
             returnModel.setData(i);
             returnModel.setState(Constant.STATE_SUCCESS);
-            returnModel.setMsg("全部已读成功！");
+            returnModel.setMsg("没有未读消息");
+        }else if (i == 1){
+            returnModel.setData(i);
+            returnModel.setState(Constant.STATE_SUCCESS);
+            returnModel.setState("全部已读成功！");
         }else{
             returnModel.setData(i);
             returnModel.setState(Constant.STATE_FAILURE);
             returnModel.setState("全部已读失败！");
         }
-
         return returnModel;
 
     }

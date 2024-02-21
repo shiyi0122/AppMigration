@@ -20,6 +20,21 @@ public class SysUserScenicFabulousCollection {
 
     private String updateTime;
 
+    private String userName;
+
     private List<SysScenicSpotBroadcast> sysScenicSpotBroadcasts;
+
+    private Integer fabulousCount;
+
+    private Integer collectionCount;
+
+    private String  broadcastName;
+
+    private Double distance;
+
+    private String scenicSpotName;
+
+    private String broadcastImg;
+
 
 }

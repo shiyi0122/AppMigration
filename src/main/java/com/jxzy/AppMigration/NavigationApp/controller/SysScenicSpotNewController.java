@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.*;
 import com.jxzy.AppMigration.NavigationApp.entity.*;
@@ -33,8 +34,7 @@ public class SysScenicSpotNewController extends PublicUtil {
     private SysScenicSpotService sysScenicSpotService;
     @Autowired
     private SysScenicSpotBindingService sysScenicSpotBindingService;
-    @Autowired
-    private SysGuideAppUsersService sysGuideAppUsersService;
+
     @Autowired
     private SysScenicSpotBroadcastService sysScenicSpotBroadcastService;
     @Autowired
@@ -115,7 +115,7 @@ public class SysScenicSpotNewController extends PublicUtil {
     @ApiOperation("更新景区热度")
     @PostMapping("/addScenicSpotHeat")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="baseDTO", value="登录令牌", dataType="string", required = true),
+//            @ApiImplicitParam(name="baseDTO", value="登录令牌", dataType="string", required = true),
             @ApiImplicitParam(name="scenicSpotId",value="景区ID",dataType="string",required = true)})
     public ReturnModel addScenicSpotHeat(BaseDTO baseDTO,String scenicSpotId) {
         ReturnModel returnModel = new ReturnModel();
@@ -369,11 +369,12 @@ public class SysScenicSpotNewController extends PublicUtil {
 
         PageDataResult pageDataResult = new PageDataResult();
 
-        if (StringUtils.isEmpty(pageDTO.getLng()) &&StringUtils.isEmpty(pageDTO.getLat())){
+        if (StringUtils.isEmpty(pageDTO.getLng()) || StringUtils.isEmpty(pageDTO.getLat()) || "0".equals(pageDTO.getLng()) || "0".equals(pageDTO.getLat())){
             Integer sort = pageDTO.getSort();
             Integer pageNum = pageDTO.getPageNum();
             Integer pageSize = pageDTO.getPageSize();
-            pageDataResult =  sysScenicSpotService.currentCityAll(sort,pageNum,pageSize);
+            String name = pageDTO.getName();
+            pageDataResult =  sysScenicSpotService.currentCityAll(sort,"",name,pageNum,pageSize);
             return pageDataResult;
         }else{
             String lng = pageDTO.getLng();
@@ -381,12 +382,16 @@ public class SysScenicSpotNewController extends PublicUtil {
             Integer sort = pageDTO.getSort();
             Integer pageNum = pageDTO.getPageNum();
             Integer pageSize = pageDTO.getPageSize();
-            String cityName = HttpClientUtils.findByLatAndLng(lat,lng);
+            String cityName = "";
+            if (!StringUtils.isEmpty(pageDTO.getName())){
+                cityName = pageDTO.getName();
+            }else{
+                 cityName = HttpClientUtils.findByLatAndLng(lat,lng);
+            }
             if (!StringUtils.isEmpty(cityName)){
-                pageDataResult =  sysScenicSpotService.currentCity(lng,lat,cityName,sort,pageNum,pageSize);
+                pageDataResult =  sysScenicSpotService.currentCity(lng,lat,"",cityName,sort,pageNum,pageSize);
                 return pageDataResult;
             }else{
-
                 pageDataResult.setCode(400);
                 return pageDataResult;
             }
@@ -396,14 +401,12 @@ public class SysScenicSpotNewController extends PublicUtil {
      * zhang
      * 景区搜索
      */
-
     @ApiOperation("景区搜索")
     @GetMapping("searchSpots")
     @ResponseBody
     public PageDataResult searchSpots(PageDTO pageDTO){
         PageDataResult pageDataResult = new PageDataResult();
         pageDataResult = sysScenicSpotService.searchSpot(pageDTO);
-
         return pageDataResult;
     }
 
@@ -438,7 +441,217 @@ public class SysScenicSpotNewController extends PublicUtil {
         return returnModel;
     }
 
+    @ApiOperation("根据景区id，获取门票详细信息")
+    @GetMapping("getSpotIdAdmissionTicket")
+    @ResponseBody
+    public ReturnModel getSpotIdAdmissionTicket(SearchDTO searchDTO){
 
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+            returnModel.setData(0);
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景区id为空，无法获取详情!");
+        }
+//        if (StringUtils.isEmpty(searchDTO.getLat()) || StringUtils.isEmpty(searchDTO.getLat())){
+//            returnModel.setData(0);
+//            returnModel.setState(Constant.STATE_FAILURE);
+//            returnModel.setMsg("当前坐标数据为空，无法获取数据!");
+//        }
+        List<SysScenicSpotAdmissionFee> admissionFeeList = sysScenicSpotService.getSpotIdAdmissionTicket(searchDTO.getSpotId());
+        returnModel.setData(admissionFeeList);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取景区门票详情成功!");
+        return returnModel;
+    }
+
+    /**
+     * 根据坐标获取最近的景区，或者已经在某个景区内
+     * @param
+     * @return GPS_COORDINATE
+     */
+    @ApiOperation("根据坐标获取最近的景区，或者已经在某个景区内")
+    @GetMapping("spotGpsCoordinate")
+    @ResponseBody
+    public ReturnModel spotGpsCoordinate(String lng,String lat) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+//        JSONObject obj = DistanceUtil.getAddressInfoByLngAndLat(lng, lat);
+//        String city = "";
+//        String success="0";
+//        String status = String.valueOf(obj.get("status"));
+//        if(success.equals(status)) {
+//            String result = String.valueOf(obj.get("result"));
+//            JSONObject resultObj = JSONObject.parseObject(result);
+//            String addressComponent = String.valueOf(resultObj.get("addressComponent"));
+////            String formattedAddress = String.valueOf(resultObj.get("formatted_address"));
+//            JSONObject resultObjs = JSONObject.parseObject(addressComponent);
+//             city =(String) resultObjs.get("city");
+//        }
+
+       Map<String,Object> map  = sysScenicSpotService.spotGpsGoordinate(lng,lat);
+
+       returnModel.setData(map);
+       returnModel.setState(Constant.STATE_SUCCESS);
+       returnModel.setMsg("查询成功");
+       return returnModel;
+
+    }
+
+
+    /**
+     * 根据坐标获取是否在景区内
+     * @param
+     * @return GPS_COORDINATE
+     */
+    @ApiOperation("根据坐标和景区id获取是否在景区内")
+    @GetMapping("spotIdGpsCoordinate")
+    @ResponseBody
+    public ReturnModel spotIdGpsCoordinate(String lng,String lat,Long spotId) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        Map<String,Object> map = sysScenicSpotService.spotIdGpsCoordinate(lng,lat,spotId);
+
+        returnModel.setData(map);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功！");
+
+        return returnModel;
+    }
+
+    /**
+     * 根据景区，景点，和坐标，判断坐标是否在景点范围内
+     */
+    @ApiOperation("根据坐标和景区id获取是否在景点内")
+    @GetMapping("broadcastIdGpsCoordinate")
+    @ResponseBody
+    public ReturnModel broadcastIdGpsCoordinate(String lng,String lat,Long spotId,Long broadcastId) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        int  b  = sysScenicSpotService.broadcastIdGpsCoordinate(lng,lat,spotId,broadcastId);
+        returnModel.setData(b);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功！");
+        return returnModel;
+    }
+
+    /**
+     * 根据坐标和景区id判断在那个景点内，没有则返回最近的景点和距离
+     */
+    @ApiOperation("根据坐标和景区id判断在那个景点内，没有则返回最近的景点和距离")
+    @GetMapping("spotIdBroadcastGpsCoordinate")
+    @ResponseBody
+    public ReturnModel spotIdBroadcastGpsCoordinate(String lng,String lat,Long spotId) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        Map<String ,Object> map   = sysScenicSpotService.spotIdBroadcastGpsCoordinate(lng,lat,spotId);
+        returnModel.setData(map);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功！");
+        return returnModel;
+    }
+
+
+    @ApiOperation("查询景区停车场坐标")
+    @GetMapping("/queryScenicParkingLotLists")
+    public ReturnModel queryScenicParkingLotLists(@ApiParam(name="baseDTO",value="登录令牌",required=true)BaseDTO baseDTO,
+                                                 @ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
+                                                 @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
+                                                 @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize) {
+
+        ReturnModel returnModel = new ReturnModel();
+        List<SysScenicSpotBroadcast> parking = sysScenicSpotParkingService.queryScenicParkingLotLists(pageNum,pageSize,scenicSpotId);
+        //List<SysScenicSpotBroadcast> parking = sysScenicSpotBroadcastService.queryScenicSpotStop(pageNum,pageSize,search);
+        //PageInfo就是一个分页Bean
+        PageInfo pageInfo = new PageInfo(parking);
+        returnModel.setData(pageInfo);
+        returnModel.setMsg("成功获取停靠点列表！");
+        returnModel.setState(Constant.STATE_SUCCESS);
+        return returnModel;
+
+
+    }
+
+
+    @ApiOperation("查询景区出入口坐标")
+    @GetMapping("/queryScenicSpotEntranceLists")
+    public ReturnModel queryScenicSpotEntranceLists(@ApiParam(name="baseDTO",value="登录令牌",required=true)BaseDTO baseDTO,
+                                                  @ApiParam(name="scenicSpotId",value="景区ID",required=true)String scenicSpotId,
+                                                  @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
+                                                  @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize) {
+
+        ReturnModel returnModel = new ReturnModel();
+        List<SysScenicSpotBroadcast> parking = sysScenicSpotParkingService.queryScenicSpotEntranceLists(pageNum,pageSize,scenicSpotId);
+        //List<SysScenicSpotBroadcast> parking = sysScenicSpotBroadcastService.queryScenicSpotStop(pageNum,pageSize,search);
+        //PageInfo就是一个分页Bean
+        PageInfo pageInfo = new PageInfo(parking);
+        returnModel.setData(pageInfo);
+        returnModel.setMsg("成功获取停靠点列表！");
+        returnModel.setState(Constant.STATE_SUCCESS);
+        return returnModel;
+
+    }
+
+
+
+    /**
+     * 获取推荐景区
+     * @param: type
+     * @param: pageNum
+     * @param: pageSize
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: 张
+     *
+     */
+    @ApiOperation("获取推荐景区")
+    @GetMapping("/getRecommendSpot")
+    public ReturnModel getRecommendSpot(@ApiParam(name="token",value="token",required=true)BaseDTO baseDTO) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        List<SysScenicSpot> list = sysScenicSpotService.getRecommendSpot();
+
+        returnModel.setData(list);
+        returnModel.setMsg("获取成功");
+        returnModel.setState(Constant.STATE_SUCCESS);
+
+        return  returnModel;
+
+    }
+
+
+
+    /**
+     * 获取推荐景区
+     * @param: type
+     * @param: pageNum
+     * @param: pageSize
+     * @description: TODO
+     * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
+     * @author: 张
+     *
+     */
+    @ApiOperation("获取推荐景区（新）")
+    @GetMapping("/getRecommendSpotNew")
+    public ReturnModel getRecommendSpotNew(@ApiParam(name="token",value="token",required=true)BaseDTO baseDTO) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+
+        List<SysScenicSpot> list = sysScenicSpotService.getRecommendSpotNew();
+
+        returnModel.setData(list);
+        returnModel.setMsg("获取成功");
+        returnModel.setState(Constant.STATE_SUCCESS);
+
+        return  returnModel;
+
+    }
 
 
 

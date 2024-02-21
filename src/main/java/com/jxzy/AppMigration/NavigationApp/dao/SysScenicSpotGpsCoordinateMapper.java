@@ -39,4 +39,19 @@ public interface SysScenicSpotGpsCoordinateMapper {
      * @date: 2022/8/3 0003
      */
     List<SysScenicSpotGpsCoordinateWithBLOBs> queryLocationScenicSpot();
+
+    /**
+     * 后台获取全部围栏
+     * @return
+     */
+    List<SysScenicSpotGpsCoordinateWithBLOBs> selectByAll();
+
+
+    /**
+     * 根据景区id查询景区围栏
+     * @param spotId
+     * @return
+     */
+    SysScenicSpotGpsCoordinateWithBLOBs selectBySpotId(Long spotId);
+
 }

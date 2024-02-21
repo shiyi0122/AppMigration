@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysRobot;
+import com.jxzy.AppMigration.NavigationApp.entity.SysRobotGPS;
 
 import java.util.List;
 import java.util.Map;
@@ -26,4 +27,12 @@ public interface SysRobotMapper {
      * @date: 2021/12/3 0003
      */
     List<SysRobot> queryRobotList(Map<String, Object> search);
+
+    List<SysRobot> getRobotGpsList(Map<String, Object> search);
+
+
+    SysRobotGPS getRobotGPSByRobotCode(String robotCode);
+
+    List<SysRobot> getRobotGpsSpotList(Long scenicSpotFid);
+
 }

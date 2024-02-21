@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppNews;
+import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 
 import java.util.List;
 import java.util.Map;
@@ -39,5 +40,35 @@ public interface SysGuideAppNewsService {
      */
     int allRead(String userId);
 
+
+    /**
+     * 后台管理—— 查询消息列表
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
+    PageDataResult getSysGuideAppNewsList(Integer pageNum, Integer pageSize, Map<String, Object> search);
+
+    /**
+     * 添加消息
+     * @param sysGuideAppNews
+     * @return
+     */
+    int addSysGuideAppNews(SysGuideAppNews sysGuideAppNews);
+
+    /**
+     * 修改消息
+     * @param sysGuideAppNews
+     * @return
+     */
+    int editSysGuideAppNews(SysGuideAppNews sysGuideAppNews);
+
+    /**
+     * 删除消息
+     * @param guideId
+     * @return
+     */
+    int delSysGuideAppNews(Long guideId);
 
 }

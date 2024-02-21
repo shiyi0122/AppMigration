@@ -26,8 +26,25 @@ public class SysScenicSpotShops {
 
     private String updateTime;
 
+    private String shopsState;
+
+    private String shopsPinyinName;
+
+    private String shopsGpsBaidu;
+
+    private String shopsGpsGaode;
+
+    private String shopsRange;
+
+    private String businessHours;
+
+    private String productIntroduction;
+
     private List<SysScenicSpotShopsType> sysScenicSpotShopsType;
 
     private Double distance;
+
+    //表中无此字段
+    private String spotName;
 
 }

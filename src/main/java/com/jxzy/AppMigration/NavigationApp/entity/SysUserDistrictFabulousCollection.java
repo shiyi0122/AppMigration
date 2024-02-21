@@ -22,4 +22,14 @@ public class SysUserDistrictFabulousCollection {
 
     private List<SysScenicSpot> sysScenicSpotList;
 
+    private Integer fabulousCount;
+
+    private Integer collectionCount;
+
+    private String  scenicSpotName;
+
+    private Double distance;
+
+    private String scenicSpotImg;
+
 }

@@ -117,7 +117,7 @@ public class WeatherReport {
 	 * @date: 2022/7/27 0027
 	 */
 	public static void main(String[] args) throws Exception {
-		System.out.println(getWeather("北京"));
+		System.out.println(getWeather("丰台"));
 		//System.out.println("po&oi".split("&").length) ;
 		//System.out.println("##".split("#").length) ;
 	}

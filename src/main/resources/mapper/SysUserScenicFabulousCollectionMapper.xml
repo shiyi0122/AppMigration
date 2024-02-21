@@ -29,6 +29,7 @@
       <result column="collection" property="collection" jdbcType="VARCHAR" />
       <result column="create_time" property="createTime" jdbcType="VARCHAR" />
       <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_NAME" property="scenicSpotName" jdbcType="VARCHAR" />
     <collection property="sysScenicSpotBroadcasts" column="scenicDistrictId"
                 ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
       <id column="BROADCAST_ID" property="broadcastId" jdbcType="BIGINT" />
@@ -46,6 +47,8 @@
       <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
       <result column="SCENIC_SPOT_ADDRES" property="scenicSpotAddres" jdbcType="VARCHAR" />
       <result column="PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR" />
+      <result column="IS_FEATURE" property="isFeature" jdbcType="VARCHAR"/>
+      <result column="INTRODUCE" property="introduce" jdbcType="VARCHAR"/>
       <collection property="rankings" column="broadcastId"
                   ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicDistrictRanking">
         <id column="id" property="id" jdbcType="BIGINT" />
@@ -192,4 +195,46 @@
       update_time = #{updateTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getSpotIdFabulousCount" resultType="java.lang.Integer">
+    select COUNT(*)
+    from sys_user_scenic_fabulous_collection
+    where scenic_district_id = #{broadcastId} and fabulous = 1
+  </select>
+
+  <select id="getSpotIdCollectionCount" resultType="java.lang.Integer">
+    select COUNT(*)
+    from sys_user_scenic_fabulous_collection
+    where scenic_district_id = #{broadcastId} and collection = 1
+  </select>
+
+  <delete id="deleteByBroadcastId" >
+    delete from sys_user_scenic_fabulous_collection
+    where scenic_district_id = #{broadcastId}
+  </delete>
+
+  <select id="getUserScenicFabulousCollectionList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection">
+    select * FROM
+    (select susfc.*,sssb.BROADCAST_NAME
+    from sys_user_scenic_fabulous_collection susfc
+    left join SYS_SCENIC_SPOT_BROADCAST sssb on susfc.scenic_district_id = sssb.BROADCAST_ID
+    where  susfc.fabulous = 1  OR  susfc.collection = 1) as susfc
+    <where>
+      <if test="userId !=null and userId != ''">
+        susfc.user_id = #{userId}
+      </if>
+      <if test="id != null and id != ''">
+        and susfc.scenic_district_id = #{id}
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+        and susfc.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+      <if test="time != null and time != ''">
+        and DATE(susfc.create_time)  &gt;= DATE(#{time})
+      </if>
+      <if test="timeEnd != null and timeEnd != ''">
+        and DATE(susfc.create_time)  &lt;= DATE(#{timeEnd})
+      </if>
+    </where>
+  </select>
 </mapper>

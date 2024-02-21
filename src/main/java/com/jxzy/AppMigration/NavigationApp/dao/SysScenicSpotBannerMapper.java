@@ -20,4 +20,23 @@ public interface SysScenicSpotBannerMapper {
     int editScenicSpotBanner(SysScenicSpotBanner sysScenicSpotBanner);
 
 
+    int delSpotFilesBanner(String id);
+
+    List<SysScenicSpotBanner> selectSpotIdByList(Long scenicSpotId);
+
+
+    /**
+     * 获取景区轮播图数量
+     * @param scenicSpotId
+     * @return
+     */
+    Integer getScenicSpotBannerCount(Long scenicSpotId);
+
+    /**
+     * 后台管理—— 修改轮播图启用禁用状态
+     * @param id
+     * @return
+     */
+    SysScenicSpotBanner selectByPrimaryKey(Long id);
+
 }

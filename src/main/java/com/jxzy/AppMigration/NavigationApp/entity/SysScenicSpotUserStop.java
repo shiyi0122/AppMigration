@@ -31,4 +31,8 @@ public class SysScenicSpotUserStop extends BaseDTO {
 
     private String type;
 
+    private String  scenicSpotName;
+
+    private String    broadcastName;
+
 }

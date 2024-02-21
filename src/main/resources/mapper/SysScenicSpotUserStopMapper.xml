@@ -113,6 +113,70 @@
         </trim>
     </insert>
 
+    <select id="getSpotIdUserCount" resultType="java.lang.Integer">
+        select COUNT(*)
+        from sys_scenic_spot_user_stop
+        <where>
+            <if test="spot_id != null and spot_id != null">
+                spot_id = #{scenicSpotId}
+            </if>
+            <if test="broadcastId != null and broadcastId != ''">
+                and  broadcast_id = #{broadcastId}
+            </if>
+        </where>
+    </select>
 
+    <select id="getSpotIdTimeSum" resultType="java.lang.Integer">
+        select SUM(time)
+        from sys_scenic_spot_user_stop
+        <where>
+            <if test="spot_id != null and spot_id != null">
+                spot_id = #{scenicSpotId}
+            </if>
+            <if test="broadcastId != null and broadcastId != ''">
+                and  broadcast_id = #{broadcastId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getSysScenicSpotUserStopList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotUserStop">
+        select sssus.*,sss.SCENIC_SPOT_NAME,sssb.BROADCAST_NAME
+        from sys_scenic_spot_user_stop sssus
+        left join SYS_SCENIC_SPOT sss on sssus.spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on sssus.broadcast_id = sssb.BROADCAST_ID
+        <where>
+            <if test="uid != null and uid != null">
+                sssus.user_id = #{uid}
+            </if>
+            <if test="spotName != null and spotName != ''">
+                and sss.SCENIC_SPOT_NAME like CONCAT('%',#{spotName},'%')
+            </if>
+            <if test="time != null and time != ''">
+                and sssus.time like concat('%',#{time},'%')
+            </if>
+        </where>
+        group by  user_id
+        order by create_time
+    </select>
+
+
+    <select id="getSysScenicSpotUserTime" resultType="java.lang.Long">
+        select SUM(time) from sys_scenic_spot_user_stop
+        where spot_id = #{spotId}
+        and user_id = #{userId}
+    </select>
+
+    <select id="getSysScenicSpotUserStopFootprint" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotUserStop">
+
+        select sssus.* ,sssb.BROADCAST_NAME
+        from sys_scenic_spot_user_stop sssus
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on sssus.broadcast_id = sssb.BROADCAST_ID
+
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from sys_scenic_spot_user_stop
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
 
 </mapper>

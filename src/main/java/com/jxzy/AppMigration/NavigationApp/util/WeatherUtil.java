@@ -83,7 +83,7 @@ public class WeatherUtil {
     }
 
     public static void main(String[] args){
-        String info = WeatherUtil.GetWeatherData("北京");
+        String info = WeatherUtil.GetWeatherData("丰台");
         System.out.println("1.预测结果：" + info);                    // 全部天气数据，含预测
         WeatherInfo weatherinfo = WeatherUtil.GetWeather(info);
         System.out.println("2.今天天气：" + weatherinfo.toString());  // 当天天气数据

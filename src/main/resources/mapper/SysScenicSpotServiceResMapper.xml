@@ -13,10 +13,14 @@
     <result column="SERVICE_PIC" property="servicePic" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="SERVICE_STATE" property="serviceState" jdbcType="VARCHAR"/>
+    <result column="SERVICE_RADIUS" property="serviceRadius" jdbcType="VARCHAR"/>
+    <result column="SERVICE_MAX_PEOPLE" property="serviceMaxPeople" jdbcType="VARCHAR"/>
+    <result column="SERVICE_GPS_GAO_DE" property="serviceGpsGaoDe" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     SERVICE_ID, SERVICE_NAME, SERVICE_NAME_PIN_YIN, SERVICE_TYPE, SCENIC_SPOT_ID, SERVICE_GPS, 
-    SERVICE_GPS_BAI_DU, SERVICE_INTRODUCE, SERVICE_PIC, CREATE_DATE, UPDATE_DATE
+    SERVICE_GPS_BAI_DU, SERVICE_INTRODUCE, SERVICE_PIC, CREATE_DATE, UPDATE_DATE, SERVICE_STATE, SERVICE_RADIUS, SERVICE_MAX_PEOPLE,SERVICE_GPS_GAO_DE
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,7 +33,7 @@
     select
     <include refid="Base_Column_List" />
     from SYS_SCENIC_SPOT_SERVICE_RES
-    where SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND SERVICE_TYPE = 1
+    where SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND SERVICE_TYPE = 1 AND SERVICE_STATE = 1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from SYS_SCENIC_SPOT_SERVICE_RES
@@ -39,11 +43,12 @@
     insert into SYS_SCENIC_SPOT_SERVICE_RES (SERVICE_ID, SERVICE_NAME, SERVICE_NAME_PIN_YIN, 
       SERVICE_TYPE, SCENIC_SPOT_ID, SERVICE_GPS, 
       SERVICE_GPS_BAI_DU, SERVICE_INTRODUCE, SERVICE_PIC, 
-      CREATE_DATE, UPDATE_DATE)
+      CREATE_DATE, UPDATE_DATE, SERVICE_STATE, SERVICE_RADIUS, SERVICE_MAX_PEOPLE)
     values (#{serviceId,jdbcType=BIGINT}, #{serviceName,jdbcType=VARCHAR}, #{serviceNamePinYin,jdbcType=VARCHAR}, 
       #{serviceType,jdbcType=VARCHAR}, #{scenicSpotId,jdbcType=BIGINT}, #{serviceGps,jdbcType=VARCHAR}, 
       #{serviceGpsBaiDu,jdbcType=VARCHAR}, #{serviceIntroduce,jdbcType=VARCHAR}, #{servicePic,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR})
+      #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR}, #{serviceState,jdbcType=VARCHAR}, #{serviceRadius,jdbcType=VARCHAR},
+      #{serviceMaxPeople,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotServiceRes" >
     insert into SYS_SCENIC_SPOT_SERVICE_RES
@@ -81,6 +86,18 @@
       <if test="updateDate != null" >
         UPDATE_DATE,
       </if>
+      <if test="serviceState != null">
+        SERVICE_STATE,
+      </if>
+      <if test="serviceRadius != null">
+        SERVICE_RADIUS,
+      </if>
+      <if test="serviceMaxPeople != null">
+        SERVICE_MAX_PEOPLE,
+      </if>
+      <if test="serviceGpsGaoDe != null">
+        SERVICE_GPS_GAO_DE
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serviceId != null" >
@@ -115,6 +132,18 @@
       </if>
       <if test="updateDate != null" >
         #{updateDate,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceState != null">
+        #{serviceState,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceRadius != null">
+        #{serviceRadius,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceMaxPeople != null">
+        #{serviceMaxPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceGpsGaoDe != null">
+        #{serviceGpsGaoDe,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -151,6 +180,18 @@
       <if test="updateDate != null" >
         UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
       </if>
+      <if test="serviceState != null">
+        SERVICE_STATE = #{serviceState,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceRadius != null">
+        SERVICE_RADIUS = #{serviceRadius,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceMaxPeople != null">
+        SERVICE_MAX_PEOPLE = #{serviceMaxPeople,jdbcType = VARCHAR},
+      </if>
+      <if test="serviceGpsGaoDe != null">
+        SERVICE_GPS_GAO_DE #{serviceGpsGaoDe,jdbcType = VARCHAR},
+      </if>
     </set>
     where SERVICE_ID = #{serviceId,jdbcType=BIGINT}
   </update>
@@ -165,7 +206,36 @@
       SERVICE_INTRODUCE = #{serviceIntroduce,jdbcType=VARCHAR},
       SERVICE_PIC = #{servicePic,jdbcType=VARCHAR},
       CREATE_DATE = #{createDate,jdbcType=VARCHAR},
-      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
+      UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+      SERVICE_STATE = #{serviceState,jdbcType=VARCHAR},
+      SERVICE_RADIUS = #{serviceRadius,jdbcType=VARCHAR},
+      SERVICE_MAX_PEOPLE = #{serviceMaxPeople,jdbcType=VARCHAR}
     where SERVICE_ID = #{serviceId,jdbcType=BIGINT}
   </update>
+
+  <select id="getSpotServiceResList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotServiceRes">
+      select ssssr.*,sss.SCENIC_SPOT_NAME
+      from SYS_SCENIC_SPOT_SERVICE_RES ssssr
+      left join SYS_SCENIC_SPOT sss on ssssr.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+      <where>
+        <if test="serviceName != null and serviceName != ''">
+              ssssr.SERVICE_NAME like concat('%',#{serviceName},'%')
+        </if>
+        <if test="scenicSpotId != null and scenicSpotId != ''">
+              and ssssr.SCENIC_SPOT_ID = #{scenicSpotId}
+        </if>
+        <if test="spotName != null and spotName !=''">
+              and sss.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+        </if>
+              and SERVICE_TYPE = 1
+      </where>
+      order by CREATE_DATE DESC
+  </select>
+
+  <select id="getSpotIdAndServiceResId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotServiceRes">
+    select * from SYS_SCENIC_SPOT_SERVICE_RES
+    where SCENIC_SPOT_ID = #{scenicSpotId}
+    and SERVICE_ID = #{serviceId}
+  </select>
+
 </mapper>

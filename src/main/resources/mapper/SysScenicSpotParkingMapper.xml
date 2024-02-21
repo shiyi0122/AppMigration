@@ -9,17 +9,21 @@
     <result column="PARKING_TYPE" property="parkingType" jdbcType="VARCHAR" />
     <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
     <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    <result column="PARKING_PINYIN_NAME" property="parkingPinyinName" jdbcType="VARCHAR"/>
+    <result column="PARKING_RANGE" property="parkingRange" jdbcType="VARCHAR"/>
+    <result column="BROADCAST_CONTENT" property="broadcastContent" jdbcType="VARCHAR"/>
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs" extends="BaseResultMap" >
     <result column="PARKING_COORDINATE_GROUP" property="parkingCoordinateGroup" jdbcType="LONGVARCHAR" />
     <result column="PARKING_COORDINATE_GROUP_BAIDU" property="parkingCoordinateGroupBaidu" jdbcType="LONGVARCHAR" />
+    <result column="PARKING_COORDINATE_GROUP_GAODE" property="parkingCoordinateGroupGaode" jdbcType="LONGVARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     PARKING_ID, PARKING_NAME, PARKING_CONTENT, PARKING_SCENIC_SPOT_ID, PARKING_TYPE, 
-    CREATE_DATE, UPDATE_DATE
+    CREATE_DATE, UPDATE_DATE,PARKING_PINYIN_NAME,PARKING_RANGE,BROADCAST_CONTENT
   </sql>
   <sql id="Blob_Column_List" >
-    PARKING_COORDINATE_GROUP, PARKING_COORDINATE_GROUP_BAIDU
+    PARKING_COORDINATE_GROUP, PARKING_COORDINATE_GROUP_BAIDU,PARKING_COORDINATE_GROUP_GAODE
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
@@ -36,7 +40,7 @@
     ,
     <include refid="Blob_Column_List" />
     from SYS_SCENIC_SPOT_PARKING
-    where PARKING_SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND PARKING_TYPE = 1
+    where PARKING_SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND PARKING_TYPE = 1 AND COORDINATE_TYPE = 0
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
@@ -46,12 +50,12 @@
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs" >
     insert into SYS_SCENIC_SPOT_PARKING (PARKING_ID, PARKING_NAME, PARKING_CONTENT, 
       PARKING_SCENIC_SPOT_ID, PARKING_TYPE, CREATE_DATE, 
-      UPDATE_DATE, PARKING_COORDINATE_GROUP, 
-      PARKING_COORDINATE_GROUP_BAIDU)
+      UPDATE_DATE,PARKING_COORDINATE_GROUP,
+      PARKING_COORDINATE_GROUP_BAIDU,PARKING_PINYIN_NAME,PARKING_RANGE,PARKING_COORDINATE_GROUP_GAODE)
     values (#{parkingId,jdbcType=BIGINT}, #{parkingName,jdbcType=VARCHAR}, #{parkingContent,jdbcType=VARCHAR}, 
       #{parkingScenicSpotId,jdbcType=BIGINT}, #{parkingType,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=VARCHAR}, #{parkingCoordinateGroup,jdbcType=LONGVARCHAR}, 
-      #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR})
+      #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR},#{parkingPinyinName,jdbcType=VARCHAR},#{parkingRange,jdbcType=VARCHAR},#{parkingCoordinateGroupGaode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs" >
     insert into SYS_SCENIC_SPOT_PARKING
@@ -83,6 +87,21 @@
       <if test="parkingCoordinateGroupBaidu != null" >
         PARKING_COORDINATE_GROUP_BAIDU,
       </if>
+      <if test="parkingPinyinName != null">
+        PARKING_PINYIN_NAME,
+      </if>
+      <if test="parkingRange != null">
+        PARKING_RANGE,
+      </if>
+      <if test="coordinateType != null">
+        COORDINATE_TYPE,
+      </if>
+      <if test="parkingCoordinateGroupGaode != null">
+        PARKING_COORDINATE_GROUP_GAODE,
+      </if>
+      <if test="broadcastContent != null">
+        BROADCAST_CONTENT,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="parkingId != null" >
@@ -112,6 +131,19 @@
       <if test="parkingCoordinateGroupBaidu != null" >
         #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR},
       </if>
+      <if test="parkingPinyinName != null">
+        #{parkingPinyinName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingRange != null">
+        #{parkingRange,jdbcType=VARCHAR},
+      </if>
+      <if test="coordinateType !=null">
+        #{coordinateType,jdbcType = VARCHAR},
+      </if>
+      <if test="parkingCoordinateGroupGaode != null">
+        #{parkingCoordinateGroupGaode,jdbcType=LONGVARCHAR},
+      </if>
+
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs" >
@@ -141,6 +173,18 @@
       <if test="parkingCoordinateGroupBaidu != null" >
         PARKING_COORDINATE_GROUP_BAIDU = #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR},
       </if>
+      <if test="parkingPinyinName != null">
+        PARKING_PINYIN_NAME = #{parkingPinyinName,jdbcType=VARCHAR},
+      </if>
+      <if test="parkingRange != null">
+        PARKING_RANGE = #{parkingRange,jdbcType = VARCHAR},
+      </if>
+      <if test="coordinateType != null">
+        COORDINATE_TYPE = #{coordinateType,jdbcType = VARCHAR}
+      </if>
+      <if test="parkingCoordinateGroupGaode != null">
+        PARKING_COORDINATE_GROUP_GAODE = #{parkingCoordinateGroupGaode,jdbcType=LONGVARCHAR}
+      </if>
     </set>
     where PARKING_ID = #{parkingId,jdbcType=BIGINT}
   </update>
@@ -152,8 +196,11 @@
       PARKING_TYPE = #{parkingType,jdbcType=VARCHAR},
       CREATE_DATE = #{createDate,jdbcType=VARCHAR},
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
-      PARKING_COORDINATE_GROUP = #{parkingCoordinateGroup,jdbcType=LONGVARCHAR},
-      PARKING_COORDINATE_GROUP_BAIDU = #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR}
+      SERVICE_STATE = #{serviceState,jdbcType=VARCHAR},
+      PARKING_COORDINATE_GROUP_BAIDU = #{parkingCoordinateGroupBaidu,jdbcType=LONGVARCHAR},
+      PARKING_PINYIN_NAME = #{parkingPinyinName,jdbcType=VARCHAR},
+      PARKING_RANGE = #{parkingRange,jdbcType=VARCHAR},
+      PARKING_COORDINATE_GROUP_GAODE = #{parkingCoordinateGroupGaode,jdbcType=VARCHAR}
     where PARKING_ID = #{parkingId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParking" >
@@ -166,4 +213,94 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where PARKING_ID = #{parkingId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs">
+
+    select sssp.*,sss.SCENIC_SPOT_NAME as spotName
+    from SYS_SCENIC_SPOT_PARKING sssp
+    left join SYS_SCENIC_SPOT sss
+    on sssp.PARKING_SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="parkingName != null and parkingName != ''">
+        sssp.PARKING_NAME like concat('%',#{parkingName},'%')
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and  sss.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+      </if>
+      <if test="type != null and type != ''">
+        and  sssp.COORDINATE_TYPE = #{type}
+      </if>
+      <if test="cType != null and cType != ''">
+        and  sssp.COORDINATE_TYPE in (0,1,2)
+      </if>
+      <if test="spotId != null and spotId != ''">
+        and sss.SCENIC_SPOT_ID = #{spotId}
+      </if>
+    </where>
+    order by CREATE_DATE DESC
+  </select>
+
+
+  <select id="queryScenicParkingLotLists" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_SCENIC_SPOT_PARKING
+    where PARKING_SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND PARKING_TYPE = 1 AND COORDINATE_TYPE = 2
+
+  </select>
+
+  <select id="queryScenicSpotEntranceLists" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_SCENIC_SPOT_PARKING
+    where PARKING_SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT} AND PARKING_TYPE = 1 AND COORDINATE_TYPE = 3
+  </select>
+
+
+  <select id="uploadExcelSpotEntrance" resultType="com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotParkingExcel">
+
+    select sssp.PARKING_NAME,sss.SCENIC_SPOT_NAME as spotName,sssp.PARKING_PINYIN_NAME,sssp.PARKING_RANGE,sssp.PARKING_CONTENT,sssp.PARKING_TYPE,sssp.PARKING_COORDINATE_GROUP,sssp.PARKING_COORDINATE_GROUP_BAIDU,sssp.CREATE_DATE,sssp.UPDATE_DATE,
+    sssp.PARKING_COORDINATE_GROUP_GAODE as parkingCoordinateGroupGaode
+    from SYS_SCENIC_SPOT_PARKING sssp
+    left join SYS_SCENIC_SPOT sss on sssp.PARKING_SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="parkingName != null and parkingName != ''">
+        sssp.PARKING_NAME like concat('%',#{parkingName},'%')
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and  sss.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+      </if>
+      <if test="type != null and type != ''">
+        and  sssp.COORDINATE_TYPE = #{type}
+      </if>
+      <if test="cType != null and cType != ''">
+        and  sssp.COORDINATE_TYPE in (0,1,2)
+      </if>
+      <if test="spotId != null and spotId != ''">
+        and sss.SCENIC_SPOT_ID = #{spotId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByParkingName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from SYS_SCENIC_SPOT_PARKING
+    where PARKING_NAME = #{parkingName}
+    and COORDINATE_TYPE = 3
+  </select>
+
+  <select id="getSpotIdAndParkingName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotParkingWithBLOBs">
+    select * from SYS_SCENIC_SPOT_PARKING
+    where PARKING_SCENIC_SPOT_ID = #{parkingScenicSpotId}
+    and 
+  </select>
+
 </mapper>

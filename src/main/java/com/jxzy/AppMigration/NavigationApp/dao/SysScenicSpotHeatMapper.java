@@ -27,4 +27,30 @@ public interface SysScenicSpotHeatMapper {
      * @date: 2022/8/2 0002
      */
     SysScenicSpotHeat querybestPopularity(Map<String, Object> search);
+
+    /**
+     * 清空热度
+     * @return
+     */
+    int updateHeat();
+
+
+    void selectBySearch();
+
+
+    /**
+     * 查询排行榜中是否有这个景区数据
+     * @param scenicSpotId
+     * @param
+     * @return
+     */
+    SysScenicSpotHeat selectSpotAndTypeByHeat(Long scenicSpotId, int type);
+
+    /**
+     * total+1
+     * @param scenicSpotId
+     * @return
+     */
+    int addTotal(Long scenicSpotId,int type);
+
 }

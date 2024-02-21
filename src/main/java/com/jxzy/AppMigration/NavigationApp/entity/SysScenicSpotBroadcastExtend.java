@@ -2,6 +2,7 @@ package com.jxzy.AppMigration.NavigationApp.entity;
 
 import lombok.Data;
 
+import java.util.List;
 
 
 @Data
@@ -21,5 +22,13 @@ public class SysScenicSpotBroadcastExtend {
     private String createDate;
 
     private String updateDate;
+
+    private String  scenicSpotName;
+
+    private String broadcastName;
+
+    private String introduce;
+
+    private List<SysScenicSpotBroadcastAdmissionFee> admissionFeeList;
 
 }

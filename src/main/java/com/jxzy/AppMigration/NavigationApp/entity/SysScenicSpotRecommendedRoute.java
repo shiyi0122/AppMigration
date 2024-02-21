@@ -20,6 +20,8 @@ public class SysScenicSpotRecommendedRoute {
 
     private String routeGpsBaiDu;
 
+    private String routeGpsGaoDe;
+
     private String createDate;
 
     private String updateDate;
@@ -32,14 +34,27 @@ public class SysScenicSpotRecommendedRoute {
 
     private String pictureUrl;
 
+    private String routeState;
 
     //表中没有的字段数据
-
+    private String scenicSpotName;
     //景点数量
     private String broadcastCount;
     //语音播报数量
     private String voiceCount;
+
+    private Long[] broadcastIds;
     //路线中各个景点坐标
-    private List<String> routeInBroadcastList;
+    private List<String> stringList ;
+
+    private List<SysScenicSpotRouteInBroadcast>  routeInBroadcastList ;
+
+    private List<SysScenicSpotBroadcast>  sysScenicSpotBroadcastList ;
+
+    private List<SysScenicSpotBroadcast>  sysScenicSpotBroadcastGpss;
+
+    //地图页中最近的景点，在列表中的位置
+    private Integer currentSpot ;
+
 
 }

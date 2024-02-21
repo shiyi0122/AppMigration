@@ -49,4 +49,17 @@ public class SysScenicSpotHeatServiceImpl implements SysScenicSpotHeatService {
     public int updateScenicSpotHeat(SysScenicSpotHeat heat) {
         return sysScenicSpotHeatMapper.updateByPrimaryKeySelective(heat);
     }
+
+    /**
+     *
+     * 定时清空热度
+     * @return
+     */
+    @Override
+    public int updateHeat() {
+
+       int i = sysScenicSpotHeatMapper.updateHeat();
+
+        return  i;
+    }
 }

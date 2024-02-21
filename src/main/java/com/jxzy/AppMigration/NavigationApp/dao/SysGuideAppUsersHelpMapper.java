@@ -3,6 +3,7 @@ package com.jxzy.AppMigration.NavigationApp.dao;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SysGuideAppUsersHelpMapper {
     int deleteByPrimaryKey(Long helpId);
@@ -37,4 +38,13 @@ public interface SysGuideAppUsersHelpMapper {
      * @date: 2022/8/19 0019
      */
     List<SysGuideAppUsersHelp> queryUserHelpData(String helpTitle);
+
+    /**
+     * 后台管理系统接口--列表查询
+     * @param search
+     * @return
+     */
+    List<SysGuideAppUsersHelp> getUsersHelpBySearch(Map<String, Object> search);
+
+
 }

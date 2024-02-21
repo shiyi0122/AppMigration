@@ -19,11 +19,28 @@
     <result column="IS_FEATURE" property="heat" jdbcType="VARCHAR"/>
     <result column="INTRODUCE" property="introduce" jdbcType="VARCHAR"/>
     <result column="BEAR_PEOPLE" property="bearPeople" jdbcType="VARCHAR"/>
+    <result column="FEATURE_INTRODUCE" property="featureIntroduce" jdbcType="VARCHAR"/>
+    <result column="TOUR_DURATION" property="tourDuration" jdbcType="VARCHAR"/>
+    <result column="BROADCAST_GPS_GAO_DE" property="broadcastGpsGaoDe" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <resultMap id="BaseResultMapNew" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtend" >
+    <id column="BROADCAST_RES_ID" property="broadcastResId" jdbcType="BIGINT" />
+    <result column="BROADCAST_ID" property="broadcastId" jdbcType="BIGINT" />
+    <result column="MEDIA_RESOURCE_URL" property="mediaResourceUrl" jdbcType="VARCHAR" />
+    <result column="MEDIA_TYPE" property="mediaType" jdbcType="VARCHAR" />
+    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs" extends="BaseResultMapNew" >
+    <result column="BROADCAST_CONTENT" property="broadcastContent" jdbcType="LONGVARCHAR" />
+    <result column="PICTURE_URL" property="pictureUrl" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     BROADCAST_ID, SCENIC_SPOT_ID, BROADCAST_GPS, BROADCAST_GPS_BAI_DU, SCENIC_SPOT_RANGE, 
     BROADCAST_NAME, PIN_YIN_NAME, INTRODUCTION_TYPES, NAVIGATION_TYPE, BROADCAST_PRIORITY, 
-    SORT_TYPE, CREATE_DATE, UPDATE_DATE, HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE
+    SORT_TYPE, CREATE_DATE, UPDATE_DATE, HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE,TOUR_DURATION,
+    BROADCAST_GPS_GAO_DE,IF_NEED_ADMISSION_TICKET
   </sql>
 
   <resultMap id="BaseResultMapMax" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
@@ -140,15 +157,16 @@
     insert into SYS_SCENIC_SPOT_BROADCAST (BROADCAST_ID, SCENIC_SPOT_ID, BROADCAST_GPS, 
       BROADCAST_GPS_BAI_DU, SCENIC_SPOT_RANGE, BROADCAST_NAME, 
       PIN_YIN_NAME, INTRODUCTION_TYPES, NAVIGATION_TYPE, 
-      BROADCAST_PRIORITY, SORT_TYPE, CREATE_DATE,HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE
-      UPDATE_DATE)
+      BROADCAST_PRIORITY, SORT_TYPE, CREATE_DATE, UPDATE_DATE,HEAT,IS_FEATURE,INTRODUCE,BEAR_PEOPLE,
+      FEATURE_INTRODUCE,TOUR_DURATION)
     values (#{broadcastId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{broadcastGps,jdbcType=VARCHAR}, 
       #{broadcastGpsBaiDu,jdbcType=VARCHAR}, #{scenicSpotRange,jdbcType=VARCHAR}, #{broadcastName,jdbcType=VARCHAR}, 
       #{pinYinName,jdbcType=VARCHAR}, #{introductionTypes,jdbcType=VARCHAR}, #{navigationType,jdbcType=VARCHAR}, 
       #{broadcastPriority,jdbcType=VARCHAR}, #{sortType,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=VARCHAR},#{heat,jdbcType=VARCHAR},#{isFeature,jdbcType=VARCHAR},#{introduce,jdbcType=VARCHAR},
-      #{bearPeople,jdbcType=VARCHAR})
+      #{bearPeople,jdbcType=VARCHAR},#{featureIntroduce,jdbcType=VARCHAR},#{tourDuration,jdbcType=VARCHAR})
   </insert>
+
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast" >
     insert into SYS_SCENIC_SPOT_BROADCAST
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -182,7 +200,7 @@
       <if test="broadcastPriority != null" >
         BROADCAST_PRIORITY,
       </if>
-      <if test="sortType != null" >
+      <if test="sortType != null">
         SORT_TYPE,
       </if>
       <if test="createDate != null" >
@@ -191,17 +209,29 @@
       <if test="updateDate != null" >
         UPDATE_DATE,
       </if>
-      <if test="HEAT != null">
+      <if test="heat != null" >
         HEAT,
       </if>
-      <if test="IS_FEATURE != null">
+      <if test="isFeature != null" >
         IS_FEATURE,
       </if>
-      <if test="INTRODUCE != null">
+      <if test="introduce != null" >
         INTRODUCE,
       </if>
-      <if test="BEAR_PEOPLE != null">
+      <if test="bearPeople != null" >
         BEAR_PEOPLE,
+      </if>
+      <if test="featureIntroduce != null" >
+        FEATURE_INTRODUCE,
+      </if>
+      <if test="tourDuration != null" >
+        TOUR_DURATION,
+      </if>
+      <if test="broadcastGpsGaoDe != null">
+        BROADCAST_GPS_GAO_DE,
+      </if>
+      <if test="ifNeedAdmissionTicket != null">
+        IF_NEED_ADMISSION_TICKET,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -235,7 +265,7 @@
       <if test="broadcastPriority != null" >
         #{broadcastPriority,jdbcType=VARCHAR},
       </if>
-      <if test="sortType != null" >
+      <if test="sortType != null">
         #{sortType,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null" >
@@ -245,19 +275,32 @@
         #{updateDate,jdbcType=VARCHAR},
       </if>
       <if test="heat != null">
-        #{heat,jdbcType = VARCHAR},
+        #{heat,jdbcType=VARCHAR},
       </if>
       <if test="isFeature != null">
         #{isFeature,jdbcType=VARCHAR},
       </if>
       <if test="introduce != null">
-        #{introduce,jdbcType = VARCHAR},
+        #{introduce,jdbcType=VARCHAR},
       </if>
       <if test="bearPeople != null">
-        #{bearPeople,jdbcType = BIGINT},
+        #{bearPeople,jdbcType=BIGINT},
+      </if>
+      <if test="featureIntroduce != null">
+        #{featureIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="tourDuration != null">
+        #{tourDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="broadcastGpsGaoDe != null">
+        #{broadcastGpsGaoDe,jdbcType=VARCHAR},
+      </if>
+      <if test="ifNeedAdmissionTicket != null">
+        #{ifNeedAdmissionTicket,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast" >
     update SYS_SCENIC_SPOT_BROADCAST
     <set >
@@ -309,6 +352,18 @@
       <if test="bearPeople != null">
         BEAR_PEOPLE = #{bearPeople,jdbcType=VARCHAR},
       </if>
+      <if test="featureIntroduce != null">
+        FEATURE_INTRODUCE = #{featureIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="tourDuration != null">
+        TOUR_DURATION = #{tourDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="broadcastGpsGaoDe != null">
+        BROADCAST_GPS_GAO_DE = #{broadcastGpsGaoDe,jdbcType = VARCHAR},
+      </if>
+      <if test="ifNeedAdmissionTicket != null">
+        IF_NEED_ADMISSION_TICKET = #{ifNeedAdmissionTicket,jdbcType=VARCHAR},
+      </if>
     </set>
     where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </update>
@@ -329,7 +384,9 @@
       HEAT = #{heat,jdbcType = VARCHAR},
       IS_FEATURE = #{isFeature,jdbcType = VARCHAR},
       INTRODUCE = #{introduce,jdbcType = VARCHAR},
-      BEAR_PEOPLE = #{bearPeople,jdbcType = BIGINT}
+      BEAR_PEOPLE = #{bearPeople,jdbcType = BIGINT},
+      FEATURE_INTRODUCE = #{featureIntroduce,jdbcType=VARCHAR},
+      TOUR_DURATION = #{tourDuration,jdbcType=VARCHAR}
     where BROADCAST_ID = #{broadcastId,jdbcType=BIGINT}
   </update>
 
@@ -340,11 +397,16 @@
 
   <!-- 获取景点列表-->
   <select id="getSpotBroadcastList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast" parameterType="java.util.Map">
-    select sssb.BROADCAST_ID,sssb.SCENIC_SPOT_ID,sssb.BROADCAST_GPS,sssb.BROADCAST_GPS_BAI_DU,sssb.SCENIC_SPOT_RANGE,sssb.BROADCAST_NAME,sssb.PIN_YIN_NAME,sssb.INTRODUCTION_TYPES,sssb.NAVIGATION_TYPE,
-    sssb.BROADCAST_PRIORITY,sssb.SORT_TYPE,sssb.CREATE_DATE,sssb.UPDATE_DATE,sssb.HEAT,sssb.IS_FEATURE,sssb.INTRODUCE,sssb.BEAR_PEOPLE,sssbe.PICTURE_URL
+    select sssb.BROADCAST_ID,sssb.SCENIC_SPOT_ID,sssb.BROADCAST_GPS,sssb.BROADCAST_GPS_BAI_DU,sssb.BROADCAST_GPS_GAO_DE,sssb.SCENIC_SPOT_RANGE,sssb.BROADCAST_NAME,sssb.PIN_YIN_NAME,sssb.INTRODUCTION_TYPES,sssb.NAVIGATION_TYPE,
+    sssb.BROADCAST_PRIORITY,sssb.SORT_TYPE,sssb.FEATURE_INTRODUCE,sssb.CREATE_DATE,sssb.TOUR_DURATION,sssb.UPDATE_DATE,sssb.HEAT,sssb.IS_FEATURE,sssb.INTRODUCE,sssb.BEAR_PEOPLE,sssb.IF_NEED_ADMISSION_TICKET,sssbe.PICTURE_URL,sssbe.BROADCAST_CONTENT,
+    sssbe1.MEDIA_RESOURCE_URL as videoUrl, sssbe2.MEDIA_RESOURCE_URL as audioUrl
     from SYS_SCENIC_SPOT_BROADCAST sssb
-    left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe
+    left join (select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND where MEDIA_TYPE = 1) sssbe
     on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    left join (select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND where MEDIA_TYPE = 2) sssbe1
+    on sssb.BROADCAST_ID = sssbe1.BROADCAST_ID
+    left join (select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND where MEDIA_TYPE = 3) sssbe2
+    on sssb.BROADCAST_ID = sssbe2.BROADCAST_ID
     <where>
       <if test="spotId != null and spotId !=''">
         and sssb.SCENIC_SPOT_ID = #{spotId}
@@ -354,10 +416,14 @@
       </if>
         and sssb.SORT_TYPE = 0
     </where>
+        GROUP BY sssb.BROADCAST_ID
         <if test="sort == 1">
           order by sssb.HEAT DESC
         </if>
   </select>
+
+
+
 
   <update id="addHotSpotBroadcast">
     UPDATE  SYS_SCENIC_SPOT_BROADCAST
@@ -370,4 +436,225 @@
     select * from SYS_SCENIC_SPOT_BROADCAST where BROADCAST_GPS = #{s}
   </select>
 
+  <select id="getSpotBroadcastListNew" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastWithBlogs">
+    select sssb.* , sss.SCENIC_SPOT_NAME , sssbe.PICTURE_URL, sssbe1.MEDIA_RESOURCE_URL as videoUrl, sssbe2.MEDIA_RESOURCE_URL as audioUrl,
+    (select total from sys_scenic_district_ranking where type = 1 and broadcast_id = sssb.BROADCAST_ID) as hotSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 2 and broadcast_id = sssb.BROADCAST_ID) as peopleSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 3 and broadcast_id = sssb.BROADCAST_ID) as welcomeSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 4 and broadcast_id = sssb.BROADCAST_ID) as collectionSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 5 and broadcast_id = sssb.BROADCAST_ID) as likeSearchCount
+    from SYS_SCENIC_SPOT_BROADCAST sssb
+    left join sys_scenic_district_ranking ssdr on sssb.BROADCAST_ID = ssdr.broadcast_id
+    left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    left join SYS_SCENIC_SPOT sss on sssb.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    left join (select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND where MEDIA_TYPE = 2) sssbe1 on sssb.BROADCAST_ID = sssbe1.BROADCAST_ID
+    left join (select * from SYS_SCENIC_SPOT_BROADCAST_EXTEND where MEDIA_TYPE = 3) sssbe2 on sssb.BROADCAST_ID = sssbe2.BROADCAST_ID
+    <where>
+      <if test="spotId != null and spotId != ''">
+        sssb.SCENIC_SPOT_ID = #{spotId}
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+       and  sssb.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+      <if test="startTime != null and startTime != ''">
+       and  date(sssb.CREATE_DATE) &gt;= date(#{startTime})
+      </if>
+      <if test="endTime != null and endTime != ''">
+         and date(sssb.UPDATE_DATE) &lt;= date(#{endTime})
+      </if>
+      <if test="type != null and type != ''">
+        and sssbe.MEDIA_TYPE = #{type}
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and sss.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+      </if>
+    </where>
+    GROUP BY sssb.BROADCAST_ID
+<!--    ORDER BY CREATE_DATE DESC-->
+    <choose>
+      <when test="sort == 1">
+        ORDER BY hotSearchCount DESC
+      </when>
+      <when test="sort == 2">
+        ORDER BY peopleSearchCount DESC
+      </when>
+      <when test="sort == 3">
+        ORDER BY welcomeSearchCount DESC
+      </when>
+      <when test="sort == 4">
+        ORDER BY collectionSearchCount DESC
+      </when>
+      <when test="sort == 5">
+        ORDER BY  likeSearchCount DESC
+      </when>
+      <when test="sort == 6">
+        ORDER BY CREATE_DATE DESC
+      </when>
+      <otherwise>
+        ORDER BY CREATE_DATE DESC
+      </otherwise>
+    </choose>
+
+  </select>
+
+
+  <select id="getSpotBroadcastListNewT" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastWithBlogs">
+    select sssb.* , sss.SCENIC_SPOT_NAME , sssbe.PICTURE_URL,
+    (select total from sys_scenic_district_ranking where type = 1 and broadcast_id = sssb.BROADCAST_ID) as hotSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 2 and broadcast_id = sssb.BROADCAST_ID) as peopleSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 3 and broadcast_id = sssb.BROADCAST_ID) as welcomeSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 4 and broadcast_id = sssb.BROADCAST_ID) as collectionSearchCount ,
+    (select total from sys_scenic_district_ranking where type = 5 and broadcast_id = sssb.BROADCAST_ID) as likeSearchCount
+    from SYS_SCENIC_SPOT_BROADCAST sssb
+    left join sys_scenic_district_ranking ssdr on sssb.BROADCAST_ID = ssdr.broadcast_id
+    left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    left join SYS_SCENIC_SPOT sss on sssb.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="spotId != null and spotId != ''">
+        sssb.SCENIC_SPOT_ID = #{spotId}
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+        and  sssb.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and  date(sssb.CREATE_DATE) &gt;= date(#{startTime})
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and date(sssb.UPDATE_DATE) &lt;= date(#{endTime})
+      </if>
+      <if test="type != null and type != ''">
+        and sssbe.MEDIA_TYPE = #{type}
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and sss.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+      </if>
+    </where>
+    GROUP BY sssb.BROADCAST_ID
+    <!--    ORDER BY CREATE_DATE DESC-->
+    <choose>
+      <when test="sort == 1">
+        ORDER BY hotSearchCount DESC
+      </when>
+      <when test="sort == 2">
+        ORDER BY peopleSearchCount DESC
+      </when>
+      <when test="sort == 3">
+        ORDER BY welcomeSearchCount DESC
+      </when>
+      <when test="sort == 4">
+        ORDER BY collectionSearchCount DESC
+      </when>
+      <when test="sort == 5">
+        ORDER BY  likeSearchCount DESC
+      </when>
+      <when test="sort == 6">
+        ORDER BY CREATE_DATE DESC
+      </when>
+      <otherwise>
+        ORDER BY CREATE_DATE DESC
+      </otherwise>
+    </choose>
+
+  </select>
+
+
+
+
+  <select id="getBroadcastDetails" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+    SELECT
+    A.BROADCAST_RES_ID,
+    A.BROADCAST_ID,
+    A.MEDIA_RESOURCE_URL,
+    A.MEDIA_TYPE,
+    A.CREATE_DATE,
+    A.UPDATE_DATE,
+    A.BROADCAST_CONTENT,
+    A.PICTURE_URL,
+    sss.SCENIC_SPOT_NAME,
+    B.BROADCAST_NAME AS broadcastName
+    FROM
+    SYS_SCENIC_SPOT_BROADCAST_EXTEND A
+    LEFT JOIN SYS_SCENIC_SPOT_BROADCAST B ON A.BROADCAST_ID = B.BROADCAST_ID
+    left join SYS_SCENIC_SPOT sss on B.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="broadcastId != null and broadcastId != ''">
+         A.BROADCAST_ID = #{broadcastId}
+      </if>
+      <if test="mediaType != null and mediaType != ''">
+         and A.MEDIA_TYPE = #{mediaType}
+      </if>
+    </where>
+
+    ORDER BY A.CREATE_DATE DESC
+  </select>
+
+
+  <select id="uploadExcelSpotBroadcast" resultType="com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotBroadcastExcel">
+    select sssb.BROADCAST_ID,sssb.BROADCAST_NAME,sssb.PIN_YIN_NAME,sssb.BROADCAST_GPS,sssb.BROADCAST_GPS_BAI_DU,sssb.SCENIC_SPOT_RANGE,
+             sssb.IS_FEATURE,sssb.FEATURE_INTRODUCE,sssb.TOUR_DURATION,sssb.INTRODUCE,sssb.CREATE_DATE,sss.SCENIC_SPOT_NAME
+    from SYS_SCENIC_SPOT_BROADCAST sssb
+    left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe on sssb.BROADCAST_ID = sssbe.BROADCAST_ID
+    left join SYS_SCENIC_SPOT sss on sss.SCENIC_SPOT_ID = sssb.SCENIC_SPOT_ID
+    <where>
+      <if test="spotId != null and spotId != ''">
+        sssb.SCENIC_SPOT_ID = #{spotId}
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+        and  sssb.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+      <if test="startTime != null and startTime != ''">
+        and  date(sssb.CREATE_DATE) &gt;= date(#{startTime})
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and date(sssb.UPDATE_DATE) &lt;= date(#{endTime})
+      </if>
+      <if test="type != null and type != ''">
+        and sssbe.MEDIA_TYPE = #{type}
+      </if>
+    </where>
+    group by sssb.BROADCAST_ID
+    order by sssb.CREATE_DATE DESC
+  </select>
+
+  <select id="getSpotBroadcastIdMinimum" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select * from SYS_SCENIC_SPOT_BROADCAST
+    <where>
+      <if test="spotId != null and spotId !=''">
+        and SCENIC_SPOT_ID = #{spotId}
+      </if>
+      <if test="spotName != null and spotName != ''">
+        and BROADCAST_NAME like CONCAT('%',#{spotName},'%')
+      </if>
+      and SORT_TYPE = 0
+    </where>
+    limit 1
+  </select>
+
+  <select id="getSpotBroadcastName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select * from SYS_SCENIC_SPOT_BROADCAST where BROADCAST_NAME = #{broadcastName}
+  </select>
+
+  <select id="getSpotIdAndBroadcastName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select * from SYS_SCENIC_SPOT_BROADCAST where SCENIC_SPOT_ID = #{scenicSpotId} and BROADCAST_NAME = #{broadcastName}
+  </select>
+
+
+  <select id="getSpotIdAndBroadcastNameList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select *
+    from SYS_SCENIC_SPOT_BROADCAST
+    where SCENIC_SPOT_ID = #{scenicSpotId}
+    and BROADCAST_NAME like concat('%',#{broadcastName},'%')
+  </select>
+
+  <select id="getSpotBroadcastNameList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select *
+    from SYS_SCENIC_SPOT_BROADCAST
+    where BROADCAST_NAME like concat('%',#{broadcastName},'%')
+  </select>
+
+  <select id="getSpotIdByBroadcastDropDown" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast">
+    select BROADCAST_ID, BROADCAST_NAME
+    from SYS_SCENIC_SPOT_BROADCAST
+    where SCENIC_SPOT_ID = #{spotId}
+  </select>
 </mapper>

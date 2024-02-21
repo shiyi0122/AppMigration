@@ -13,7 +13,7 @@ import java.util.Map;
  * @Date 2022/7/30 13:48
  */
 public interface SysScenicSpotBannerService {
-    List getScenicSpotBanner(Map<String, Object> search);
+    List getScenicSpotBanner(String lng,String lat,Map<String, Object> search);
 
     int addScenicSpotBanner(MultipartFile file, SysScenicSpotBanner sysScenicSpotBanner);
 

@@ -8,6 +8,7 @@ class AppMigrationApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("pingying");
 	}
 
 }

@@ -16,5 +16,7 @@ public class SysScenicSpotShopsType {
 
     private String updateTime;
 
+    private Long commodityId;
+
     private List<SysScenicSpotShopsDetails> sysScenicSpotShopsDetails;
 }

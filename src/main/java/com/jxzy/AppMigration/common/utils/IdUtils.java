@@ -53,6 +53,32 @@ public class IdUtils {
         }
         return numStr;
     }
+
+    //生成招商小程序订单编号（直播）
+    public static String getOrderNumber(String phone){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String orderNumber = "HHRDD"+phone+formatter.format(date);// 订单编号
+        return orderNumber;
+    }
+
+    //生成游娱go订单编号
+    public static String getYYGOrderNumber(String phone){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String orderNumber = "YYG"+phone+formatter.format(date);// 订单编号
+        return orderNumber;
+    }
+
+    //生成机器人押金订单编号（机器人支付押金）
+    public static String getRobotDepositOrderNumber(String phone){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String orderNumber = "YJ"+phone+formatter.format(date) + "YJ";// 订单编号
+        return orderNumber;
+    }
+
+
     /**
      * 生成主键ID
      * @param:

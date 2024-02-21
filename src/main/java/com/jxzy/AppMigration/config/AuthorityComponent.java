@@ -54,10 +54,10 @@
 //        }
 //        String functionName = joinPoint.getSignature().getName();
 //        String token = "";
-//        if (Objects.nonNull(data) && StringUtils.isEmpty(data.getLonginTokenId())) {
+//        if (Objects.nonNull(data) && StringUtils.isEmpty(data.getToken())) {
 //            throw new ForBiddenException();
 //        } else if (Objects.nonNull(data)) {
-//            token = data.getLonginTokenId();
+//            token = data.getToken();
 //        }
 //        if (isRelease(token, functionName, 0)) {
 //            return joinPoint.proceed(args);

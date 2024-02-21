@@ -23,10 +23,10 @@
         on sssbs.broadcast_id = sssb.BROADCAST_ID
         <where>
             <if test="spotId != null and spotId != ''">
-                sssbs.spot_id = #{spotId},
+                sssbs.spot_id = #{spotId}
             </if>
             <if test="broadcastId != null and broadcastId != ''">
-                sssbs.broadcast_id = #{broadcastId}
+                and   sssbs.broadcast_id = #{broadcastId}
             </if>
         </where>
     </select>

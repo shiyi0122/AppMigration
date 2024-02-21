@@ -30,4 +30,13 @@ public interface SysScenicSpotRouteInBroadcastService {
 
     List<SysScenicSpotRecommendedRoute> recommendLine(String spotId,String id);
 
+    List<SysScenicSpotRecommendedRoute> lineDetailsTwo(String spotId, String id, String lat, String lng);
+
+    List<SysScenicSpotRecommendedRoute> recommendLineTwo(String spotId, String id,String broadcastId);
+
+    List<SysScenicSpotBroadcast> broadcastEnterMap(Map<String, Object> search,String lng,String lat);
+
+
+    List<SysScenicSpotRecommendedRoute> recommendLineThree(String spotId, String id, String broadcastId);
+
 }

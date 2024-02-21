@@ -1,9 +1,12 @@
 package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotUserStopService;
 import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotUserStopMapper;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotUserStop;
+import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 import com.jxzy.AppMigration.common.utils.DateUtil;
 import com.jxzy.AppMigration.common.utils.IdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,5 +104,59 @@ public class SysScenicSpotUserStopServiceImpl implements SysScenicSpotUserStopSe
         }else{
             return list;
         }
+    }
+
+    /**
+     * 后台管理——足迹列表查询
+     * @param search
+     * @return
+     */
+    @Override
+    public PageDataResult getSysScenicSpotUserStopList(Integer pageNum,Integer pageSize,Map<String, Object> search) {
+
+        PageDataResult pageDataResult = new PageDataResult();
+        PageHelper.startPage(pageNum,pageSize);
+        List<SysScenicSpotUserStop> list = sysScenicSpotUserStopMapper.getSysScenicSpotUserStopList(search);
+        for (SysScenicSpotUserStop sysScenicSpotUserStop : list) {
+            Long userId = sysScenicSpotUserStop.getUserId();
+            Long spotId = sysScenicSpotUserStop.getSpotId();
+            Long time = sysScenicSpotUserStopMapper.getSysScenicSpotUserTime(userId,spotId);
+            sysScenicSpotUserStop.setTime(time.toString());
+
+        }
+        if (list.size()>0){
+            PageInfo<SysScenicSpotUserStop> page = new PageInfo<>(list);
+            pageDataResult.setData(list);
+            pageDataResult.setCode(200);
+            pageDataResult.setTotals((int)page.getTotal());
+        }
+        return pageDataResult;
+    }
+
+    /**
+     * 后台管理--估计用户id，和景区id，获取景区景点的驻足时长
+     * @param spotId
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysScenicSpotUserStop> getSysScenicSpotUserStopFootprint(Long spotId, Long userId) {
+
+        List<SysScenicSpotUserStop> list = sysScenicSpotUserStopMapper.getSysScenicSpotUserStopFootprint(spotId,userId);
+
+        return list;
+    }
+
+    /**
+     * 后台管理--删除景点足迹
+     * @param id
+     * @return
+     */
+    @Override
+    public int delSysScenicSpotUserStopFootprint(Long id) {
+
+       int i = sysScenicSpotUserStopMapper.deleteByPrimaryKey(id);
+        return i;
+
     }
 }

@@ -26,6 +26,8 @@
     <result column="ROBOT_BATCH_NUMBER" property="robotBatchNumber" jdbcType="VARCHAR" />
     <result column="ROBOT_MODEL" property="robotModel" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="BaseResultGPSMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysRobotGPS" >
+  </resultMap>
   <sql id="Base_Column_List" >
     ROBOT_ID, ROBOT_CODE_SIM, SCENIC_SPOT_ID, ROBOT_CODE_CID, ROBOT_CODE, ROBOT_RUN_STATE, 
     ROBOT_POWER_STATE, ROBOT_FAULT_STATE, ROBOT_TYPE, ROBOT_POLLING_TYPE, ROBOT_GPS_SMALL_APP, 
@@ -315,4 +317,76 @@
       ROBOT_MODEL = #{robotModel,jdbcType=VARCHAR}
     where ROBOT_ID = #{robotId,jdbcType=BIGINT}
   </update>
+    <select id="getRobotGpsList" resultMap="BaseResultMap" parameterType="java.util.Map">
+      SELECT
+      A.ROBOT_CODE,
+      A.ROBOT_GPS_BAI_DU,
+      A.ROBOT_GPS_GPGGA,
+      A.ROBOT_GPS_SMALL_APP,
+      A.ROBOT_POWER_STATE,
+      A.ROBOT_RUN_STATE,
+      A.SCENIC_SPOT_ID,
+      B.SCENIC_SPOT_NAME AS scenicSpotName,
+      A.CREATE_DATE,
+      A.PUSH_STATUS,
+      A.ROBOT_ADMIN_LOCKING,
+      A.ROBOT_CODE_CID,
+      A.ROBOT_CODE_SIM,
+      A.ROBOT_FAULT_STATE,
+      A.ROBOT_ID,
+      A.ROBOT_POLLING_TYPE,
+      A.ROBOT_TYPE,
+      A.CLIENT_VERSION,
+      A.ROBOT_REMARKS
+      FROM
+      SYS_ROBOT A LEFT JOIN SYS_SCENIC_SPOT B ON A.SCENIC_SPOT_ID = B.SCENIC_SPOT_ID
+      <where>
+        <if test="scenicSpotId != null and scenicSpotId != ''">
+          AND A.SCENIC_SPOT_ID = #{scenicSpotId}
+        </if>
+        <if test="robotCode != null and robotCode != ''">
+          AND A.ROBOT_CODE LIKE CONCAT('%',#{robotCode},'%')
+        </if>
+      </where>
+    </select>
+
+    <select id="getRobotGPSByRobotCode" resultMap="BaseResultGPSMap">
+      SELECT
+      A.ROBOT_CODE AS robotCode,
+      A.ROBOT_GPS_BAI_DU AS robotGpsBaiDu,
+      A.ROBOT_GPS_GPGGA AS robotGpsGpgga,
+      A.ROBOT_GPS_SMALL_APP AS robotGpsSmallApp,
+      A.ROBOT_POWER_STATE AS robotPowerState,
+      A.ROBOT_RUN_STATE AS robotRunState,
+      A.SCENIC_SPOT_ID AS scenicSpotId,
+      B.SCENIC_SPOT_NAME AS scenicSpotName,
+      A.CREATE_DATE AS createDate,
+      A.PUSH_STATUS AS pushStatus,
+      A.ROBOT_ADMIN_LOCKING AS robotAdminLocking,
+      A.ROBOT_CODE_CID AS robotCodeCid,
+      A.ROBOT_CODE_SIM AS robotCodeSim,
+      A.ROBOT_FAULT_STATE AS robotFaultState,
+      A.ROBOT_ID AS robotId,
+      A.ROBOT_POLLING_TYPE AS robotPollingType,
+      A.ROBOT_TYPE AS robotType,
+      A.CLIENT_VERSION AS clientVersion,
+      A.ROBOT_REMARKS AS robotRemarks
+      FROM
+      SYS_ROBOT A LEFT JOIN SYS_SCENIC_SPOT B ON A.SCENIC_SPOT_ID = B.SCENIC_SPOT_ID
+      WHERE
+      A.ROBOT_CODE = #{robotCode}
+    </select>
+
+  <select id="getRobotGpsSpotList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobot">
+    select SCENIC_SPOT_ID, ROBOT_CODE
+    from SYS_ROBOT
+    <where>
+      <if test="scenicSpotFid != null and scenicSpotFid">
+       SCENIC_SPOT_ID = #{scenicSpotFid}
+      </if>
+    </where>
+
+  </select>
+
+
 </mapper>

@@ -8,9 +8,11 @@
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR"/>
+    <result column="reply_content" property="replyContent" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, content, url_pic, user_id, create_time, update_time
+    id, content, url_pic, user_id, create_time, update_time,status,reply_content
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,10 +26,11 @@
   </delete>
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedbacks" >
     insert into sys_guide_app_users_feedbacks (id, content, url_pic, 
-      user_id, create_time, update_time
+      user_id, create_time, update_time, status,reply_content
       )
     values (#{id,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{urlPic,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}
+      #{userId,jdbcType=BIGINT}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+      #{replyContent,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedbacks" >
@@ -51,6 +54,12 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="replyContent != null">
+        reply_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -70,6 +79,12 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="replyContent != null">
+        #{replyContent,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +106,12 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="replyContent != null">
+        reply_content = #{replyContent,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -100,7 +121,30 @@
       url_pic = #{urlPic,jdbcType=VARCHAR},
       user_id = #{userId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=VARCHAR}
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      reply_content = #{replyContent,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersFeedbacks">
+    select sgauf.*,sgau.USER_NAME
+    from sys_guide_app_users_feedbacks sgauf
+    left join SYS_GUIDE_APP_USERS sgau on sgauf.user_id = sgau.USER_ID
+    <where>
+      <if test="phone != null and phone != ''">
+          sgau.USER_PHONE like concat('%',#{phone},'%')
+      </if>
+      <if test="content != null and content != ''">
+          sgauf.content like concat('%',#{content},'%')
+      </if>
+      <if test="userName != null and userName != ''">
+          sgau.USER_NAME like concat('%',#{userName},'%')
+      </if>
+    </where>
+    order by create_time DESC
+  </select>
+
+
 </mapper>

@@ -104,6 +104,8 @@ public class LngLonUtil {
         double theta = Math.atan2(y, x) + 0.000003 * Math.cos(x * x_pi);
         double tempLon = z * Math.cos(theta) + 0.0065;
         double tempLat = z * Math.sin(theta) + 0.006;
+        tempLat = retain6(tempLat);
+        tempLon = retain6(tempLon);
         double[] gps = {tempLat,tempLon};
         return gps;
     }
@@ -144,7 +146,7 @@ public class LngLonUtil {
     public static double[] bd09_To_gps84(double lat,double lon){
         double[] gcj02 = bd09_To_Gcj02(lat, lon);
         double[] gps84 = gcj02_To_Gps84(gcj02[0], gcj02[1]);
-        //保留小数点后六位
+        //保留小数点后2位
         gps84[0] = retain6(gps84[0]);
         gps84[1] = retain6(gps84[1]);
         return gps84;
@@ -158,7 +160,7 @@ public class LngLonUtil {
         return  retain6(new GeodeticCalculator().calculateGeodeticCurve(Ellipsoid.WGS84, from, to).getEllipsoidalDistance() / 1000.0);
     }
     /**
-     * 计算距离
+     * 计算距离(千米)
      * @param
      * @return
      */
@@ -274,7 +276,7 @@ public class LngLonUtil {
      * @return
      */
     private static double retain6(double num){
-        String result = String.format("%.2f", num);
+        String result = String.format("%.6f", num);
         return Double.valueOf(result);
     }
 
@@ -282,12 +284,13 @@ public class LngLonUtil {
         //todo  84 --> 高德
         //double[] gps = gps84_To_Gcj02(纬度,经度);
         //todo 84 -- > 百度
-        //double[] gps = gps84_To_bd09(纬度,经度);
+//        double[] gps = gps84_To_bd09(116.275019,39.832039 );
         //todo 百度 --> 84
-//        double[] gps = bd09_To_gps84("纬度","经度");
-
-        Point2D.Double from=new Point2D.Double(116.38056903541,40.02473076103);
-        Point2D.Double to=new Point2D.Double(116.402078,40.029286);
+        double[] gps = bd09_To_gps84(116.28695,39.83974);
+        System.out.println(gps);
+//        Point2D.Double from=new Point2D.Double(116.275019,39.832039);
+        Point2D.Double from=new Point2D.Double(116.28691,39.839648);
+        Point2D.Double to=new Point2D.Double(116.387162,40.015126);
         double v = LngLonUtil.calculateWithSdk(from, to);
         System.out.println(v);
     }

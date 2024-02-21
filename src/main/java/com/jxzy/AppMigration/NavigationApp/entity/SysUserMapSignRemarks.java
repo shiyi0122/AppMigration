@@ -25,5 +25,7 @@ public class SysUserMapSignRemarks extends BaseDTO {
     private String updateTime;
     @ApiModelProperty(value = "坐标")
     private String  coordinate;
+    @ApiModelProperty(value = "景区名称")
+    private String  scenicSpotName;
 
 }

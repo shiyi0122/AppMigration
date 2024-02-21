@@ -13,6 +13,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,8 +71,6 @@ public class HttpClientUtils {
 
                 }
 
-
-
                 StringUtils.substringAfter(province,"省");
 
                 return province;
@@ -81,19 +82,74 @@ public class HttpClientUtils {
         return null;
     }
 
+    //根据起点和终点两个坐标,获取之间的线路坐标
+    public static  Map<String, Object>findByNavigationCoordinatePoint(String lat1,String lng1,String lat2,String lng2){
 
+        Map<String, Object> returnMap = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        try{
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            //骑行线路规划
+//           String url = "https://api.map.baidu.com/directionlite/v1/riding?ak=6RshCqt5hn9u6yAgCEQlIGvczjn2tTna&coord_type=wgs84&origin=" + lat1 + "," + lng1 + "&destination=" + lat2 + "," + lng2;
+            //步行线路规划
+            String url = "https://api.map.baidu.com/directionlite/v1/walking?ak=6RshCqt5hn9u6yAgCEQlIGvczjn2tTna&coord_type=wgs84&origin=" + lat1 + "," + lng1 + "&destination=" + lat2 + "," + lng2;
 
+            HttpGet httpGet = new HttpGet(url);
 
+            CloseableHttpResponse response = httpClient.execute(httpGet);
 
+            HttpEntity httpEntity = response.getEntity();
 
+            String json = EntityUtils.toString(httpEntity);
+
+            Map<String, Object> result = JSONObject.parseObject(json, Map.class);
+
+            if (result.get("status").equals(0)) {
+
+                Map<String, Object> resultMap = (Map<String, Object>) result.get("result");
+
+                List<Map<String,Object>> dataList  =  (List<Map<String,Object>>) resultMap.get("routes");
+                //米
+                Integer distance = 0;
+                //时间
+                Integer duration = 0;
+                //线路坐标
+                List<Map<String,Object>> dataMapList = new ArrayList<>();
+
+                for (Map<String, Object> map : dataList) {
+                    distance = (Integer) map.get("distance");
+                    duration = (Integer) map.get("duration");
+                    dataMapList =  (List<Map<String, Object>>) map.get("steps");
+                }
+                //线路
+                for (Map<String, Object> map : dataMapList) {
+
+                    String path = (String)map.get("path");
+                    String[] split = path.split(";");
+                    for (String s : split) {
+                        String[] split1 = s.split(",");
+                        //坐标系转换(百度坐标转84坐标)
+                        double[] doubles = LngLonUtil.bd09_To_gps84(Double.valueOf(split1[1]), Double.valueOf(split1[0]));
+                        list.add(doubles[1] + "," + doubles[0]);
+                    }
+                }
+                returnMap.put("distance",distance);
+                returnMap.put("duration",duration);
+                returnMap.put("coordinates",list);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return returnMap ;
+    }
 
 
 
     public static void main(String[] args) {
 
-        String byLatAndLng = HttpClientUtils.findByLatAndLng("29.41", "106.56");
-        System.out.println(byLatAndLng);
-
+//        String byLatAndLng = HttpClientUtils.findByLatAndLng("29.41", "106.56");
+//        System.out.println(byLatAndLng);
+          HttpClientUtils.findByNavigationCoordinatePoint("40.029182","116.389817","40.029640","116.397510");
 
     }
 }

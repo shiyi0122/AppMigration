@@ -56,4 +56,39 @@ public interface SysUserDistrictFabulousCollectionMapper {
      */
     SysUserDistrictFabulousCollection ifUserLikeCollection(Map<String, Object> search);
 
+    /**
+     * 景区点赞数量
+     * @param scenicSpotId
+     * @return
+     */
+    Integer getSpotIdFabulousCount(Long scenicSpotId);
+    /**
+     * 景区收藏数量
+     * @param scenicSpotId
+     * @return
+     */
+    Integer getSpotIdCollectionCount(Long scenicSpotId);
+
+    /**
+     * 后台管理——景区点赞列表
+     * @param search
+     * @return
+     */
+    List<SysUserDistrictFabulousCollection> selectBySearch(Map<String, Object> search);
+
+
+    /**
+     * 根据景区id，删除有关景区的点赞和收藏
+     * @param spotId
+     * @return
+     */
+    int deleteBySpotId(String spotId);
+
+    /**
+     * 后台管理--查询景区点赞收藏
+     * @param search
+     * @return
+     */
+    List<SysUserDistrictFabulousCollection> getUserFabulousCollectionList(Map<String, Object> search);
+
 }

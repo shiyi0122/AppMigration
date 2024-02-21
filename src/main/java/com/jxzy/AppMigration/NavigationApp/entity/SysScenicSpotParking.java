@@ -6,6 +6,7 @@ import lombok.Data;
 public class SysScenicSpotParking {
     private Long parkingId;
 
+
     private String parkingName;
 
     private String parkingContent;
@@ -14,8 +15,17 @@ public class SysScenicSpotParking {
 
     private String parkingType;
 
+    private String coordinateType;
+
     private String createDate;
 
     private String updateDate;
 
+    private String spotName;
+
+    private String  parkingPinyinName;
+
+    private String parkingRange;
+
+    private String broadcastContent ;
 }

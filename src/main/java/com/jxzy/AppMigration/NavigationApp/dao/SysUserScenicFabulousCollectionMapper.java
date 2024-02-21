@@ -47,4 +47,33 @@ public interface SysUserScenicFabulousCollectionMapper {
      * @date: 2022/8/15 0015
      */
     List<SysUserScenicFabulousCollection> queryUserScenicLike(Map<String, Object> search);
+
+    /**
+     * 根据景点获取点赞数量
+     * @param broadcastId
+     * @return
+     */
+    Integer getSpotIdFabulousCount(Long broadcastId);
+
+    /**
+     * 根据景点获取收藏数量
+     * @param broadcastId
+     * @return
+     */
+    Integer getSpotIdCollectionCount(Long broadcastId);
+
+    /**
+     * 根据景点id删除景点相关信息
+     * @param broadcastId
+     * @return
+     */
+    int deleteByBroadcastId(Long broadcastId);
+
+    /**
+     * 后台管理--景点查询点赞收藏
+     * @param search
+     * @return
+     */
+    List<SysUserScenicFabulousCollection> getUserScenicFabulousCollectionList(Map<String, Object> search);
+
 }

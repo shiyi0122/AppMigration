@@ -16,4 +16,12 @@ public class SysGuideAppUsersFeedbacks {
 
     private String updateTime;
 
+    private String userName;
+
+    private String status;
+
+    private Integer picCount;
+
+    private String replyContent;
+
 }

@@ -37,4 +37,34 @@ public class Constant {
     //运营人员维护
     public static final String OPERATOR_MAINTENANCE = "509";
 
+    /**
+     * 不支持上传的文件类型
+     */
+    public static final int UN_SUPPORT_PICTURE_TYPE = -2;
+    /**
+     * 不支持上传的文件类型
+     */
+    public static final String UN_SUPPORT_PICTURE_TYPE_STR="不支持的文件类型";
+    /**
+     *上传的文件内容为空
+     */
+    public static final int PIC_IS_EMPTY = -3;
+    /**
+     *上传的文件内容为空
+     */
+    public static final String PIC_IS_EMPTY_STR = "文件内容为空";
+
+    /**
+     * 成功上传到OSS
+     */
+    public static final int SAVE_TO_OSS_SUCCESSFUL = 1;
+    /**
+     * 不支持的文件大小
+     */
+    public static final int UN_SUPPORT_PIC_SIZE = -4;
+    /**
+     * 不支持的文件大小
+     */
+    public static final String UN_SUPPORT_PIC_SIZE_STR = "不支持的文件大小";
+
 }

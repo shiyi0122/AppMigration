@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.geom.Point2D;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,6 +54,16 @@ public class ScenicSpotController extends PublicUtil {
     private SysUserDistrictFabulousCollectionService sysUserDistrictFabulousCollectionService;
     @Autowired
     private SysUserScenicFabulousCollectionService sysUserScenicFabulousCollectionService;
+
+    @Autowired
+    private SysScenicSpotImgService sysScenicSpotImgService;
+
+    @Autowired
+    private SysScenicSpotBroadcastExtendService sysScenicSpotBroadcastExtendService;
+
+    @Autowired
+
+
     @Value("${DOMAIN_NAME}")
     private String DOMAIN_NAME;//后台管系统域名地址
     @Value("${UPLOAD_PIC}")
@@ -556,7 +567,7 @@ public class ScenicSpotController extends PublicUtil {
             n1 = new Point(Double.valueOf(splits[0]),Double.valueOf(splits[1]));
             List<SysScenicSpotGpsCoordinateWithBLOBs> coordinate = sysScenicSpotGpsCoordinateService.queryLocationScenicSpot();
             for (SysScenicSpotGpsCoordinateWithBLOBs GpsCoordinate : coordinate) {
-            String[] split = GpsCoordinate.getCoordinateOuterring().split("!");
+            String[] split = GpsCoordinate.getCoordinateOuterringBaiDu().split("!");
             if(split != null && split.length>0){
                 Point[] ps = new Point[split.length];
                 for (int i = 0; i < split.length; i++) {
@@ -787,14 +798,14 @@ public class ScenicSpotController extends PublicUtil {
                 }else {
                     if ("1".equals(part)) {
                         user.setFabulous("1");
-                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user,part);
                         returnModel.setData("");
                         returnModel.setMsg("已成功为景区点赞！");
                         returnModel.setState(Constant.STATE_SUCCESS);
                         return returnModel;
                     }else if ("2".equals(part)) {
                         user.setCollection("1");
-                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user,part);
                         returnModel.setData("");
                         returnModel.setMsg("已成功关注此景区！");
                         returnModel.setState(Constant.STATE_SUCCESS);
@@ -803,11 +814,15 @@ public class ScenicSpotController extends PublicUtil {
                         search.put("type","5");//点赞
                         search.put("scenicSpotId", scenicSpotId);
                         SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
-                        heats.setTotal(heats.getTotal()-1);
-                        heats.setSameDay(heats.getSameDay()-1);
-                        sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                        if (heats != null) {
+                            if (heats.getSameDay() != 0 && heats.getTotal() != 0) {
+                                heats.setTotal(heats.getTotal()-1);
+                                heats.setSameDay(heats.getSameDay()-1);
+                                sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                            }
+                        }
                         user.setFabulous("0");
-                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user,part);
                         returnModel.setData("");
                         returnModel.setMsg("已取消点赞！");
                         returnModel.setState(Constant.STATE_SUCCESS);
@@ -816,11 +831,15 @@ public class ScenicSpotController extends PublicUtil {
                         search.put("type","4");//收藏
                         search.put("scenicSpotId", scenicSpotId);
                         SysScenicSpotHeat heats = sysScenicSpotHeatService.querybestPopularity(search);
-                        heats.setTotal(heats.getTotal()-1);
-                        heats.setSameDay(heats.getSameDay()-1);
-                        sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                        if (heats != null) {
+                            if (heats.getSameDay() != 0 && heats.getTotal() != 0) {
+                                heats.setTotal(heats.getTotal()-1);
+                                heats.setSameDay(heats.getSameDay()-1);
+                                sysScenicSpotHeatService.updateScenicSpotHeat(heats);
+                            }
+                        }
                         user.setCollection("0");
-                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user);
+                        sysUserDistrictFabulousCollectionService.updateUserFabulousCollection(user,part);
                         returnModel.setData("");
                         returnModel.setMsg("已取消关注！");
                         returnModel.setState(Constant.STATE_SUCCESS);
@@ -878,9 +897,11 @@ public class ScenicSpotController extends PublicUtil {
                         search.put("scenicDistrictId",scenicDistrictId);
                         SysScenicDistrictRanking rankings = sysScenicDistrictRankingService.bestRanking(search);
                         if (rankings != null) {
-                            rankings.setSameDay(rankings.getSameDay()-1);
-                            rankings.setTotal(rankings.getTotal()-1);
-                            sysScenicDistrictRankingService.updatebestRanking(rankings);
+                            if (rankings.getSameDay() != 0 && rankings.getTotal() != 0) {
+                                rankings.setSameDay(rankings.getSameDay()-1);
+                                rankings.setTotal(rankings.getTotal()-1);
+                                sysScenicDistrictRankingService.updatebestRanking(rankings);
+                            }
                         }
                         scenic.setFabulous("0");
                         sysUserScenicFabulousCollectionService.updateUserFabulousCollection(scenic);
@@ -933,6 +954,9 @@ public class ScenicSpotController extends PublicUtil {
                                                   @ApiParam(name="scenicSpotName",value="景区名称",required=false)String scenicSpotName,
                                                   @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
                                                   @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
+                                                  @ApiParam(name="lat",value="纬度",required=true)String lat,
+                                                  @ApiParam(name="lng",value="经度",required=true)String lng,
+                                                  @ApiParam(name="cityName",value="城市",required=false)String cityName,
                                                   @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
         ReturnModel returnModel = new ReturnModel();
         Map<String,Object> search = new HashMap<>();
@@ -943,6 +967,13 @@ public class ScenicSpotController extends PublicUtil {
             if (scenicSpotName != null && types != null) {
                 search.put("scenicSpotName",scenicSpotName);
                 search.put("types",types);
+            }
+            if (lat != null && lng != null){
+                search.put("lat",lat);
+                search.put("lng",lng);
+            }
+            if (cityName != null){
+                search.put("cityName",cityName);
             }
             List<SysScenicSpot> spotList = sysScenicSpotService.queryScenicSpotRankingList(pageNum,pageSize,search);
             //PageInfo就是一个分页Bean
@@ -992,12 +1023,12 @@ public class ScenicSpotController extends PublicUtil {
                 search.put("scenicSpotId",scenicSpotId);
                 search.put("broadcastName",broadcastName);
                 List<SysScenicSpotBroadcast> broadcast = sysScenicSpotBroadcastService.queryWordsScenicSpotBroadcastList(pageNum,pageSize,search);
-                for (int i = 0; i < broadcast.size(); i++) {
-                    String pictureUrl = broadcast.get(i).getPictureUrl();
-                    if (pictureUrl != null && !"".equals(pictureUrl)) {
-                        broadcast.get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
-                    }
-                }
+//                for (int i = 0; i < broadcast.size(); i++) {
+//                    String pictureUrl = broadcast.get(i).getPictureUrl();
+//                    if (pictureUrl != null && !"".equals(pictureUrl)) {
+//                        broadcast.get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+//                    }
+//                }
                 //PageInfo就是一个分页Bean
                 PageInfo pageInfo = new PageInfo(broadcast);
                 returnModel.setData(pageInfo);
@@ -1007,7 +1038,13 @@ public class ScenicSpotController extends PublicUtil {
             }else if (broadcastId != null) {
                 search.put("broadcastId",broadcastId);
                 search.put("userId",userId);
-                SysScenicSpotBroadcastExtendWithBLOBs extend = sysScenicSpotBroadcastService.queryscenicSpotContent(search);
+                List<SysScenicSpotBroadcastExtendWithBLOBs> extend = sysScenicSpotBroadcastService.queryscenicSpotContent(search);
+                if (extend.size()>0 && !StringUtils.isEmpty(extend)){
+                    returnModel.setData(extend.get(0));
+                    returnModel.setMsg("成功获取景区排行列表！");
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    return returnModel;
+                }
                 returnModel.setData(extend);
                 returnModel.setMsg("成功获取景区排行列表！");
                 returnModel.setState(Constant.STATE_SUCCESS);
@@ -1041,27 +1078,95 @@ public class ScenicSpotController extends PublicUtil {
     public ReturnModel queryUserLikeCollection(@ApiParam(name="type",value="4收藏榜、5点赞榜",required=true)String type,
                                                @ApiParam(name="scenicType",value="1景区、2景点",required=true)String scenicType,
                                                @ApiParam(name="userId",value="用户ID",required=true)String userId,
+                                               @ApiParam(name="lng",value="经度",required=true)String lng,
+                                               @ApiParam(name="lat",value="纬度",required=true)String lat,
                                                @ApiParam(name="baseDto",value="登录令牌(测试阶段暂时可以随便传参)",required=true) BaseDTO baseDto,
                                                @ApiParam(name="pageNum",value="当前页,输入0不分页",required=true)int pageNum,
-                                               @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize,
-                                               @ApiParam(name="token",value="token",required=true)BaseDTO baseDTO){
+                                               @ApiParam(name="pageSize",value="总条数,输入0不分页",required=true)int pageSize
+                                               ){
         ReturnModel returnModel = new ReturnModel();
+
+        double[] doubles = LngLonUtil.bd09_To_gps84(Double.valueOf(lat),Double.valueOf(lng));
+        double lat84 = doubles[0];
+        double lng84 = doubles[1];
+        Point2D.Double from = null;
+        Point2D.Double to = null;
         Map<String,Object> search = new HashMap<>();
+        int total = 0;
         try {
             search.put("userId",userId);
             if ("1".equals(scenicType)) {//景区
                 if ("4".equals(type)) {//收藏
                     List<SysUserDistrictFabulousCollection> broadcast = sysUserDistrictFabulousCollectionService.queryUserCollection(pageNum,pageSize,search);
+                    for (SysUserDistrictFabulousCollection fabulousCollection : broadcast) {
+
+
+                       SysScenicSpotImg sysScenicSpotImg =  sysScenicSpotImgService.getSpotIdBySpotImg(fabulousCollection.getScenicSpotId());
+
+                       if (!StringUtils.isEmpty(sysScenicSpotImg)){
+                           fabulousCollection.setScenicSpotImg(sysScenicSpotImg.getScneicSpotImgUrl());
+                       }
+
+                        if ("1".equals(fabulousCollection.getCollection())){
+                            total++;
+                        }
+                        Long scenicSpotId = fabulousCollection.getScenicSpotId();
+                        int i = sysUserDistrictFabulousCollectionService.getScenicSpotCollectionCount(scenicSpotId);
+                        fabulousCollection.setCollectionCount(i);
+
+                        //计算距离
+                        SysScenicSpot sysScenicSpot = sysScenicSpotService.selectById(scenicSpotId);
+                        String[] split = sysScenicSpot.getCoordinateRange().split(",");
+                        if (!StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
+                            from=new Point2D.Double(Double.valueOf(lng84),Double.valueOf(lat84));
+                            to=new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                            double distance = LngLonUtil.calculateWithSdk(from, to);
+                            fabulousCollection.setDistance(distance);
+                        }else{
+                            fabulousCollection.setDistance(0d);
+                        }
+
+                    }
                     //PageInfo就是一个分页Bean
                     PageInfo pageInfo = new PageInfo(broadcast);
+                    pageInfo.setTotal(total);
                     returnModel.setData(pageInfo);
                     returnModel.setMsg("成功获取景区排行列表！");
                     returnModel.setState(Constant.STATE_SUCCESS);
                     return returnModel;
                 }else if ("5".equals(type)) {//点赞
                     List<SysUserDistrictFabulousCollection> broadcast = sysUserDistrictFabulousCollectionService.queryUserLike(pageNum,pageSize,search);
+
+                    for (SysUserDistrictFabulousCollection fabulousCollection : broadcast) {
+
+                        SysScenicSpotImg sysScenicSpotImg =  sysScenicSpotImgService.getSpotIdBySpotImg(fabulousCollection.getScenicSpotId());
+
+                        if (!StringUtils.isEmpty(sysScenicSpotImg)){
+                            fabulousCollection.setScenicSpotImg(sysScenicSpotImg.getScneicSpotImgUrl());
+                        }
+
+
+                        if ("1".equals(fabulousCollection.getFabulous())){
+                            total++;
+                        }
+                        Long scenicSpotId = fabulousCollection.getScenicSpotId();
+                        int i = sysUserDistrictFabulousCollectionService.getScenicSpotFabulousCount(scenicSpotId);
+                        fabulousCollection.setFabulousCount(i);
+                        //计算距离
+                        SysScenicSpot sysScenicSpot = sysScenicSpotService.selectById(scenicSpotId);
+                        String[] split = sysScenicSpot.getCoordinateRange().split(",");
+                        if (!StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
+                            from=new Point2D.Double(Double.valueOf(lng84),Double.valueOf(lat84));
+                            to=new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                            double distance = LngLonUtil.calculateWithSdk(from, to);
+                            fabulousCollection.setDistance(distance);
+                        }else{
+                            fabulousCollection.setDistance(0d);
+                        }
+                    }
                     //PageInfo就是一个分页Bean
                     PageInfo pageInfo = new PageInfo(broadcast);
+                    pageInfo.setTotal(total);
                     returnModel.setData(pageInfo);
                     returnModel.setMsg("成功获取景区排行列表！");
                     returnModel.setState(Constant.STATE_SUCCESS);
@@ -1071,17 +1176,46 @@ public class ScenicSpotController extends PublicUtil {
                 if ("4".equals(type)) {//收藏
                     List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicCollection(pageNum,pageSize,search);
                     for (int i = 0; i < broadcast.size(); i++) {
+
+
+                        SysScenicSpotBroadcastExtendWithBLOBs broadcastExtend = sysScenicSpotBroadcastExtendService.getBroadcastIdByBraodcastImg(broadcast.get(i).getScenicDistrictId());
+
+                        if (!StringUtils.isEmpty(broadcastExtend)){
+                            broadcast.get(i).setBroadcastImg(broadcastExtend.getPictureUrl());
+                        }
+
                         if (broadcast.size() > 0) {
                             for (int j = 0; j < broadcast.get(i).getSysScenicSpotBroadcasts().size(); j++) {
-                                String pictureUrl = broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl()=="" ?"":broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
+                                String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(j).getPictureUrl()=="" ?"":broadcast.get(i).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
                                 if (pictureUrl != null && !"".equals(pictureUrl)) {
-                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(j).setPictureUrl(DOMAIN_NAME+pictureUrl);
                                 }
                             }
+                        }
+                        if ("1".equals(broadcast.get(i).getCollection())){
+                            total++;
+                        }
+//
+                        Long scenicDistrictId = broadcast.get(i).getScenicDistrictId();
+                        int count = sysUserScenicFabulousCollectionService.getScenicSpotCollectionCount(scenicDistrictId);
+                        broadcast.get(i).setCollectionCount(count);
+                        //距离
+                        SysScenicSpotBroadcast spotBroadcast = sysScenicSpotBroadcastService.getSpotBroadcastId(scenicDistrictId);
+                        String broadcastGps = spotBroadcast.getBroadcastGps();
+                        if (!StringUtils.isEmpty(broadcastGps)){
+                            String[] split = spotBroadcast.getBroadcastGps().split("!");
+                            String[] split1 = split[0].split(",");
+                            from=new Point2D.Double(Double.valueOf(lng84),Double.valueOf(lat84));
+                            to=new Point2D.Double(Double.valueOf(split1[0]),Double.valueOf(split1[1]));
+                            double distance = LngLonUtil.calculateWithSdk(from, to);
+                            broadcast.get(i).setDistance(distance);
+                        }else{
+                            broadcast.get(i).setDistance(0d);
                         }
                     }
                     //PageInfo就是一个分页Bean
                     PageInfo pageInfo = new PageInfo(broadcast);
+                    pageInfo.setTotal(total);
                     returnModel.setData(pageInfo);
                     returnModel.setMsg("成功获取景区排行列表！");
                     returnModel.setState(Constant.STATE_SUCCESS);
@@ -1089,17 +1223,48 @@ public class ScenicSpotController extends PublicUtil {
                 }else if ("5".equals(type)) {//点赞
                     List<SysUserScenicFabulousCollection> broadcast = sysUserScenicFabulousCollectionService.queryUserScenicLike(pageNum,pageSize,search);
                     for (int i = 0; i < broadcast.size(); i++) {
+
+
+                        SysScenicSpotBroadcastExtendWithBLOBs broadcastExtend = sysScenicSpotBroadcastExtendService.getBroadcastIdByBraodcastImg(broadcast.get(i).getScenicDistrictId());
+
+                        if (!StringUtils.isEmpty(broadcastExtend)){
+                            broadcast.get(i).setBroadcastImg(broadcastExtend.getPictureUrl());
+                        }
+
+
                         if (broadcast.size() > 0) {
                             for (int j = 0; j < broadcast.get(i).getSysScenicSpotBroadcasts().size(); j++) {
-                                String pictureUrl = broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl()==null ?"":broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
+                                String pictureUrl = broadcast.get(i).getSysScenicSpotBroadcasts().get(j).getPictureUrl()==null ?"":broadcast.get(j).getSysScenicSpotBroadcasts().get(j).getPictureUrl();
                                 if (pictureUrl != null && !"".equals(pictureUrl)) {
-                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(i).setPictureUrl(DOMAIN_NAME+pictureUrl);
+                                    broadcast.get(i).getSysScenicSpotBroadcasts().get(j).setPictureUrl(DOMAIN_NAME+pictureUrl);
                                 }
                             }
                         }
+                        if ("1".equals(broadcast.get(i).getFabulous())){
+                            total++;
+                        }
+                        Long scenicDistrictId = broadcast.get(i).getScenicDistrictId();
+                        int count = sysUserScenicFabulousCollectionService.getScenicSpotFabulousCount(scenicDistrictId);
+                        broadcast.get(i).setFabulousCount(count);
+                        //距离
+                        SysScenicSpotBroadcast spotBroadcast = sysScenicSpotBroadcastService.getSpotBroadcastId(scenicDistrictId);
+                        String broadcastGps = spotBroadcast.getBroadcastGps();
+                        if (!StringUtils.isEmpty(broadcastGps)){
+                            String[] split = spotBroadcast.getBroadcastGps().split("!");
+                            String[] split1 = split[0].split(",");
+                            from=new Point2D.Double(Double.valueOf(lng84),Double.valueOf(lat84));
+                            to=new Point2D.Double(Double.valueOf(split1[0]),Double.valueOf(split1[1]));
+                            double distance = LngLonUtil.calculateWithSdk(from, to);
+                            broadcast.get(i).setDistance(distance);
+                        }else{
+                            broadcast.get(i).setDistance(0d);
+                        }
+
+
                     }
                     //PageInfo就是一个分页Bean
                     PageInfo pageInfo = new PageInfo(broadcast);
+                    pageInfo.setTotal(total);
                     returnModel.setData(pageInfo);
                     returnModel.setMsg("成功获取景区排行列表！");
                     returnModel.setState(Constant.STATE_SUCCESS);
@@ -1134,9 +1299,20 @@ public class ScenicSpotController extends PublicUtil {
             returnModel.setMsg("景区id或者用户id为空，无法查询！");
             return returnModel;
         }
-
         SysUserDistrictFabulousCollection sysUserDistrictFabulousCollection = sysUserDistrictFabulousCollectionService.ifUserLikeCollection(searchDTO.getSpotId(),searchDTO.getUid());
 
+        if (StringUtils.isEmpty(sysUserDistrictFabulousCollection)) {
+            SysUserDistrictFabulousCollection sysUserDistrictFabulousCollections = new SysUserDistrictFabulousCollection();
+            sysUserDistrictFabulousCollections.setScenicSpotId(Long.parseLong(searchDTO.getSpotId()));
+            sysUserDistrictFabulousCollections.setUserId(Long.parseLong(searchDTO.getUid()));
+            sysUserDistrictFabulousCollections.setCollection("0");
+            sysUserDistrictFabulousCollections.setFabulous("0");
+
+            returnModel.setData(sysUserDistrictFabulousCollections);
+            returnModel.setState(Constant.STATE_SUCCESS);
+            returnModel.setMsg("查询成功");
+            return returnModel;
+        }
         returnModel.setData(sysUserDistrictFabulousCollection);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("查询成功");

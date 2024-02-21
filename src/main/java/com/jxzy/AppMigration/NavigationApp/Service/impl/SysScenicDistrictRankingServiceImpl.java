@@ -50,4 +50,14 @@ public class SysScenicDistrictRankingServiceImpl implements SysScenicDistrictRan
     public int updatebestRanking(SysScenicDistrictRanking rankings) {
         return sysScenicDistrictRankingMapper.updateByPrimaryKeySelective(rankings);
     }
+
+    /**
+     * 清空排行数据
+     * @return
+     */
+    @Override
+    public int updateRanking() {
+       int i = sysScenicDistrictRankingMapper.updateRanking();
+       return i;
+    }
 }

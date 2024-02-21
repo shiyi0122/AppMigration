@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.RobotLiveDeviceMapper" >
+
+
+    <select id="getRobotDeviceList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotLiveDevice" parameterType="java.util.Map">
+        SELECT
+        srld.*
+        FROM
+        SYS_ROBOT_LIVE_DEVICE srld
+        <where>
+            <if test="search.scenicSpotId != null and search.scenicSpotId != ''">
+                srld.SCENIC_SPOT_ID = #{search.scenicSpotId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getRecommendRobotDevice" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotLiveDevice" parameterType="java.util.Map">
+        SELECT
+        srld.*,
+        sssb1.SCENIC_SPOT_FNAME as scenicSpotName,
+        sssb.SCENIC_SPOT_FNAME as city,
+        CONCAT(ba.SAVE_PATH , ba.SAVE_NAME) as scenicSpotPic
+        FROM
+        SYS_ROBOT_LIVE_DEVICE srld
+        left join ( SELECT * FROM SYS_SCENIC_SPOT_BINDING WHERE ( SCENIC_SPOT_TYPE = 0 || SCENIC_SPOT_TYPE IS NULL ) ) sssb1 ON srld.SCENIC_SPOT_ID = sssb1.SCENIC_SPOT_FID
+        left join ( SELECT * FROM SYS_SCENIC_SPOT_BINDING WHERE SCENIC_SPOT_TYPE = 1 ) sssb ON sssb1.SCENIC_SPOT_PID = sssb.SCENIC_SPOT_FID
+        left join BUSINESS_SCENIC_SPOT_EXPAND bsse on srld.SCENIC_SPOT_ID = bsse.SCENIC_SPOT_ID
+        left join BUSINESS_ATTACH ba on bsse.IMAGE_ID = ba.ATTACH_ID
+        <where>
+            <if test="spotId != null and spotId != ''">
+                srld.SCENIC_SPOT_ID = #{spotId}
+            </if>
+        </where>
+        order by srld.IF_ON_LINE DESC ,srld.LIVE_ID ASC
+    </select>
+
+    <update id="updateByDeviceIdSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotLiveDevice">
+
+        update SYS_ROBOT_LIVE_DEVICE
+        <set>
+            <if test="scenicSpotId != null and scenicSpotId != ''" >
+                SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="robotId != null and robotId != ''" >
+                ROBOT_ID = #{robotId,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null and robotCode != ''" >
+                ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceNumber != null and deviceNumber != ''" >
+                DEVICE_NUMBER = #{deviceNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''" >
+                UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="leftCamera != null and leftCamera != ''" >
+                LEFT_CAMERA = #{leftCamera,jdbcType=VARCHAR},
+            </if>
+            <if test="rightCamera != null and rightCamera != ''" >
+                RIGHT_CAMERA = #{rightCamera,jdbcType=VARCHAR},
+            </if>
+            <if test="frontCamera != null and frontCamera != ''" >
+                FRONT_CAMERA = #{frontCamera,jdbcType=VARCHAR},
+            </if>
+            <if test="afterCamera != null and afterCamera != ''" >
+                AFTER_CAMERA = #{afterCamera,jdbcType=VARCHAR},
+            </if>
+            <if test="upperCamera != null and upperCamera != ''" >
+                UPPER_CAMERA = #{upperCamera,jdbcType=VARCHAR},
+            </if>
+            <if test="ifOnLine != null and ifOnLine != ''" >
+                IF_ON_LINE = #{ifOnLine,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DEVICE_ID = #{deviceId,jdbcType=BIGINT}
+
+    </update>
+
+   <select id="getRobotDevice" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotLiveDevice">
+       SELECT
+       srld.*
+       FROM
+       SYS_ROBOT_LIVE_DEVICE srld
+       <where>
+           <if test="scenicSpotId != null and scenicSpotId != ''">
+               srld.SCENIC_SPOT_ID = #{scenicSpotId}
+           </if>
+       </where>
+   </select>
+
+    <select id="getSpotDevice" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+        SELECT
+        sssb.SCENIC_SPOT_FID,
+        sssb.SCENIC_SPOT_FNAME
+        FROM
+        ( SELECT * FROM SYS_SCENIC_SPOT_BINDING WHERE ( SCENIC_SPOT_TYPE = 0 || SCENIC_SPOT_TYPE IS NULL ) ) sssb
+        RIGHT JOIN SYS_SCENIC_SPOT sss ON sss.SCENIC_SPOT_ID = sssb.SCENIC_SPOT_FID
+        RIGHT JOIN SYS_ROBOT_LIVE_DEVICE srld ON sss.SCENIC_SPOT_ID = srld.SCENIC_SPOT_ID
+        <where>
+            1=1
+            <if test="scenicSpotFid != null and scenicSpotFid">
+                and sssb.SCENIC_SPOT_PID = #{scenicSpotFid}
+            </if>
+        </where>
+        GROUP BY
+        SCENIC_SPOT_FID
+    </select>
+
+    <select id="getCityDevice" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+        SELECT
+        sssb.SCENIC_SPOT_FID,
+        sssb.SCENIC_SPOT_FNAME
+        FROM
+        ( SELECT * FROM SYS_SCENIC_SPOT_BINDING WHERE SCENIC_SPOT_TYPE = 1 ) sssb
+        RIGHT JOIN ( SELECT * FROM SYS_SCENIC_SPOT_BINDING WHERE ( SCENIC_SPOT_TYPE = 0 || SCENIC_SPOT_TYPE IS NULL ) ) sssb1 ON sssb.SCENIC_SPOT_FID = sssb1.SCENIC_SPOT_PID
+        RIGHT JOIN SYS_SCENIC_SPOT sss ON sss.SCENIC_SPOT_ID = sssb1.SCENIC_SPOT_FID
+        RIGHT JOIN SYS_ROBOT_LIVE_DEVICE srld ON sss.SCENIC_SPOT_ID = srld.SCENIC_SPOT_ID
+        GROUP BY
+        SCENIC_SPOT_FID
+    </select>
+
+
+</mapper>

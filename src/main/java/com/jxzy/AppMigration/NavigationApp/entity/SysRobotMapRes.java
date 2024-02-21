@@ -19,4 +19,6 @@ public class SysRobotMapRes {
     private String createDate;
 
     private String updateDate;
+
+    private String scenicSpotName;
 }

@@ -4,7 +4,7 @@ import com.jxzy.AppMigration.NavigationApp.util.Constant;
 
 
 /**
- * @author Dong.w
+ * @author
  */
 public class UniversalException extends RuntimeException {
 

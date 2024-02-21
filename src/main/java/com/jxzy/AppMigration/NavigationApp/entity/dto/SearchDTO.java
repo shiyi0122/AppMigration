@@ -24,8 +24,13 @@ public class SearchDTO extends BaseDTO {
     @ApiModelProperty(value = "id")
     private String  id;
 
-    @ApiModelProperty(value = "景区id或者景点id")
+    @ApiModelProperty(value = "景区id")
     private String  spotId;
+    @ApiModelProperty(value = "景区name")
+    private String  spotName;
+
+    @ApiModelProperty(value = "景点id")
+    private String broadcastId;
 
     @ApiModelProperty(value = "商铺id")
     private String  shopsId;

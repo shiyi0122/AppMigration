@@ -172,4 +172,17 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where COORDINATE_ID = #{coordinateId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectByAll" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinateWithBLOBs">
+    select  sssgc.* from SYS_SCENIC_SPOT_GPS_COORDINATE sssgc
+    left join SYS_SCENIC_SPOT sss on sssgc.COORDINATE_SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    where sssgc.COORDINATE_PARKING_TYPE = 1
+    and sss.ROBOT_WAKEUP_WORDS in (1,3)
+  </select>
+
+  <select id="selectBySpotId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinateWithBLOBs">
+    select * from SYS_SCENIC_SPOT_GPS_COORDINATE where COORDINATE_SCENIC_SPOT_ID = #{spotId}
+  </select>
+
 </mapper>

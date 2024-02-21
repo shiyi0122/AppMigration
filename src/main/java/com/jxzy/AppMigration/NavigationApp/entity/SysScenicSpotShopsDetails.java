@@ -16,4 +16,16 @@ public class SysScenicSpotShopsDetails {
 
     private String updateTime;
 
+    private String state;
+
+    //表中无此字段
+
+    //商铺id
+    private String shopsId;
+    //类型名称
+    private String typeName ;
+    //商品类型id
+    private Long commodityId;
+
+
 }

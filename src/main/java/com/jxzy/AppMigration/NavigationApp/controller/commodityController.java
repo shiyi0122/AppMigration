@@ -15,10 +15,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +23,6 @@ import java.util.Map;
 
 @Api(tags = "游小伴商品相关")
 @RestController
-@CrossOrigin
 @RequestMapping("commodity")
 public class commodityController extends PublicUtil {
 
@@ -56,20 +52,20 @@ public class commodityController extends PublicUtil {
         try {
                 search.put("shopsId",shopsId);
                 List<SysScenicSpotShops> shops = sysScenicSpotShopsService.queryScenicShopsList(pageNum,pageSize,search);
-                for (int i = 0; i < shops.size(); i++) {
-                    String shopsPic = shops.get(i).getShopsPic();//商铺图片
-                    if (shopsPic != null && !"".equals(shopsPic)) {
-                        shops.get(i).setShopsPic(DOMAIN_NAME+shopsPic);
-                    }
-                    for (int j = 0; j < shops.get(i).getSysScenicSpotShopsType().size(); j++) {
-                        String productPicUrl = shops.get(i).getSysScenicSpotShopsType().get(i).getSysScenicSpotShopsDetails().get(i).getProductPicUrl();//商品详情图片
-                        for (int k = 0; k < shops.get(i).getSysScenicSpotShopsType().get(i).getSysScenicSpotShopsDetails().size(); k++) {
-                            if (productPicUrl != null && !"".equals(productPicUrl)) {
-                                shops.get(i).getSysScenicSpotShopsType().get(j).getSysScenicSpotShopsDetails().get(k).setProductPicUrl(DOMAIN_NAME+productPicUrl);
-                            }
-                        }
-                    }
-                }
+//                for (int i = 0; i < shops.size(); i++) {
+//                    String shopsPic = shops.get(i).getShopsPic();//商铺图片
+//                    if (shopsPic != null && !"".equals(shopsPic)) {
+//                        shops.get(i).setShopsPic(DOMAIN_NAME+shopsPic);
+//                    }
+//                    for (int j = 0; j < shops.get(i).getSysScenicSpotShopsType().size(); j++) {
+//                        String productPicUrl = shops.get(i).getSysScenicSpotShopsType().get(i).getSysScenicSpotShopsDetails().get(i).getProductPicUrl();//商品详情图片
+//                        for (int k = 0; k < shops.get(i).getSysScenicSpotShopsType().get(i).getSysScenicSpotShopsDetails().size(); k++) {
+//                            if (productPicUrl != null && !"".equals(productPicUrl)) {
+//                                shops.get(i).getSysScenicSpotShopsType().get(j).getSysScenicSpotShopsDetails().get(k).setProductPicUrl(DOMAIN_NAME+productPicUrl);
+//                            }
+//                        }
+//                    }
+//                }
                 //PageInfo就是一个分页Bean
                 PageInfo pageInfo = new PageInfo(shops);
                 returnModel.setData(pageInfo);
@@ -92,6 +88,7 @@ public class commodityController extends PublicUtil {
      */
     @ApiOperation("景区全景中的最近店铺展示")
     @GetMapping("/getLatelyScenicShops")
+    @ResponseBody
     public ReturnModel getLatelyScenicShops(SearchDTO searchDTO){
 
         ReturnModel returnModel = new ReturnModel();
@@ -110,5 +107,33 @@ public class commodityController extends PublicUtil {
 
     }
 
+    /**
+     * zhang
+     * 景区全景中全部店铺展示
+     * @return
+     */
+    @ApiOperation("景区全景中全部店铺展示")
+    @GetMapping("/getScenicShopsList")
+    @ResponseBody
+    public ReturnModel getScenicShopsList(SearchDTO searchDTO) {
 
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(searchDTO.getSpotId())) {
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_SUCCESS);
+            returnModel.setMsg("景区id为空，无法查询！");
+            return returnModel;
+        }
+        List<SysScenicSpotShops> shops = sysScenicSpotShopsService.getScenicShopsList(searchDTO.getSpotId());
+        returnModel.setData(shops);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取成功！");
+        return returnModel;
+    }
 }
+
+
+
+
+

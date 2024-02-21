@@ -41,11 +41,11 @@ public class ScenicSpotBannerController {
             search.put("spotId",searchDTO.getSpotId());
         }
         search.put("sort",searchDTO.getSort());
-        List<SysScenicSpotBanner> list = scenicSpotBannerService.getScenicSpotBanner(search);
+        search.put("type",1);
+        List<SysScenicSpotBanner> list = scenicSpotBannerService.getScenicSpotBanner(searchDTO.getLng(),searchDTO.getLat(),search);
         returnModel.setData(list);
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("获取轮播图成功!");
-
         return returnModel;
     }
 
@@ -91,6 +91,23 @@ public class ScenicSpotBannerController {
         return returnModel;
     }
 
+    @ApiOperation("获取景区详情页轮播图")
+    @GetMapping("getScenicSpotDetailsBanner")
+    @ResponseBody
+    public ReturnModel getScenicSpotDetailsBanner(SearchDTO searchDTO){
+        ReturnModel returnModel = new ReturnModel();
+
+        Map<String, Object> search = new HashMap<>();
+        if (!StringUtils.isEmpty(searchDTO.getSpotId())){
+            search.put("spotId",searchDTO.getSpotId());
+        }
+        search.put("type",2);
+        List<SysScenicSpotBanner> list = scenicSpotBannerService.getScenicSpotBanner(searchDTO.getLng(),searchDTO.getLat(),search);
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取轮播图成功!");
+        return returnModel;
+    }
 
 
 

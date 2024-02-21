@@ -52,4 +52,91 @@ public class JudgingCoordinates {
         }
         return false;
     }
+
+    /**
+     * 计算中心点半径的 四个临界点（暂不使用）
+     * @param latitude
+     * @param longitude
+     * @param dis 半径
+     * @return
+     */
+    public static double[] centerDis(double latitude,double longitude,double dis){
+        //地球半径千米
+        double r = 6371;
+        double dLng =  2*Math.asin(Math.sin(dis/(2*r))/Math.cos(latitude*Math.PI/180));
+        //角度转为弧度
+        dLng = dLng*180/Math.PI;
+        double dLat = dis/r;
+        dLat = dLat*180/Math.PI;
+        double minLat =latitude - dLat;
+        double maxLat = latitude + dLat;
+
+        double minLng = longitude + dLng;
+        double maxLng = longitude - dLng;
+        //返回四个边界点
+        return new double[]{minLat,maxLat,minLng,maxLng};
+    }
+
+    /**
+     *
+     * 根据经纬度和距离返回一个矩形范围
+     * @param lng 经度
+     * @param lat 纬度
+     * @param distance 距离(单位为米)
+     * @return [lng1,lat1, lng2,lat2] 矩形的左下角(lng1,lat1)和右上角(lng2,lat2)
+     */
+    public static double[] getRectangle(double lng, double lat, long distance)
+    {
+        float delta = 111000;
+        if (lng != 0 && lat != 0)
+        {
+            double lng1 = lng - distance / Math.abs(Math.cos(Math.toRadians(lat)) * delta);
+            double lng2 = lng + distance / Math.abs(Math.cos(Math.toRadians(lat)) * delta);
+            double lat1 = lat - (distance / delta);
+            double lat2 = lat + (distance / delta);
+            return new double[] {lng1, lat1, lng2, lat2};
+        }
+        else
+        {
+            double lng1 = lng - distance / delta;
+            double lng2 = lng + distance / delta;
+            double lat1 = lat - (distance / delta);
+            double lat2 = lat + (distance / delta);
+            return new double[] {lng1, lat1, lng2, lat2};
+        }
+    }
+
+
+    private static double EARTH_RADIUS = 6378138.0;
+    private static double rad(double d){
+
+        return d * Math.PI / 180.0;
+
+    }
+
+    /**
+     * 判断坐标是否在圆中
+     * @param radius 半径
+     * @param lat1 纬度
+     * @param lng2  经度
+     *
+     *
+     */
+    public static boolean isInCircle(double radius,double lat1,double lng1,double lat2,double lng2){
+
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        double s =  2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b/2),2)));
+        s = s * EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000;
+        if (s > radius){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+
 }

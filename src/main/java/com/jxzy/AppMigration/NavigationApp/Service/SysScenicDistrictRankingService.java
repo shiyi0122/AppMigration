@@ -35,4 +35,12 @@ public interface SysScenicDistrictRankingService {
      * @date: 2022/8/3 0003
      */
     int updatebestRanking(SysScenicDistrictRanking rankings);
+
+    /**
+     * 清空排行数据
+     * @return
+     */
+    int updateRanking();
+
+
 }

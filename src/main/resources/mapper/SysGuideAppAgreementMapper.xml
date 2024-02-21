@@ -13,6 +13,67 @@
 
     </select>
 
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppAgreement">
+            insert into sys_guide_app_agreement
+            <trim prefix="(" suffix=")" suffixOverrides="," >
+                <if test="id != null" >
+                    id,
+                </if>
+                <if test="type != null" >
+                    type,
+                </if>
+                <if test="content != null" >
+                    content,
+                </if>
+                <if test="createTime != null">
+                    create_time,
+                </if>
+                <if test="updateTime != null">
+                    update_time,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides="," >
+                <if test="id != null" >
+                    #{id,jdbcType=BIGINT},
+                </if>
+                <if test="type != null" >
+                    #{type,jdbcType=VARCHAR},
+                </if>
+                <if test="content != null" >
+                    #{content,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null" >
+                    #{createTime,jdbcType=VARCHAR},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime,jdbcType=VARCHAR},
+                </if>
+            </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppAgreement">
+        update sys_guide_app_agreement
+        <set >
+            <if test="type != null" >
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        select *
+        from sys_guide_app_agreement
+    </select>
 
 
 

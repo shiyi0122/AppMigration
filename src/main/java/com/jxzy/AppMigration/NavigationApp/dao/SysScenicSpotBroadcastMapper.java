@@ -1,6 +1,9 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
+import com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotBroadcastExcel;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastWithBlogs;
 
 import java.util.List;
 import java.util.Map;
@@ -10,7 +13,6 @@ public interface SysScenicSpotBroadcastMapper {
 
     int insert(SysScenicSpotBroadcast record);
 
-    int insertSelective(SysScenicSpotBroadcast record);
 
     SysScenicSpotBroadcast selectByPrimaryKey(Long broadcastId);
 
@@ -54,5 +56,31 @@ public interface SysScenicSpotBroadcastMapper {
     int addHotSpotBroadcast(Long id);
 
     List<SysScenicSpotBroadcast> getSpotBroadcastGps(String s);
+
+    List<SysScenicSpotBroadcastWithBlogs> getSpotBroadcastListNew(Map<String, Object> search);
+
+    List<SysScenicSpotBroadcastExtendWithBLOBs> getBroadcastDetails(Map<String, Object> search);
+
+
+    int insertSelective(SysScenicSpotBroadcast broadcast);
+
+    List<SysScenicSpotBroadcastExcel> uploadExcelSpotBroadcast(Map<String, Object> search);
+
+
+    SysScenicSpotBroadcast getSpotBroadcastIdMinimum(Map<String, Object> search);
+
+    SysScenicSpotBroadcast getSpotBroadcastName(String broadcastName);
+
+    SysScenicSpotBroadcast getSpotIdAndBroadcastName(Long scenicSpotId, String broadcastName);
+
+    List<SysScenicSpotBroadcast> getSpotIdAndBroadcastNameList(Long scenicSpotFid, String content);
+
+
+    List<SysScenicSpotBroadcast> getSpotBroadcastNameList(String content);
+
+
+    List<SysScenicSpotBroadcastWithBlogs> getSpotBroadcastListNewT(Map<String, Object> search);
+
+    List<SysScenicSpotBroadcast> getSpotIdByBroadcastDropDown(String spotId);
 
 }

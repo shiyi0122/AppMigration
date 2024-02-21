@@ -1,10 +1,28 @@
 ## 数据库配置
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rm-2zepn064b29mmgi9ifo.mysql.rds.aliyuncs.com:3306/jxzyyxb?zeroDateTimeBehavior=round&useSSL=true&useTimezone=true&serverTimezone=GMT%2B8&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true
-    username: jxzy
-    password: Jxzytangliu001
+    dynamic:
+      #设置默认的数据源或者数据源组
+      primary: master
+      #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      strict: false
+      datasource:
+#        master: #本地测试数据库
+#          driver-class-name: com.mysql.cj.jdbc.Driver
+#          url: jdbc:mysql://localhost:3306/jxzyyxb?zeroDateTimeBehavior=round&useSSL=true&useTimezone=true&serverTimezone=GMT%2B8&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true
+#          username: root
+#          password: root
+        master: #第一数据源 别名
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://rm-2zepn064b29mmgi9ifo.mysql.rds.aliyuncs.com:3306/jxzyyxb?zeroDateTimeBehavior=round&useSSL=true&useTimezone=true&serverTimezone=GMT%2B8&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true
+          username: jxzy
+          password: Jxzytangliu001
+        master2: #第二数据源 别名
+          url: jdbc:mysql://rm-2zepn064b29mmgi9ifo.mysql.rds.aliyuncs.com:3306/jxzy?zeroDateTimeBehavior=round&useSSL=true&useTimezone=true&serverTimezone=GMT%2B8&characterEncoding=UTF-8&allowMultiQueries=true&autoReconnect=true
+          username: jxzy
+          password: Jxzytangliu001
+          driver-class-name: com.mysql.cj.jdbc.Driver
+
   transaction:
     rollback-on-commit-failure: true
   thymeleaf:
@@ -17,22 +35,36 @@ spring:
 #设置tomcat文件上传大小限制
   servlet:
     multipart:
-      max-file-size: 100MB
+      max-file-size: 200MB
       max-request-size: 1000MB
 
   #redis
   redis:
     host: r-2zeau438goyxpelfa3pd.redis.rds.aliyuncs.com
     port: 6379
-    database: 1
+    database: 0
     password: Jxzy001!
 ## mybatis 配置
-mybatis:
-  mapper-locations: classpath*:mapper/*.xml
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    map-underscore-to-camel-case: true
-    call-setters-on-nulls: true
+#mybatis:
+#  mapper-locations: classpath*:mapper/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true
+#    call-setters-on-nulls: true
+  mybatis-puls:
+    mapper-locations:
+      classpath*: mapper/**/*Mapper.xml
+    configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#knife4j:
+#  upload:
+#    enabled: true
+#    max-size: 10MB
+#    max-total-size: 100MB
+#    max-request-size: 200MB
+
+
 #分页pageHelper
 pagehelper:
   helper-dialect: mysql
@@ -46,6 +78,11 @@ server:
   logging:
     level:
       root: info
+
+#控制台打印sql
+logging:
+  level:
+    com.jxzy.AppMigration.NavigationApp.dao: debug
 #路径和域名获取
 DOMAIN_NAME: https://topsroboteer.com.cn/
 
@@ -61,33 +98,125 @@ TENCENT_KEY: f4eeb442e910c057d2579c90fa0a3f4d
 TENCENT_TEMPLATE: 500066
 TENCENT_MINUTE: 5
 
+#百度识物验证账号
+BAIDUTELL_APPID: 30021163
+BAIDUTELL_KEY: 8EGAN6cvD2BDqMsNMjxgmnMZ
+BAIDUTELL_SECRET_KEY: xjramOm20jIXuXOgbjYLmWCrT2jz5rm0
+
 #本地访问图片测试使用
 cbs:
-  imagesPath: file:/F:/pro/
+  imagesPath: file:/F:/pro/static
 
 #意见反馈图片上传
-userFeedbackPatheGetPicUrl: static/userFeedback/
+userFeedbackPatheGetPicUrl: userFeedback/
 userFeedbackGetPicPaht: /pro/static/userFeedback/
 #用户头像上传路径
-userHeadPortraitPatheGetPicUrl: static/userHeadPortrait/
+userHeadPortraitPatheGetPicUrl: userHeadPortrait/
 userHeadPortraitGetPicPaht: /pro/static/userHeadPortrait/
 
 #首页轮播图上传路径
-bannerPatheGetPicUrl: static/banner_pic/
+bannerPatheGetPicUrl: banner_pic/
 bannerPatheGetPicPaht: /pro/static/banner_pic/
 #首页榜单图片
-spotHotListPatheGetPicUrl: static/hotList/
+spotHotListPatheGetPicUrl: hotList/
 spotHotListPatheGetPicPaht: /pro/static/hotList/
+#店铺图片
+spotShopListPatheGetPicUrl: shop/
+spotShopListPatheGetPicPaht: /pro/static/shop/
+
+#店铺商品图片
+spotShopDetailsPatheGetPicUrl: shopDetails/
+spotShopdetailsPatheGetPicPaht: /pro/static/shopDetails/
+
 
 #景点图片
-spotBroadcastPatheGetPicUrl: static/broadcast/
-spotBroadcastPatheGetPicPaht: /pro/static/broadcast/
+spotBroadcastPatheGetPicUrl: broadcast/upload_pic/
+spotBroadcastPatheGetPicPaht: /pro/static/broadcast/upload_pic/
+spotBroadcastAudioUrl: broadcast/audio/
+spotBroadcastAudioPaht: /pro/static/broadcast/audio/
+spotBroadcastVodioUrl: broadcast/voido/
+spotBroadcastVodioPaht: /pro/static/broadcast/voido/
+#景区图片
+scenicSpotImgPatheGetPicUrl: scenicSpotImg/
+scenicSpotImgPatheGetPicPaht: /pro/static/scenicSpotImg/
+#景区语音讲解
+scenicSpotAudioPatheGetAudioUrl: scenicSpotAudio/
+scenicSpotAudioPatheGetAudioPaht: /pro/static/scenicSpotAudio/
+
+#首页导航图标上传地址
+navigationPatheGetPicUrl: navigationIcon/
+navigationPatheGetPicPaht: /pro/static/navigationIcon/
+#特色美食，地道好物，酒店民宿，娱乐项目图片上传地址
+featuredFoodPatheGetPicUrl: featuredFood/
+featuredFoodPatheGetPicPaht: /pro/static/featuredFood/
+#攻略，游记，广场上传图片地址
+sysStrategyPatheGetPicUrl: sysStrategy/
+sysStrategyPatheGetPicPaht: /pro/static/sysStrategy/
+#动态上传图片地址
+sysSpotDynamicPatheGetPicUrl: sysDynamic/
+sysSpotDynamicPatheGetPicPaht: /pro/static/sysDynamic/
+
+#地标上传图片地址
+sysLandmarkPatheGetPicUrl: sysLandmark/
+sysLandmarkPatheGetPicPaht: /pro/static/sysLandmark/
+
+#线路封面图片地址
+sysRoutePatheGetPicUrl: recommendedRoute/
+sysRoutePatheGetPicPaht: /pro/static/recommendedRoute/
+
+#app版本上传地址
+sysAppVersionPatheGetPicUrl: sysAppVersion/
+sysAppVersionPatheGetPicPaht: /pro/static/sysAppVersion/
+
+#app版本上传地址(新)
+sysAppVersionPatheGetNewPicUrl: sysAppVersion/
+sysAppVersionPatheGetNewPicPaht: /pro/static/upload_app/
+
+#博物馆图片
+sysMuseumPatheGetPicUrl: static/sysMuseum/photo/
+sysMuseumPatheGetPicPaht: /pro/static/sysMuseum/photo/
+
+#博物馆地图上传地址
+sysMuseumMapListPatheGetPicUrl: static/sysMuseum/map/
+sysMuseumspotMapListPatheGetPicPaht: /pro/static/sysMuseum/map/
+
+#地图上传地址
+spotMapListPatheGetPicUrl: upload_map/
+spotMapListPatheGetPicPaht: /pro/static/shop/
+
+#地图下载
+GET_MAP_PAHT: /pro/static/upload_map/
+GET_MAP_URL: upload_map/
+
+
+##项目相关配置 appid
+custom:
+#  secretkey: uia2f5im0uic0ns7tfatn0ru8urxad4e
+#  #  filepath: /var/project/business/data/
+#  filepath: D:/data/
+#  fileurl: http://192.168.1.63:8088/picture/
+#  appid: wx132e56f29c78a020
+#  secret: 5114d2bb202244cccdfd081326d61eae
+#  hours: 5
+#  adminurl: http://192.168.1.45:8080/RC/
+#  refundurl: appSystem/appOrder/PayOrderBackDeposit.do
+#  settlementurl: appSystem/appOrder/settlementAmount.do
+#  editpaymenturl: appSystem/appOrder/updateEditPayment.do
+  business-name: 游娱goAPP
+
+
 
 #支付相关
 #微信支付
 wxpay:
-  appid: wx99edc76989395ab4
-  mchid: 1500030172
+  #项目appId
+  appid: wx3a2cc6945c0b11e8
+  # 微信开放平台 appsecret
+  appsecret : c1f8e7105fe8432b61556189272c9f61
+
+
+  #微信商户号
+  mchid: 1626662703
   apiSecretkey: b14558994cc99197ebb9f09d3d3eb09f
   depositCallbackInterface: https://topsroboteer.wang/system/smallAPP/wxRefundCallback
   wechatRefundRequest: https://api.mch.weixin.qq.com/secapi/pay/refund
@@ -95,22 +224,21 @@ wxpay:
   certPath: /pro/Cert_Management/
   deposit_fileCertPath: /pro/Cert_Management/jxzy_deposit.p12
   deposit_weChat_mch_id: 1502139171
-
+#  notify_url: https://pv47861922.yicp.fun/pay_call/wx_pay
+  notify_url: https://youxiaobansys.topsroboteer.com/pay_call/wx_pay
 #支付宝支付
 alipay:
-  #支付宝小程序标识
-  APP_ID: 2021002112625350
-  #私钥
-  MERCHANT_PRIVATE_KEY: MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCmwyt5aEuR7jBH/PVd7elOWjx3Jj9Um7H+kqKem7g96PwA+JDIqtUOpVs0YqjN3h3sbbcO1WvCXJECfv8zWCPnmI+csMCFS94WG/Od68AELONKBH1pVIw9RatqfIslyh+heBLWdQYtNI+gR8jVA76lrR9oEwHi1aznyjZDEVTZMncKuj3Mf2s6a4afQ6kbpR8+7a2Z37G5g0IImVGS+C2PW97DZwoQpU1GMdZVsaftdri69pS8rTbFWFZdAE8t3buZHc8S2ldjOgaH8z77OwyKshDgp4no2bX+ZMz6NiOUV1GHkixHsJnx9zBgT4u8rbv+L3j3U8yd5vYND+SdYgVnAgMBAAECggEAZ2SQesigOg084BVFKASO52ZpINKU52dU92qA6ufPVosyW4PBeLj6OgdpwdP9pw407Vak7cyC8FGmEq8cmP/n2vqq59Jquvpr6rdP1zTIq44NKeIYw4qJHKAqhG5Nc5ObAujIfTC3MKXq+swnB3M3686nr0ZBoBstBdVIyVJgkfyGDDflih4S5AmL4xwmJT2o4c9dTtGxNecUmFh/exTswOyzq0d1DQkaAGnPXFkPnTJXUXlVJoYXMGbqldM2J1WpaWYBu2oA7WnVp3ow8YtLUR+gsP5Ue4tzWFjQxQFTvxKjasq3eEbg72dE8ik7amJ4ptMdQ1SsklWm/cPzdnqSmQKBgQDu1l3QDjMRKeQ9MGdHzletcjKVh6Sn64fEdWRNy+gCx1lXx7aaBBrGqDTslg0LwMQ4KdBknc7YGl8QFFRie5Y+q8d2mzLRyNQZqFjBhnz1EmLORORrBzux7W8rymoeekgREjXHWNP/H7uj3bsnsj2HD+JS3p1zt/SOX0uWCtThIwKBgQCyvurkfcRIw2QjUYOLVciwr7Qs8WS6KKeJMkbDh6ETM0HI6ng+RgYpo/FijK1fvy+PVGqfybf1bLHSrM9OpMkBO6Qb/PoFqqkkinmORe+mlB6V0z4TAYwuMPoB8qOspKHYEoiaEEHmTaXaAeBEl5QK6Y1q59QkWO6l4QUl7TGI7QKBgFUJUiGPzLLhvXfj0gII/8KrlEMVJpT7ET3rpijk3tiObcsJOoSfzYDJxv4tdrumiLaOfLo2Tb03tn0dH+ZoplfuBXi/TVrQLGRuQhu1bKw9PZy/fqx0yNZS+XAYA6ySUTJyz18Iy4JcpAx2F/rMRYffKe/jfyACcTp3x4vGk4ENAoGAUqxLKHOjHaSB5HQHS6LZuB8MTt03oYK8OpCuejF5JtBGVQ9dni/1Gb1iIBrA9dAPx1NcHZvHIhSsCq0zFUTSU2eqd+eCHKzanrQNlOhz96/6lYGm7FOC6rpsaAo5+dgLo0yvMdLjKAox86t6dz9EkeeEKTYgwM8BUmfJYclbZ+ECgYAusbFFYTUV9sE2uCfj+jMcT0G+/Ckf5T+ao9h+rQLbPWN9q3o63mAk/9GQqMnllTcgoRDs2YNI8t/IUarNggkI+o08t7INQaKZZDgX7vxHjdFyt4IfQuWV/6+cPfvr85guvQ7Dnwsuci/m5UUDDVV2Q5vxRDHmHdVPvkyq0Tkv1g==
-  #公钥
-  ALIPAY_PUBLIC_KEY: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAikc4ty51S4SnU5I4zeJLH51IzOb8Ox7YWJhNt+wZCQayUnnjZ7ETUIN/PU0dM1/QjqXLjvXq7oZem9jjaTc8dtxzTlKS569Vw8WVzO18jSBNZQGvLO42ZjjkYQLqrw6PzIUWTby8sfquo5MdFzP481he03NyHNRU7I3m2Ao4W2hxH09xogIndQGaV3Q+bQPQQaESamFFrMyUIyeDty8YnmEMN7QsvxcIrVnI4tuZNp99eXDE0SYqFKcKtBgRaSGEntx9U2MlX2JZeS2qwPIJWkBVn1kdQvX5RjnYza4yKuEsgSWkIfr0ZAh6bYri9mypBmHfRh4swsQl+IggcBM8qQIDAQAB
-  #加密方式
-  AES_SECRET_KEY: 4o/ScZAuZcopIHg6lZfx/w==
-  #编码格式
-  CHARSET: UTF-8
-  #签名格式
-  SIGN_TYPE: RSA2
-  #签名格式
-  FORMAT: json
-  #支付宝接口地址
-  PAY_URL: https://openapi.alipay.com/gateway.do
+  appid: 2017090508567993
+  partner: 2088121471063153
+  gatewayUrl: https://openapi.alipay.com/gateway.do
+  appPrivateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCS0XYjX5nTeBB9AnzSHfQwHh1xiAQnVZjDrgh0v46v2XbvMEcxJmeAdnp9g/rYWLwQp8pxDWVuXWHuo/dFiffpl4h9oyLUiTiaeGLSrZiDQF+0xNnkru3sGZfjwYaSCQv5FC/Y0KDWDDUsBtZcR2m+VktL/7mt9tjmeGFWGam+aG65SACVBleA2QTdoIlz3ecOETRMz9UN8cV7w+/AOGWYHWNK08X5gS3NAFlWg9/cyH3uZN4OO3IcDZT+9EILn982SBY+yfO+Y7tDRAjWcHg3bfo8ddTzLTtWdr5bOSlvgDA3mX5ZSOb0HU6mlpn/Cdn2EBzCFBFlm0MNkFjhpUW5AgMBAAECggEAM9bJg8vpoIUwLTOHpxj0c1juxHtmHA1ZFx6H1dEdLHH4UJQXTv9kZDNxJIhJNcJ/BNJ55Fj6i3FldsFmOaNxaYUbqGDFl42r8r63BfRNeWptYIJw/RHW6BpRSxW10jJni9bY3hEr+OfujlELtyFv8Mi/ZWIxyX7zLs0qcSA2kwf7wwghnAZIYd3Woah1BzM/jk2QvFL1qpKNJM67tnPMzVYhtj9qirO6u7DRp9l2SyiQjVPykm9CxlKREV4KBf0VIC4tH32Gu0ky+VPElAWjVdJzS3IO0jJGFP3RQiKWLuhDqt372md2XjTCmWiylgAmkMNmcc2weYEAoX9tbfhoQQKBgQDFSteTpW7Jk+n2A6LQ5YjwieTwbC7vy3ki3Ds2JM0oQX7vARPaFfJaowHmniQt8E9179RGNJCm0sPyqS7GWxW5qDuRnCNBdWHpI+bK6RCmd3EeCeDC5lCxORJyAqjmcidAN+YcnKWh1OKle0p9pIuj3Y9IFQtAHINXBmTBYJ3nJQKBgQC+gaVYIrRnBqoEz9K43ppGo+OzrqvCddiIhXiF3Or10F550MBPnD4BD2c5DU3LGLGLcoAh5C3P3vqEgnnoJuFgwCZ61k8CBNv1wxFT953Hn0P2G8cBoTpDUbL/kY/yya2FAZXV2c7C9RD3Vs4f0c+3yhD4Mn+FfXjPonODh94aBQKBgHeY1vX54x7vO3SW36wieNDXxqC38/wJLHWla39276bnjTr1PEOH6lJnXk+ere/rLUAhEl08oDOAsKf5RxGXRaQ2B2ZNcFHOBnx99voqLp266id7dXSwiVnlbvkOA7Uunfyf5i6SBxYDJyGJi65+gOfk92aK2zcSEcw/Y/SVzSLBAoGATgvNElN9duvLAZemq6g+qgwAgB9iLJOc9yk/HBBKjhQkcGFuN+85k7OcxUnHAhqGuitZhQj3H78pANp3WP18vedanF5qFdipyIB2++Bo2lxMOmpc2DUWKngxDfSzdXLcTK4+lVLbGxHNNpdwcKbDI3d8BkKh7a1erinOiydBfYUCgYEAtTV6/ePZi/XGLHxqUweOPi823DvMN01XlwX4axRWyK/OJoHeMT9h3TmdTLHrp35eXykAMEjSm5nVnNQAoJqRTrlmKO+SkjOpS4eCMCoj2Isp6Vr0JJIknBALElGb44uXeNTBL0jjI//e5GnNP4rHRFduWOkHu7EtplSLRBuTZxk=
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgy+966l5eztG2ZUUt8HP240v0B3ZuNvsYwqVM3p9MGSiIVr7wTNm16g7v5W+oEqvwbbCm/h1luuen0WEUeV14K6wXWOOrq6QB6VidKiGb2ap68X4kbxDd/OqWUNpKgAp44xhRhuT3+5CP7eOFB8Yjw62L+GAjPppeHRvh49Dpx4eAMtZgLpnj8RWVP0QO+SgVZF4ivyjsMF2+1NHO+lUqU0TccMCIBkksxm1PEy2uIpIJBibUxWLcYgWGsBTEq2m07v4dURK7+HV2CTjrh7R3q5zD48/4TuznSI/uOlQ0r9vDeCSR0ms9tHpSWfI/2Cm5XFIZJuh9b5rg85qAZwF4QIDAQAB
+  notifyUrl: https://youxiaobansys.topsroboteer.com/pay_call/alipay
+
+#阿里OSS
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    accessKeyId: LTAI5tGHudTuZqmVV5sMhGSn            # 阿里云账号AccessKey里所对应的AccessKey ID
+    accessKeySecret: 9SjAE3CIfVfhJRrdcPPOhTfiYqcVIP  # 阿里云账号AccessKey里所对应的AccessKey Secret
+    bucketName: jxzy-yxb

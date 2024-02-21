@@ -7,9 +7,10 @@
     <result column="type_name" property="typeName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="commodity_id" property="commodityId" jdbcType="BIGINT"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    type_id, shops_id, type_name, create_time, update_time
+    type_id, shops_id, type_name, create_time, update_time, commodity_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -23,9 +24,9 @@
   </delete>
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
     insert into sys_scenic_spot_shops_type (type_id, shops_id, type_name, 
-      create_time, update_time)
+      create_time, update_time, commodity_id)
     values (#{typeId,jdbcType=BIGINT}, #{shopsId,jdbcType=BIGINT}, #{typeName,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}, #{commodityId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType" >
     insert into sys_scenic_spot_shops_type
@@ -45,6 +46,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="commodityId != null">
+        commodity_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="typeId != null" >
@@ -61,6 +65,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="commodityId != null">
+        #{commodityId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -79,6 +86,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=VARCHAR},
       </if>
+      <if test="commodityId != null">
+        commodity_id =#{commodityId,jdbcType=BIGINT},
+      </if>
     </set>
     where type_id = #{typeId,jdbcType=BIGINT}
   </update>
@@ -87,7 +97,23 @@
     set shops_id = #{shopsId,jdbcType=BIGINT},
       type_name = #{typeName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=VARCHAR}
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      commodity_id =#{commodityId,jdbcType=BIGINT}
     where type_id = #{typeId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsType">
+    select * from sys_scenic_spot_shops_type
+    <where>
+      <if test="typeName != null and typeName != null">
+         type_name = #{typeName}
+      </if>
+      <if test="shopsId != null and shopsId != ''">
+        and  shops_id = #{shopsId}
+      </if>
+      <if test="commodityId != null and commodityId != ''">
+        and  commodity_id = #{commodityId}
+      </if>
+    </where>
+  </select>
 </mapper>

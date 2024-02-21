@@ -34,4 +34,15 @@ public interface SysScenicSpotHeatService {
      * @date: 2022/8/2 0002
      */
     int updateScenicSpotHeat(SysScenicSpotHeat heat);
+
+
+    /**
+     * 定时清空热度
+     *
+     * @return
+     */
+    int updateHeat();
+
+
+
 }

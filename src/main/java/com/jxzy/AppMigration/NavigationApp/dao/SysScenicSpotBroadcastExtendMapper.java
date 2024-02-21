@@ -3,6 +3,7 @@ package com.jxzy.AppMigration.NavigationApp.dao;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtend;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastExtendWithBLOBs;
 
+import java.util.List;
 import java.util.Map;
 
 public interface SysScenicSpotBroadcastExtendMapper {
@@ -27,5 +28,21 @@ public interface SysScenicSpotBroadcastExtendMapper {
      * @author: qushaobei
      * @date: 2022/8/5 0005
      */
-    SysScenicSpotBroadcastExtendWithBLOBs queryscenicSpotContent(Map<String, Object> search);
+    List<SysScenicSpotBroadcastExtendWithBLOBs> queryscenicSpotContent(Map<String, Object> search);
+
+    /**
+     * 景点上传图片
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotBroadcastExtendWithBLOBs> getBroadcastBySearch(Map<String, Object> search);
+
+
+    List<SysScenicSpotBroadcastExtendWithBLOBs> qiliangxiugaichaxun(Long spotId);
+
+    List<SysScenicSpotBroadcastExtendWithBLOBs> getBroadcastId(Long broadcastId);
+
+    SysScenicSpotBroadcastExtend getBroadcastIdAndTypeByExtend(Long broadcastId, String type);
+
+
 }

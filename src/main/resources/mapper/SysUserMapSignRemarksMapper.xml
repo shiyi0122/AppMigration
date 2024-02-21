@@ -64,8 +64,9 @@
 
 
     <select id="getUserMapSignRemarksList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserMapSignRemarks">
-        select *
-        from sys_user_map_sign_remarks
+        select sumsr.*,sss.SCENIC_SPOT_NAME
+        from sys_user_map_sign_remarks sumsr
+        left join SYS_SCENIC_SPOT  sss on sumsr.spot_id = sss.SCENIC_SPOT_ID
         <where>
             <if test="spotId != null">
                 and spot_id = #{spotId}

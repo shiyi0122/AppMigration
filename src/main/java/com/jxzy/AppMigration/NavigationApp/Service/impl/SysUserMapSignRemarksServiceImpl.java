@@ -12,6 +12,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +67,34 @@ public class SysUserMapSignRemarksServiceImpl implements SysUserMapSignRemarksSe
             pageDataResult.setCode(200);
         }
         return pageDataResult;
+    }
+
+    /**
+     * 后台查询图钉
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
+    @Override
+    public PageDataResult adminUserMapSignRemarksList(Integer pageNum, Integer pageSize, HashMap<String, Object> search) {
+
+        PageDataResult pageDataResult = new PageDataResult();
+
+        PageHelper.startPage(pageNum,pageSize);
+        List<SysUserMapSignRemarks> list =  sysUserMapSignRemarksMapper.getUserMapSignRemarksList(search);
+
+        if (list.size()>0){
+
+            PageInfo<SysUserMapSignRemarks> listPageInfo = new PageInfo<>(list);
+            pageDataResult.setData(list);
+            pageDataResult.setTotals((int)listPageInfo.getTotal());
+            pageDataResult.setCode(200);
+        }
+
+
+        return pageDataResult;
+
     }
 }

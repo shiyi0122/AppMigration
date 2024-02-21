@@ -133,4 +133,15 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where RES_ID = #{resId,jdbcType=BIGINT}
   </update>
+
+  <select id="getSysRobotMapResList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotMapRes">
+    select *  from SYS_ROBOT_MAP_RES srmr
+    left join SYS_SCENIC_SPOT sss on srmr.RES_SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="spotName != null and spotName != ''">
+         sss.SCENIC_SPOT_NAME  like concat('%',#{spotName},'%')
+      </if>
+    </where>
+    order by srmr.CREATE_DATE DESC
+  </select>
 </mapper>

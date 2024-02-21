@@ -38,9 +38,11 @@ public interface SysGuideAppNewsMapper {
      */
     int updateByBatchSelective(SysGuideAppNews record);
 
-    List<SysGuideAppNews> selectBySearch(HashMap<String, Object> search);
+    List<SysGuideAppNews> selectBySearch(Map<String, Object> search);
 
 
     List<String> selectIdBySearch(HashMap<String, Object> search);
+
+    List<SysGuideAppNews> queryGuideAppNewsPart(Map<String, Object> search);
 
 }

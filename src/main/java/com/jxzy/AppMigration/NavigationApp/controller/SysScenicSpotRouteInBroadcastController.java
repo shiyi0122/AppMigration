@@ -7,10 +7,7 @@ import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.BaseDataDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.PageDTO;
 import com.jxzy.AppMigration.NavigationApp.entity.dto.SearchDTO;
-import com.jxzy.AppMigration.NavigationApp.util.Constant;
-import com.jxzy.AppMigration.NavigationApp.util.LngLonUtil;
-import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
-import com.jxzy.AppMigration.NavigationApp.util.ReturnModel;
+import com.jxzy.AppMigration.NavigationApp.util.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +124,7 @@ public class SysScenicSpotRouteInBroadcastController {
         if (!StringUtils.isEmpty(pageDTO.getSpotId())){
             search.put("spotId",pageDTO.getSpotId());
         }
-        if (!StringUtils.isEmpty(pageDTO.getSpotName())){
+        if (!StringUtils.isEmpty(pageDTO.getSpotName()))        {
             search.put("spotName",pageDTO.getSpotName());
         }
         pageDataResult =  sysScenicSpotBroadcastService.getSpotBroadcastList(pageDTO.getPageNum(),pageDTO.getPageSize(),pageDTO.getSort(),search);
@@ -208,7 +205,7 @@ public class SysScenicSpotRouteInBroadcastController {
      * 伴游线路
      * 张
      */
-    @ApiOperation("伴游线路")
+    @ApiOperation("伴游线路(暂不使用)")
     @GetMapping("lineDetails")
     @ResponseBody
     public ReturnModel lineDetails(SearchDTO searchDTO){
@@ -248,7 +245,7 @@ public class SysScenicSpotRouteInBroadcastController {
      * 伴游线路页面中的推荐线路
      * 张
      */
-    @ApiOperation("伴游线路页面中的推荐线路")
+    @ApiOperation("伴游线路页面中的推荐线路(暂不使用)")
     @GetMapping("recommendLine")
     @ResponseBody
     public ReturnModel recommendLine(SearchDTO searchDTO){
@@ -279,21 +276,172 @@ public class SysScenicSpotRouteInBroadcastController {
 
 
 
+    /**
+     * 伴游线路（方法2）
+     * 张
+     */
+    @ApiOperation("伴游线路（方法2）")
+    @GetMapping("lineDetailsTwo")
+    @ResponseBody
+    public ReturnModel lineDetailsTwo(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+
+        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景区id为空，无法查询");
+            return  returnModel;
+        }
 
 
+        if(StringUtils.isEmpty(searchDTO.getLat()) && StringUtils.isEmpty(searchDTO.getLng())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("当前坐标为空，无法查询");
+            return  returnModel;
+        }
+
+        //线路id为空时返回数据
+        if(StringUtils.isEmpty(searchDTO.getId())){
+            Map<String, Object> search = new HashMap<>();
+            search.put("spotId",searchDTO.getSpotId());
+//            search.put("broadcastId",searchDTO.getBroadcastId());
+            List<SysScenicSpotBroadcast> list = sysScenicSpotRouteInBroadcastService.broadcastEnterMap(search,searchDTO.getLng(),searchDTO.getLat());
+            returnModel.setData(list);
+            returnModel.setState(Constant.STATE_SUCCESS);
+            returnModel.setMsg("线路id为空，随机获取5个景点");
+            return  returnModel;
+        }
+
+        List<SysScenicSpotRecommendedRoute> list = sysScenicSpotRouteInBroadcastService.lineDetailsTwo(searchDTO.getSpotId(),searchDTO.getId(),searchDTO.getLat(),searchDTO.getLng());
+
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功");
+        return returnModel;
+    }
+
+    /**
+     * 伴游线路页面中的推荐线路(方法2)
+     * 张
+     */
+    @ApiOperation("伴游线路页面中的推荐线路(方法2)")
+    @GetMapping("recommendLineTwo")
+    @ResponseBody
+    public ReturnModel recommendLineTwo(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+        //判断景点id是否为空
+        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景区spotId为空，无法查询推荐线路");
+            return returnModel;
+        }
+        if (StringUtils.isEmpty(searchDTO.getId())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("线路id为空，无法查询推荐线路");
+            return returnModel;
+        }
+        if (StringUtils.isEmpty(searchDTO.getBroadcastId())){
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("景点id为空，无法查询推荐线路");
+            return returnModel;
+        }
+
+        List<SysScenicSpotRecommendedRoute> list = sysScenicSpotRouteInBroadcastService.recommendLineTwo(searchDTO.getSpotId(),searchDTO.getId(),searchDTO.getBroadcastId());
+
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功");
+        return returnModel;
+    }
 
 
+    /**
+     * 点击景点进入地图页（暂时写死）
+     * @param searchDTO
+     * @return
+     */
+    @ApiOperation("景点进入地图页")
+    @GetMapping("broadcastEnterMap")
+    @ResponseBody
+    public ReturnModel broadcastEnterMap(SearchDTO searchDTO){
+
+        ReturnModel returnModel = new ReturnModel();
+        Map<String, Object> search = new HashMap<>();
+        search.put("spotId",searchDTO.getSpotId());
+        search.put("broadcastId",searchDTO.getBroadcastId());
+        List<SysScenicSpotBroadcast> list = sysScenicSpotRouteInBroadcastService.broadcastEnterMap(search,searchDTO.getLng(),searchDTO.getLat());
+
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("获取成功！");
+        return returnModel;
+
+    }
 
 
+    /**
+     * 根据两个84坐标点，从百度地图中得到对应的线路坐标(有问题)
+     * 涨
+     */
+    @ApiOperation("根据两个84坐标点，从百度地图中得到两个点中线路的坐标(骑行的线路)")
+    @GetMapping("coordinateLineBD")
+    @ResponseBody
+    public ReturnModel coordinateLineBD(String lat,String lng,String latTwo,String lngTwo) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        Map<String, Object> returnModelMap = HttpClientUtils.findByNavigationCoordinatePoint(lat, lng, latTwo, lngTwo);
+
+        returnModel.setData(returnModelMap);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功！");
+        return returnModel;
+    }
 
 
+    /**
+     * 伴游线路页面中的推荐线路(方法3)
+     * 张
+     */
+    @ApiOperation("伴游线路页面中的推荐线路(方法3)")
+    @GetMapping("recommendLineThree")
+    @ResponseBody
+    public ReturnModel recommendLineThree(SearchDTO searchDTO){
 
+        ReturnModel returnModel = new ReturnModel();
+        //判断景点id是否为空
+//        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+//            returnModel.setData("");
+//            returnModel.setState(Constant.STATE_FAILURE);
+//            returnModel.setMsg("景区spotId为空，无法查询推荐线路");
+//            return returnModel;
+//        }
+//        if (StringUtils.isEmpty(searchDTO.getId())){
+//            returnModel.setData("");
+//            returnModel.setState(Constant.STATE_FAILURE);
+//            returnModel.setMsg("线路id为空，无法查询推荐线路");
+//            return returnModel;
+//        }
+//        if (StringUtils.isEmpty(searchDTO.getBroadcastId())){
+//            returnModel.setData("");
+//            returnModel.setState(Constant.STATE_FAILURE);
+//            returnModel.setMsg("景点id为空，无法查询推荐线路");
+//            return returnModel;
+//        }
 
+        List<SysScenicSpotRecommendedRoute> list = sysScenicSpotRouteInBroadcastService.recommendLineThree(searchDTO.getSpotId(),searchDTO.getId(),searchDTO.getBroadcastId());
 
-
-
-
-
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功");
+        return returnModel;
+    }
 
 
 

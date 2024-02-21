@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
+import com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotShopsExcel;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops;
 
 import java.util.List;
@@ -35,5 +36,34 @@ public interface SysScenicSpotShopsMapper {
      * @return
      */
     List<SysScenicSpotShops> searchScenicShopsList(Map<String, Object> search);
+
+    /**
+     * 后台管理——店铺列表
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotShops> getSotShopsList(Map<String, Object> search);
+
+    /**
+     * 获取景区中全部的店铺信息
+     * @param spotId
+     * @return
+     */
+    List<SysScenicSpotShops> getScenicShopsList(String spotId);
+
+    /**
+     * 后台管理——店铺导出
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotShopsExcel> uploadExcelShop(Map<String, Object> search);
+
+    /**
+     * 导入店铺添加
+     * @param sysScenicSpotServiceResExcel
+     * @return
+     */
+    int addImportShops(SysScenicSpotShopsExcel sysScenicSpotServiceResExcel);
+
 
 }

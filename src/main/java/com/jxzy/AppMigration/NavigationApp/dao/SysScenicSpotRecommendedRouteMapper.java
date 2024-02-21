@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
+import com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicReommendedRoute;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute;
 
 
@@ -61,5 +62,17 @@ public interface SysScenicSpotRecommendedRouteMapper {
      * @return
      */
     List<SysScenicSpotRecommendedRoute> selectByRouteGps(Long spotId,String broadcastGps);
+
+    /**
+     * 后台管理——经典线路查询
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotRecommendedRoute> getRecommendedRouteList(Map<String, String> search);
+
+
+    List<SysScenicReommendedRoute> uploadExcelRecommendedRoute(Map<String, String> search);
+
+    SysScenicSpotRecommendedRoute getSpotIdAndSpotRecommendedName(Long scenicSpotId, String routeName);
 
 }

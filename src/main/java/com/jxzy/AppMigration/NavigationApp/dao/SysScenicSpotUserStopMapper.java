@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotUserStop;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -23,5 +24,17 @@ public interface SysScenicSpotUserStopMapper {
 
     int addSpotUserStop(SysScenicSpotUserStop sysScenicSpotUserStop);
 
+
+    Integer getSpotIdUserCount(Long scenicSpotId);
+
+    Integer getSpotIdTimeSum(Long scenicSpotId);
+
+    List<SysScenicSpotUserStop> getSysScenicSpotUserStopList(Map<String, Object> search);
+
+    Long getSysScenicSpotUserTime(@Param("userId")Long userId,@Param("spotId")Long spotId);
+
+    List<SysScenicSpotUserStop> getSysScenicSpotUserStopFootprint(@Param("userId")Long spotId, @Param("spotId")Long userId);
+
+    int deleteByPrimaryKey(Long id);
 
 }

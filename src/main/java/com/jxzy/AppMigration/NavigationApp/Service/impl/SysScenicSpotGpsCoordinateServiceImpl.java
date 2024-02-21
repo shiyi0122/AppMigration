@@ -2,11 +2,14 @@ package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotGpsCoordinateService;
 import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotGpsCoordinateMapper;
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinate;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinateWithBLOBs;
+import com.jxzy.AppMigration.common.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +40,56 @@ public class SysScenicSpotGpsCoordinateServiceImpl implements SysScenicSpotGpsCo
      */
     public List<SysScenicSpotGpsCoordinateWithBLOBs> queryLocationScenicSpot() {
         return sysScenicSpotGpsCoordinateMapper.queryLocationScenicSpot();
+    }
+
+    /**
+     * 根据景区id查询围栏
+     * @param coordinateScenicSpotId
+     * @return
+     */
+    @Override
+    public SysScenicSpotGpsCoordinateWithBLOBs getSpotIdByGpsCoordinate(Long coordinateScenicSpotId) {
+
+        SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs = sysScenicSpotGpsCoordinateMapper.selectBySpotId(coordinateScenicSpotId);
+        return sysScenicSpotGpsCoordinateWithBLOBs;
+
+    }
+
+    /**
+     * 定时任务中添加围栏
+     * @param sysScenicSpotGpsCoordinateWithBLOBs
+     * @return
+     */
+    @Override
+    public int insert(SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs) {
+
+        sysScenicSpotGpsCoordinateWithBLOBs.setCreateDate(DateUtil.currentDateTime());
+        sysScenicSpotGpsCoordinateWithBLOBs.setUpdateDate(DateUtil.currentDateTime());
+        int i = sysScenicSpotGpsCoordinateMapper.insertSelective(sysScenicSpotGpsCoordinateWithBLOBs);
+        return i;
+    }
+
+    /**
+     * 根据id查询
+     * @param coordinateId
+     * @return
+     */
+    @Override
+    public SysScenicSpotGpsCoordinateWithBLOBs getSpotGpsCoordinateId(Long coordinateId) {
+
+        SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs = sysScenicSpotGpsCoordinateMapper.selectByPrimaryKey(coordinateId);
+        return sysScenicSpotGpsCoordinateWithBLOBs;
+    }
+
+    /**
+     * 编辑围栏信息
+     * @param sysScenicSpotGpsCoordinateWithBLOBs
+     * @return
+     */
+    @Override
+    public int edit(SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs) {
+
+        int i = sysScenicSpotGpsCoordinateMapper.updateByPrimaryKeySelective(sysScenicSpotGpsCoordinateWithBLOBs);
+        return i;
     }
 }

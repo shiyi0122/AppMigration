@@ -121,4 +121,18 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where HELP_ID = #{helpId,jdbcType=BIGINT}
   </update>
+
+  <select id="getUsersHelpBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsersHelp">
+    select *
+    from SYS_GUIDE_APP_USERS_HELP
+    <where>
+      <if test="title != null and title != ''">
+        HELP_TITLE like concat('%',#{title},'%')
+      </if>
+      <if test="content != null and content != ''">
+        HELP_CONTENT like concat('%',#{content},'%')
+      </if>
+    </where>
+  </select>
+
 </mapper>

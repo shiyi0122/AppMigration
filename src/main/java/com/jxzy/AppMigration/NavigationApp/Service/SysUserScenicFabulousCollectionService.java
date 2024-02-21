@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysUserScenicFabulousCollection;
+import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 
 import java.util.List;
 import java.util.Map;
@@ -60,4 +61,26 @@ public interface SysUserScenicFabulousCollectionService {
      * @date: 2022/8/15 0015
      */
     List<SysUserScenicFabulousCollection> queryUserScenicLike(int pageNum, int pageSize, Map<String, Object> search);
+
+    /**
+     * 根据景点id，获取景点收藏数量
+     * @param scenicDistrictId
+     * @return
+     */
+    int getScenicSpotCollectionCount(Long scenicDistrictId);
+
+    /**
+     * 根据景点id，获取景点点赞数量
+     * @param scenicDistrictId
+     * @return
+     */
+    int getScenicSpotFabulousCount(Long scenicDistrictId);
+
+    /**
+     * 后台管理--景点点赞收藏查询
+     * @param search
+     * @return
+     */
+    PageDataResult getUserScenicFabulousCollectionList(Integer pageNum,Integer pageSize,Map<String, Object> search);
+
 }

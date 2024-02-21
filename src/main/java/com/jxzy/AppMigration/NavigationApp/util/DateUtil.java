@@ -56,6 +56,10 @@ public class DateUtil {
         return formatter.format(crutDateTime());
     }
 
+    public static String DateTimeKey(){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        return formatter.format(crutDateTime());
+    }
     /**
      * @Author 郭凯
      * @Description 得到分钟
@@ -875,7 +879,31 @@ public class DateUtil {
 
     }
 
+    /**
+     * 将Date转换为String类型 采用默认格式转换yyyy-MM-dd HH:mm:ss
+     *
+     * @param d
+     * @return
+     */
+    public static String date2String(Date d)
+    {
+        return date2String(d, "yyyy-MM-dd HH:mm:ss");
+    }
 
+    /**
+     * 将Date转换为String类型
+     *
+     * @param d
+     * @param format
+     * @return
+     */
+    public static String date2String(Date d, String format)
+    {
+        if(d == null)
+            return "";
+        DateFormat df = new SimpleDateFormat(format);
+        return df.format(d);
+    }
 
 
 
@@ -885,7 +913,8 @@ public class DateUtil {
     public static void main(String[] args) throws ParseException {
 //        System.out.println(getMonthDay("2021-07"));
 //        System.out.println(calcLastMonth("2021-12"));
-        System.out.println(betweenYears("2021","2021"));
+//        System.out.println(betweenYears("2021","2021"));
+        System.out.println(DateTimeKey());
 //        System.out.println(dateHoursList(new Date()));
 
 

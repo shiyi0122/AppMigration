@@ -8,4 +8,6 @@ public class SysScenicSpotParkingWithBLOBs extends SysScenicSpotParking {
 
     private String parkingCoordinateGroupBaidu;
 
+    private String parkingCoordinateGroupGaode;
+
 }

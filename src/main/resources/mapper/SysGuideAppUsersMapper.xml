@@ -1,197 +1,235 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersMapper" >
-  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
-    <id column="USER_ID" property="userId" jdbcType="BIGINT" />
-    <result column="USER_PHONE" property="userPhone" jdbcType="VARCHAR" />
-    <result column="LONGIN_TOKEN_ID" property="longinTokenId" jdbcType="VARCHAR" />
-    <result column="USER_CLIENT_GT_ID" property="userClientGtId" jdbcType="VARCHAR" />
-    <result column="PHONE_SIGN" property="phoneSign" jdbcType="VARCHAR" />
-    <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
-    <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
-    <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
-    <result column="QQ_ID" property="qqId" jdbcType="VARCHAR"/>
-    <result column="WE_CHAT_ID" property="weChatId" jdbcType="VARCHAR"/>
-    <result column="APPLE_ID" property="appleId" jdbcType="VARCHAR"/>
-    <result column="PORTRAIT_PIC" property="portraitPic" jdbcType="VARCHAR"/>
-    <result column="USER_GENDER" property="userGender" jdbcType="VARCHAR"/>
-    <result column="USER_STATE" property="userState" jdbcType="VARCHAR"/>
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGuideAppUsersMapper">
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+        <id column="USER_ID" property="userId" jdbcType="BIGINT"/>
+        <result column="USER_PHONE" property="userPhone" jdbcType="VARCHAR"/>
+        <result column="LONGIN_TOKEN_ID" property="longinTokenId" jdbcType="VARCHAR"/>
+        <result column="USER_CLIENT_GT_ID" property="userClientGtId" jdbcType="VARCHAR"/>
+        <result column="PHONE_SIGN" property="phoneSign" jdbcType="VARCHAR"/>
+        <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR"/>
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="QQ_ID" property="qqId" jdbcType="VARCHAR"/>
+        <result column="WE_CHAT_ID" property="weChatId" jdbcType="VARCHAR"/>
+        <result column="APPLE_ID" property="appleId" jdbcType="VARCHAR"/>
+        <result column="PORTRAIT_PIC" property="portraitPic" jdbcType="VARCHAR"/>
+        <result column="USER_GENDER" property="userGender" jdbcType="VARCHAR"/>
+        <result column="USER_STATE" property="userState" jdbcType="VARCHAR"/>
+        <result column="IP_ASCRIPTION" property="ipAscription" jdbcType="VARCHAR"/>
+        <result column="INTRODUCE" property="introduce" jdbcType="VARCHAR"/>
+        <result column="USER_VISIT_NUMBER" property="userVisitNumber" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     USER_ID, USER_PHONE, LONGIN_TOKEN_ID, USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE, 
-    UPDATE_DATE,USER_NAME,QQ_ID,WE_CHAT_ID,APPLE_ID,PORTRAIT_PIC,USER_GENDER,USER_STATE
+    UPDATE_DATE,USER_NAME,QQ_ID,WE_CHAT_ID,APPLE_ID,PORTRAIT_PIC,USER_GENDER,USER_STATE,IP_ASCRIPTION,INTRODUCE,USER_VISIT_NUMBER
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from SYS_GUIDE_APP_USERS
-    where USER_ID = #{userId,jdbcType=BIGINT}
-  </select>
-  <!--查询登录令牌失效性-->
-  <select id="getToken" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />
-    from SYS_GUIDE_APP_USERS
-    where LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR}
-  </select>
-  <!--唯一标识查询用户信息-->
-  <select id="getPhoneSign" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
-    select
-    <include refid="Base_Column_List" />
-    from SYS_GUIDE_APP_USERS
-    where PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_GUIDE_APP_USERS
+        where USER_ID = #{userId,jdbcType=BIGINT}
+    </select>
+    <!--查询登录令牌失效性-->
+    <select id="getToken" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_GUIDE_APP_USERS
+        where LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR}
+    </select>
+    <!--唯一标识查询用户信息-->
+    <select id="getPhoneSign" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from SYS_GUIDE_APP_USERS
+        <where>
+            <if test="phoneSign != null and phoneSign != ''">
+                PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR}
+            </if>
+            <if test="userClientGtId != null and userClientGtId != ''">
+                and USER_CLIENT_GT_ID = #{userClientGtId,jdbcType=VARCHAR}
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                and USER_PHONE = #{userPhone}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from SYS_GUIDE_APP_USERS
     where USER_ID = #{userId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
     insert into SYS_GUIDE_APP_USERS (USER_ID, USER_PHONE, LONGIN_TOKEN_ID, 
       USER_CLIENT_GT_ID, PHONE_SIGN, CREATE_DATE, UPDATE_DATE,
       QQ_ID, WE_CHAT_ID, APPLE_ID, USER_NAME, PORTRAIT_PIC, USER_GENDER, USER_STATE
     )
     values (#{userId,jdbcType=BIGINT}, #{userPhone,jdbcType=VARCHAR}, #{longinTokenId,jdbcType=VARCHAR},
       #{userClientGtId,jdbcType=VARCHAR}, #{phoneSign,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR},
-      #{updateDate,jdbcType=VARCHAR}, #{qqId,jdbcType=VARCHAR}, #{weChatId,jdbcType=VARCHAR}, #{appleId,jdbcType=VARCHAR}
+      #{updateDate,jdbcType=VARCHAR}, #{qqId,jdbcType=VARCHAR}, #{weChatId,jdbcType=VARCHAR}, #{appleId,jdbcType=VARCHAR},
       #{userName,jdbcType=VARCHAR}, #{portraitPic,jdbcType=VARCHAR}, #{userGender,jdbcType=VARCHAR},#{userState,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
-    insert into SYS_GUIDE_APP_USERS
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        USER_ID,
-      </if>
-      <if test="userPhone != null" >
-        USER_PHONE,
-      </if>
-      <if test="longinTokenId != null" >
-        LONGIN_TOKEN_ID,
-      </if>
-      <if test="userClientGtId != null" >
-        USER_CLIENT_GT_ID,
-      </if>
-      <if test="phoneSign != null" >
-        PHONE_SIGN,
-      </if>
-      <if test="createDate != null" >
-        CREATE_DATE,
-      </if>
-      <if test="updateDate != null" >
-        UPDATE_DATE,
-      </if>
-      <if test="qqId != null">
-        QQ_ID,
-      </if>
-      <if test="weChatId != null">
-        WE_CHAT_ID,
-      </if>
-      <if test="appleId != null">
-        APPLE_ID,
-      </if>
-      <if test="userName != null">
-        USER_NAME,
-      </if>
-      <if test="portraitPic != null">
-        PORTRAIT_PIC,
-      </if>
-      <if test="userGender != null">
-        USER_GENDER,
-      </if>
-      <if test="userState != null">
-        USER_STATE,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="userPhone != null" >
-        #{userPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="longinTokenId != null" >
-        #{longinTokenId,jdbcType=VARCHAR},
-      </if>
-      <if test="userClientGtId != null" >
-        #{userClientGtId,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneSign != null" >
-        #{phoneSign,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        #{createDate,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        #{updateDate,jdbcType=VARCHAR},
-      </if>
-      <if test="qqId != null">
-        #{qqId,jdbcType=VARCHAR},
-      </if>
-      <if test="weChatId != null">
-        #{weChatId,jdbcType=VARCHAR},
-      </if>
-      <if test="appleId != null">
-        #{appleId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="portraitPic != null">
-        #{portraitPic,jdbcType=VARCHAR},
-      </if>
-      <if test="userGender != null">
-        #{userGender,jdbcType=VARCHAR},
-      </if>
-      <if test="userState != null">
-        #{userState,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
-    update SYS_GUIDE_APP_USERS
-    <set >
-      <if test="userPhone != null" >
-        USER_PHONE = #{userPhone,jdbcType=VARCHAR},
-      </if>
-      <if test="longinTokenId != null" >
-        LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR},
-      </if>
-      <if test="userClientGtId != null" >
-        USER_CLIENT_GT_ID = #{userClientGtId,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneSign != null" >
-        PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR},
-      </if>
-      <if test="createDate != null" >
-        CREATE_DATE = #{createDate,jdbcType=VARCHAR},
-      </if>
-      <if test="updateDate != null" >
-        UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
-      </if>
-      <if test="qqId != null">
-        QQ_ID = #{qqId,jdbcType=VARCHAR},
-      </if>
-      <if test="weChatId != null">
-        WE_CHAT_ID = #{weChatId,jdbcType=VARCHAR},
-      </if>
-      <if test="appleId != null">
-        APPLE_ID = #{appleId,jdbcType=VARCHAR},
-      </if>
-      <if test="userName != null">
-        USER_NAME = #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="portraitPic != null">
-        PORTRAIT_PIC = #{portraitPic,jdbcType=VARCHAR},
-      </if>
-      <if test="userGender != null">
-        USER_GENDER = #{userGender,jdbcType=VARCHAR},
-      </if>
-      <if test="userState != null">
-        USER_STATE = #{userState,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where USER_ID = #{userId,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" >
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+        insert into SYS_GUIDE_APP_USERS
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="userPhone != null">
+                USER_PHONE,
+            </if>
+            <if test="longinTokenId != null">
+                LONGIN_TOKEN_ID,
+            </if>
+            <if test="userClientGtId != null">
+                USER_CLIENT_GT_ID,
+            </if>
+            <if test="phoneSign != null">
+                PHONE_SIGN,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="qqId != null">
+                QQ_ID,
+            </if>
+            <if test="weChatId != null">
+                WE_CHAT_ID,
+            </if>
+            <if test="appleId != null">
+                APPLE_ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="portraitPic != null">
+                PORTRAIT_PIC,
+            </if>
+            <if test="userGender != null">
+                USER_GENDER,
+            </if>
+            <if test="userState != null">
+                USER_STATE,
+            </if>
+            <if test="ipAscription != null">
+                IP_ASCRIPTION,
+            </if>
+            <if test="introduce != null">
+                INTRODUCE,
+            </if>
+            <if test="userVisitNumber  != null">
+                USER_VISIT_NUMBER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userPhone != null">
+                #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="longinTokenId != null">
+                #{longinTokenId,jdbcType=VARCHAR},
+            </if>
+            <if test="userClientGtId != null">
+                #{userClientGtId,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneSign != null">
+                #{phoneSign,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="qqId != null">
+                #{qqId,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatId != null">
+                #{weChatId,jdbcType=VARCHAR},
+            </if>
+            <if test="appleId != null">
+                #{appleId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="portraitPic != null">
+                #{portraitPic,jdbcType=VARCHAR},
+            </if>
+            <if test="userGender != null">
+                #{userGender,jdbcType=VARCHAR},
+            </if>
+            <if test="userState != null">
+                #{userState,jdbcType=VARCHAR},
+            </if>
+            <if test="ipAscription != null">
+                #{ipAscription,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null">
+                #{introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="userVisitNumber != null">
+                #{userVisitNumber,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+        update SYS_GUIDE_APP_USERS
+        <set>
+            <if test="userPhone != null">
+                USER_PHONE = #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="longinTokenId != null">
+                LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR},
+            </if>
+            <if test="userClientGtId != null">
+                USER_CLIENT_GT_ID = #{userClientGtId,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneSign != null">
+                PHONE_SIGN = #{phoneSign,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="qqId != null">
+                QQ_ID = #{qqId,jdbcType=VARCHAR},
+            </if>
+            <if test="weChatId != null">
+                WE_CHAT_ID = #{weChatId,jdbcType=VARCHAR},
+            </if>
+            <if test="appleId != null">
+                APPLE_ID = #{appleId,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="portraitPic != null">
+                PORTRAIT_PIC = #{portraitPic,jdbcType=VARCHAR},
+            </if>
+            <if test="userGender != null">
+                USER_GENDER = #{userGender,jdbcType=VARCHAR},
+            </if>
+            <if test="userState != null">
+                USER_STATE = #{userState,jdbcType=VARCHAR},
+            </if>
+            <if test="ipAscription != null">
+                IP_ASCRIPTION = #{ipAscription,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null">
+                INTRODUCE = #{introduce,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where USER_ID = #{userId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
     update SYS_GUIDE_APP_USERS
     set USER_PHONE = #{userPhone,jdbcType=VARCHAR},
       LONGIN_TOKEN_ID = #{longinTokenId,jdbcType=VARCHAR},
@@ -210,26 +248,86 @@
   </update>
 
 
-  <select id="getUid" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    <select id="getUid" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
     select * from SYS_GUIDE_APP_USERS where USER_ID = #{uid}
   </select>
 
-  <select id="selectPhoneByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
-    select * from SYS_GUIDE_APP_USERS where USER_PHONE = #{phone}
+    <select id="selectPhoneByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    select * from SYS_GUIDE_APP_USERS where USER_PHONE = #{phone} ORDER BY CREATE_DATE limit 1
   </select>
 
-  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers" parameterType="java.util.Map">
-    select * from SYS_GUIDE_APP_USERS
-    <where>
-      <if test="qq != null and qq != ''">
-         and  QQ_ID = #{qq}
-      </if>
-      <if test="weChatId != null and weChatId != ''">
-         and  WE_CHAT_ID = {weChatId}
-      </if>
-      <if test="appleId != null and appleId != ''">
-         and  APPLE_ID = {appleId}
-      </if>
-    </where>
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers"
+            parameterType="java.util.Map">
+        select * from SYS_GUIDE_APP_USERS
+        <where>
+            <if test="qq != null and qq != ''">
+                and QQ_ID = #{qq}
+            </if>
+            <if test="weChatId != null and weChatId != ''">
+                and WE_CHAT_ID = {weChatId}
+            </if>
+            <if test="appleId != null and appleId != ''">
+                and APPLE_ID = {appleId}
+            </if>
+            <if test="phone != null and phone != ''">
+                and USER_PHONE like concat('%',#{phone},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="selectAllUserId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    select USER_ID from SYS_GUIDE_APP_USERS
   </select>
+
+    <select id="getSysGuideAppUsersDrop" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+    select USER_ID,USER_NAME from SYS_GUIDE_APP_USERS
+  </select>
+
+    <update id="addUserVisit">
+    update SYS_GUIDE_APP_USERS
+    set USER_VISIT_NUMBER = USER_VISIT_NUMBER + 1
+    where  USER_ID = #{uid}
+  </update>
+    <update id="updateById">
+        update SYS_GUIDE_APP_USERS
+        <set>
+            <if test="userPhone != null and userPhone != ''">
+                USER_PHONE = #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null and userName != ''">
+                USER_NAME =#{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                UPDATE_DATE =#{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="longinTokenId != null and longinTokenId != ''">
+                LONGIN_TOKEN_ID =#{longinTokenId,jdbcType=VARCHAR},
+            </if>
+<!--            <if test="weChatId == null">-->
+<!--                WE_CHAT_ID = null-->
+<!--            </if>-->
+<!--            <if test="wechatId != null and weChatId != ''">-->
+<!--                WE_CHAT_ID =#{weChatId,jdbcType=VARCHAR}-->
+<!--            </if>-->
+            WE_CHAT_ID =#{weChatId,jdbcType=VARCHAR}
+        </set>
+        where USER_ID = #{userId,jdbcType=BIGINT}
+    </update>
+
+    <select id="getUserIdByUserClientGtId" resultType="java.lang.String">
+    select USER_CLIENT_GT_ID
+    from SYS_GUIDE_APP_USERS
+    where USER_ID = #{userId}
+  </select>
+
+    <select id="selectOpenIdByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+        select * from SYS_GUIDE_APP_USERS where WE_CHAT_ID =#{openid}
+    </select>
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers">
+        select * from SYS_GUIDE_APP_USERS where USER_ID =#{userId}
+    </select>
+
+
+
 </mapper>

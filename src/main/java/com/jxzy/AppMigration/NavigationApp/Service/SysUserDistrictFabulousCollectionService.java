@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection;
+import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public interface SysUserDistrictFabulousCollectionService {
      * @author: qushaobei
      * @date: 2022/8/3 0003
      */
-    int updateUserFabulousCollection(SysUserDistrictFabulousCollection user);
+    int updateUserFabulousCollection(SysUserDistrictFabulousCollection user,String part);
 
     /**
      * 查询用户收藏景区列表
@@ -68,5 +69,35 @@ public interface SysUserDistrictFabulousCollectionService {
      * @return
      */
     SysUserDistrictFabulousCollection ifUserLikeCollection(String spotId, String uid);
+
+    /**
+     * 后台管理——用户景区点赞收藏管理列表查询
+     * @param pageNum
+     * @param pageSize
+     * @param search
+     * @return
+     */
+    PageDataResult getSysUserDistrictFabulousList(Integer pageNum, Integer pageSize, Map<String, Object> search);
+
+    /**
+     * 根据景区id，获取景区的总收藏数量
+     * @param scenicSpotId
+     * @return
+     */
+    int getScenicSpotCollectionCount(Long scenicSpotId);
+
+    /**
+     * 根据景区id，获取景区总点赞数量
+     * @param scenicSpotId
+     * @return
+     */
+    int getScenicSpotFabulousCount(Long scenicSpotId);
+
+    /**
+     * 查询景区点赞收藏
+     * @param search
+     * @return
+     */
+    PageDataResult getUserFabulousCollectionList(Integer pageNum,Integer pageSize,Map<String, Object> search);
 
 }

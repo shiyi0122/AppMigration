@@ -86,4 +86,36 @@ public class SysScenicSpotUserFootprintController {
     }
 
 
+    /**
+     * 当天用户足迹列表
+     * 张
+     * @param searchDTO
+     * @return
+     */
+    @ApiOperation("当天用户足迹列表")
+    @GetMapping("getSpotUserFootSameDay")
+    @ResponseBody
+    public ReturnModel getSpotUserFootSameDay(SearchDTO searchDTO) {
+
+        ReturnModel returnModel = new ReturnModel();
+        if (StringUtils.isEmpty(searchDTO.getSpotId())){
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setData("");
+            returnModel.setMsg("景区id为空无法查询");
+            return returnModel;
+        }
+        if (StringUtils.isEmpty(searchDTO.getUid())){
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setData("");
+            returnModel.setMsg("用户id为空无法查询");
+            return returnModel;
+        }
+        List<SysScenicSpotUserFootprint> list = sysScenicSpotUserFootprintService.getSpotUserFootSameDay(searchDTO.getSpotId(),searchDTO.getUid());
+        returnModel.setData(list);
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("查询成功");
+        return returnModel;
+    }
+
+
     }

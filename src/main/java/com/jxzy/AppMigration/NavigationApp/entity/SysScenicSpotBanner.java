@@ -20,13 +20,18 @@ public class SysScenicSpotBanner extends BaseDTO {
 
     private Integer sort;
 
-    private Integer type;
+    private Integer state;
 
     private String createTime;
 
     private String updateTime;
 
+    private Integer type;
 
+    //数据表中没有
+    private double distance;
+
+    private String scenicSpotName;
 
 
 }

@@ -121,4 +121,8 @@
       update_time = #{updateTime,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="updateRanking">
+    update sys_scenic_district_ranking
+    set same_day = 0 , update_time = NOW()
+  </update>
 </mapper>

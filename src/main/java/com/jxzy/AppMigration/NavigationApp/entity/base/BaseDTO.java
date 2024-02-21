@@ -20,4 +20,5 @@ public class BaseDTO implements Serializable {
 
     private String uid;
 
+
 }

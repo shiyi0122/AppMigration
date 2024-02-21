@@ -1,6 +1,7 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
+import com.jxzy.AppMigration.NavigationApp.entity.example.UserExample;
 
 import java.util.List;
 import java.util.Map;
@@ -41,4 +42,22 @@ public interface SysGuideAppUsersMapper {
     SysGuideAppUsers selectPhoneByUser(String phone);
 
     List<SysGuideAppUsers> selectBySearch(Map<String, Object> search);
+
+    List<SysGuideAppUsers> selectAllUserId();
+
+
+    List<SysGuideAppUsers> getSysGuideAppUsersDrop();
+
+
+    int addUserVisit(String uid);
+
+    String getUserIdByUserClientGtId(String userId);
+
+
+
+    SysGuideAppUsers selectOpenIdByUser(String openid);
+
+    SysGuideAppUsers selectById(String userId);
+
+    int updateById(SysGuideAppUsers sysGuideAppUsers1);
 }

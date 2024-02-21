@@ -8,9 +8,10 @@
     <result column="product_pic_url" property="productPicUrl" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    details_id, type_id, product_name, product_pic_url, create_time, update_time
+    details_id, type_id, product_name, product_pic_url, create_time, update_time,state
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,11 +25,11 @@
   </delete>
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsDetails" >
     insert into sys_scenic_spot_shops_details (details_id, type_id, product_name, 
-      product_pic_url, create_time, update_time
+      product_pic_url, create_time, update_time,state
       )
     values (#{detailsId,jdbcType=BIGINT}, #{typeId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
-      #{productPicUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR}
-      )
+      #{productPicUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR},
+      #{state,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsDetails" >
     insert into sys_scenic_spot_shops_details
@@ -51,6 +52,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="state != null">
+        state,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="detailsId != null" >
@@ -70,6 +74,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +98,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=VARCHAR},
       </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
     </set>
     where details_id = #{detailsId,jdbcType=BIGINT}
   </update>
@@ -100,7 +110,36 @@
       product_name = #{productName,jdbcType=VARCHAR},
       product_pic_url = #{productPicUrl,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=VARCHAR}
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR}
     where details_id = #{detailsId,jdbcType=BIGINT}
   </update>
+
+  <select id="getSpotShopsDetails" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShopsDetails">
+    select ssssd.*,sssst.type_name,sssst.commodity_id
+    from sys_scenic_spot_shops_details ssssd
+    left join sys_scenic_spot_shops_type sssst on ssssd.type_id = sssst.type_id
+    <where>
+      <if test="shopsId != null and shopsId != ''">
+         sssst.shops_id = #{shopsId}
+      </if>
+      <if test="state != null  and state != ''">
+        and  ssssd.state = #{state}
+      </if>
+      <if test="content != null and content">
+        and  ssssd.product_name like concat('%',#{content},'%')
+      </if>
+      <if test="shopsTypeName != null and shopsTypeName != ''">
+        and sssst.type_name like concat('%',#{shopsTypeName},'%')
+      </if>
+    </where>
+    order by create_time
+  </select>
+
+
+
+  <delete id="deleteByPrimaryTypeId" parameterType="java.lang.Long">
+    delete from sys_scenic_spot_shops_details
+    where type_id = #{typeId}
+  </delete>
 </mapper>

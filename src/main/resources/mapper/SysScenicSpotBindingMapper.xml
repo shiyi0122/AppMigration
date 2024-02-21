@@ -8,9 +8,13 @@
     <result column="SCENIC_SPOT_TYPE" property="scenicSpotType" jdbcType="INTEGER" />
     <result column="CITY_LABEL" property="cityLabel" jdbcType="VARCHAR" />
     <result column="CITY_PIC" property="cityPic" jdbcType="VARCHAR" />
+    <result column="SCENIC_SPOT_SID" property="scenicSpotSid" jdbcType="VARCHAR"/>
+    <result column="SCENIC_SPOT_QID" property="scenicSpotQid" jdbcType="VARCHAR"/>
+    <result column="IS_HOT_CITY" property="isHotCity" jdbcType="VARCHAR"/>
+    <result column="IS_DIRECTLY" property="isDirectly" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    SCENIC_SPOT_FID, SCENIC_SPOT_FNAME, SCENIC_SPOT_PID, SCENIC_SPOT_TYPE, CITY_LABEL, cityPic
+    SCENIC_SPOT_FID, SCENIC_SPOT_FNAME, SCENIC_SPOT_PID, SCENIC_SPOT_TYPE, CITY_LABEL, CITY_PIC, SCENIC_SPOT_QID, SCENIC_SPOT_SID, IS_HOT_CITY,IS_DIRECTLY
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -77,7 +81,7 @@
       <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
       <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
 
-      <result column="scenicSpotImgUtl" property="scenicSpotImgUtl" jdbcType="VARCHAR" />
+<!--      <result column="scenicSpotImgUtl" property="scenicSpotImgUtl" jdbcType="VARCHAR" />-->
       <result column="broadcastGps" property="broadcastGps" jdbcType="VARCHAR" />
       <result column="total" property="total" jdbcType="VARCHAR" />
 
@@ -126,6 +130,7 @@
       B.SCENIC_SPOT_FNAME,
       B.CITY_LABEL,
       B.CITY_PIC,
+      B.IS_HOT_CITY,
       D.SCNEIC_SPOT_IMG_URL AS scenicSpotImgUtl,
       C.BROADCAST_GPS AS broadcastGps,
       COUNT(C.SCENIC_SPOT_ID) AS total
@@ -183,6 +188,18 @@
       <if test="scenicSpotType != null" >
         SCENIC_SPOT_TYPE,
       </if>
+      <if test="scenicSpotQid != null">
+        SCENIC_SPOT_QID,
+      </if>
+      <if test="scenicSpotSid != null">
+        SCENIC_SPOT_SID,
+      </if>
+      <if test="isHotCity != null">
+        IS_HOT_CITY,
+      </if>
+      <if test="isDirectly != null">
+        IS_DIRECTLY,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="scenicSpotFid != null" >
@@ -197,6 +214,18 @@
       <if test="scenicSpotType != null" >
         #{scenicSpotType,jdbcType=INTEGER},
       </if>
+      <if test="scenicSpotQid != null">
+        #{scenicSpotQid,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotSid != null">
+        #{scenicSpotSid,jdbcType=BIGINT},
+      </if>
+      <if test="isHotCity != null">
+        #{isHotCity,jdbcType=VARCHAR},
+      </if>
+      <if test="isDirectly != null">
+        #{isDirectly,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding" >
@@ -208,8 +237,20 @@
       <if test="scenicSpotPid != null" >
         SCENIC_SPOT_PID = #{scenicSpotPid,jdbcType=BIGINT},
       </if>
+      <if test="scenicSpotSid != null">
+        SCENIC_SPOT_SID = #{scenicSpotSid,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotQid != null">
+        SCENIC_SPOT_QID = #{scenicSpotQid,jdbcType=BIGINT},
+      </if>
       <if test="scenicSpotType != null" >
         SCENIC_SPOT_TYPE = #{scenicSpotType,jdbcType=INTEGER},
+      </if>
+      <if test="isHotCity != null">
+        IS_HOT_CITY = #{isHotCity,jdbcType=VARCHAR},
+      </if>
+      <if test="isDirectly != null">
+        IS_DIRECTLY = #{isDirectly,jdbcType=VARCHAR}
       </if>
     </set>
     where SCENIC_SPOT_FID = #{scenicSpotFid,jdbcType=BIGINT}
@@ -224,18 +265,40 @@
 
 
   <select id="selectSpotByFname" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
-    select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_FNAME like CONCAT('%',#{cityName},'%') and SCENIC_SPOT_TYPE = 1
+    SELECT
+    *
+    FROM
+    SYS_SCENIC_SPOT_BINDING
+    WHERE
+    SCENIC_SPOT_FNAME = #{cityName,jdbcType=VARCHAR}
+    AND SCENIC_SPOT_TYPE IN ( 1, 3, 4 )
+  </select>
+  <select id="selectSpotByFnameN" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_FNAME  = #{cityName} and SCENIC_SPOT_TYPE = #{type}
+  </select>
+  <select id="selectSpotByFnameT" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_FNAME   = #{cityName} and SCENIC_SPOT_TYPE in (1,3,4)
   </select>
 
   <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot">
-    select sss.* from SYS_SCENIC_SPOT_BINDING sssb
-    left join SYS_SCENIC_SPOT sss on sssb.SCENIC_SPOT_FID = sss.SCENIC_SPOT_ID
+    select sss.*,ssd.title as dynamicTitle
+    from SYS_SCENIC_SPOT sss
+    right join (select * from SYS_SCENIC_SPOT_BINDING where  SCENIC_SPOT_TYPE = 0  or SCENIC_SPOT_TYPE is null ) sssb
+    on sssb.SCENIC_SPOT_FID = sss.SCENIC_SPOT_ID
+    left join sys_spot_dynamic ssd on sss.SCENIC_SPOT_ID = ssd.ascription_spot_id
     <where>
       <if test="scenicSpotPid != null and scenicSpotPid != ''">
-        and  sssb.SCENIC_SPOT_PID = #{scenicSpotPid}
+
+        and  (sssb.SCENIC_SPOT_PID = #{scenicSpotPid}
+        or sssb.SCENIC_SPOT_SID = #{scenicSpotPid}
+        or sssb.SCENIC_SPOT_QID = #{scenicSpotPid})
       </if>
-       and sss.ROBOT_WAKEUP_WORDS in (1,3)
+      <if test="content != null and content != ''">
+        and  sss.SCENIC_SPOT_NAME like CONCAT('%',#{content},'%')
+      </if>
+      and sss.ROBOT_WAKEUP_WORDS in (1,3)
     </where>
+    group by sss.SCENIC_SPOT_ID
     <if test="sort == 1">
       order by START_LEVEL DESC
     </if>
@@ -244,5 +307,151 @@
     </if>
 
   </select>
+
+
+  <select id="placeDrop" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select SCENIC_SPOT_FID ,SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_TYPE = 1
+  </select>
+
+  <select id="getSpotIdAndSpotFid" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select * from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FID = #{scenicSpotFid}
+    and SCENIC_SPOT_PID = #{scenicSpotPid}
+  </select>
+
+
+
+  <select id="getSpotBindingProvince" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select SCENIC_SPOT_FID , SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_TYPE = 1
+    <if test="pid != null and  pid != ''">
+      and  SCENIC_SPOT_PID = #{pid}
+    </if>
+  </select>
+
+  <select id="getSpotBindingCity" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select SCENIC_SPOT_FID , SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where
+    SCENIC_SPOT_TYPE = 3
+    <if test="pid != null and pid != ''">
+      and  SCENIC_SPOT_PID = #{pid}
+    </if>
+  </select>
+
+  <select id="getSpotBindingArea" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select SCENIC_SPOT_FID , SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where
+    SCENIC_SPOT_TYPE = 4
+    <if test="pid != null and pid != ''">
+      and  SCENIC_SPOT_SID = #{pid}
+    </if>
+  </select>
+
+  <select id="getScenicSpotBindingList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select
+    sssb.*
+    ,sssb1.SCENIC_SPOT_FNAME as scenicSpotSname
+    ,sssb2.SCENIC_SPOT_FNAME as scenicSpotQname
+    ,sssb3.SCENIC_SPOT_FNAME as scenicSpotPname
+    from SYS_SCENIC_SPOT_BINDING sssb
+    left join SYS_SCENIC_SPOT_BINDING sssb1 on sssb.SCENIC_SPOT_SID = sssb1.SCENIC_SPOT_FID
+    left join SYS_SCENIC_SPOT_BINDING sssb2 on sssb.SCENIC_SPOT_QID = sssb2.SCENIC_SPOT_FID
+    left join SYS_SCENIC_SPOT_BINDING sssb3 on sssb.SCENIC_SPOT_PID = sssb3.SCENIC_SPOT_FID
+    where
+    <!--    sssb.SCENIC_SPOT_PID IS NULL-->
+    1=1
+    <if test="sysScenicSpotBinding.scenicSpotFname != null and sysScenicSpotBinding.scenicSpotFname != ''">
+      AND  sssb.SCENIC_SPOT_FNAME LIKE CONCAT('%',#{sysScenicSpotBinding.scenicSpotFname},'%')
+    </if>
+    <if test="sysScenicSpotBinding.scenicSpotType != null ">
+      AND  sssb.SCENIC_SPOT_TYPE  = #{sysScenicSpotBinding.scenicSpotType}
+    </if>
+    <if test="sysScenicSpotBinding.isHotCity != null and sysScenicSpotBinding.isHotCity != ''">
+      AND sssb.IS_HOT_CITY = #{sysScenicSpotBinding.isHotCity}
+    </if>
+    <if test="sysScenicSpotBinding.scenicSpotPid != null and sysScenicSpotBinding.scenicSpotPid != ''">
+      AND sssb.SCENIC_SPOT_PID = #{sysScenicSpotBinding.scenicSpotPid}
+    </if>
+    <if test="sysScenicSpotBinding.scenicSpotSid != null and sysScenicSpotBinding.scenicSpotSid != ''">
+      AND sssb.SCENIC_SPOT_SID = #{sysScenicSpotBinding.scenicSpotSid}
+    </if>
+  </select>
+
+  <select id="getHotCity" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select SCENIC_SPOT_FID,SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where IS_HOT_CITY = 1
+  </select>
+
+  <select id="getCityAll" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select SCENIC_SPOT_FID,SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_TYPE = 3
+  </select>
+
+  <select id="getAreaAll" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select sssb.SCENIC_SPOT_FID,sssb.SCENIC_SPOT_FNAME,sssb1.SCENIC_SPOT_FNAME as scenicSpotSname
+    from SYS_SCENIC_SPOT_BINDING sssb
+    left join
+    (select * from  SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_TYPE = 3) sssb1 on sssb.SCENIC_SPOT_SID = sssb1.SCENIC_SPOT_FID
+    where sssb.SCENIC_SPOT_TYPE = 4
+  </select>
+
+  <select id="selectSpotByFnameList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select SCENIC_SPOT_FID,SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FNAME like CONCAT('%',#{content},'%')
+    and SCENIC_SPOT_TYPE in (1,3,4)
+      and (SCENIC_SPOT_FNAME &lt;&gt; '上海' and SCENIC_SPOT_FNAME &lt;&gt; '北京' and SCENIC_SPOT_FNAME &lt;&gt; '重庆' and SCENIC_SPOT_FNAME &lt;&gt; '天津')
+  </select>
+
+
+  <select id="getProvinceCity" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select SCENIC_SPOT_FID,SCENIC_SPOT_FNAME
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_TYPE in (3) order by convert(SCENIC_SPOT_FNAME using gbk) asc
+  </select>
+
+  <select id="getBindingIdBySpotList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select a.*
+    from (select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_TYPE = 0 or SCENIC_SPOT_TYPE is null) as a
+    left JOIN SYS_SCENIC_SPOT sss on a.SCENIC_SPOT_FID = sss. SCENIC_SPOT_ID
+    where
+    (SCENIC_SPOT_PID = #{scenicSpotFid}
+    or SCENIC_SPOT_QID = #{scenicSpotFid}
+    or SCENIC_SPOT_SID = #{scenicSpotFid})
+    and sss.ROBOT_WAKEUP_WORDS in (1,3)
+  </select>
+
+  <select id="selectSpotNameLikeByFname" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select *
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FNAME like concat('%',#{placeOfOwnership},'%')
+  </select>
+
+  <select id="selectFidByList" resultType="java.lang.Integer">
+    select COUNT(0)
+    from SYS_SCENIC_SPOT_BINDING
+    where (SCENIC_SPOT_PID = #{scenicSpotFid}
+    or SCENIC_SPOT_SID = #{scenicSpotFid}
+    or SCENIC_SPOT_QID = #{scenicSpotFid})
+  </select>
+
+  <select id="selectByPrimaryKeyAndName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBinding">
+    select *
+    from SYS_SCENIC_SPOT_BINDING
+    where SCENIC_SPOT_FID = #{scenicSpotId}
+    or SCENIC_SPOT_FNAME = #{scenicSpotName}
+  </select>
+
+
+
+
+
 
 </mapper>

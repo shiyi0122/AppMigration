@@ -18,6 +18,7 @@
                 spot_id = #{spotId}
             </if>
         </where>
+        order by create_time
     </select>
 
     <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicRankingList" >

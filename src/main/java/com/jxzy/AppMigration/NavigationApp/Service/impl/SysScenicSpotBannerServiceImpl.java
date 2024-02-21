@@ -2,17 +2,24 @@ package com.jxzy.AppMigration.NavigationApp.Service.impl;
 
 import com.jxzy.AppMigration.NavigationApp.Service.SysScenicSpotBannerService;
 import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBannerMapper;
+import com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotMapper;
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpot;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBanner;
+import com.jxzy.AppMigration.NavigationApp.util.LngLonUtil;
 import com.jxzy.AppMigration.NavigationApp.util.PageDataResult;
 import com.jxzy.AppMigration.common.utils.DateUtil;
 import com.jxzy.AppMigration.common.utils.IdUtils;
+import io.swagger.models.auth.In;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.geom.Point2D;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +32,8 @@ public class SysScenicSpotBannerServiceImpl implements SysScenicSpotBannerServic
 
     @Autowired
     SysScenicSpotBannerMapper sysScenicSpotBannerMapper;
+    @Autowired
+    SysScenicSpotMapper sysScenicSpotMapper;
 
     @Value("${bannerPatheGetPicPaht}")
     private String GET_SYS_SCENIC_SPOT_BANNER_IMG_PATH;
@@ -33,11 +42,55 @@ public class SysScenicSpotBannerServiceImpl implements SysScenicSpotBannerServic
     private String GET_SYS_SCENIC_SPOT_BANNER_IMG_URL;
 
     @Override
-    public List getScenicSpotBanner(Map<String, Object> search) {
+    public List getScenicSpotBanner(String lng,String lat,Map<String, Object> search) {
+        if ((Integer) search.get("type") == 1){//首页轮播图
 
-        List<SysScenicSpotBanner> list = sysScenicSpotBannerMapper.getScenicSpotBanner(search);
+            List<SysScenicSpotBanner> list = new ArrayList<>();
+            if (!StringUtils.isEmpty(lng) && !StringUtils.isEmpty(lat)){
+                list = sysScenicSpotBannerMapper.getScenicSpotBanner(search);
+                if (!StringUtils.isEmpty(list)){
+                    String spotId = list.get(0).getSpotId();
+                    Point2D.Double from = new Point2D.Double();
+                    Point2D.Double to = new Point2D.Double();
+                    SysScenicSpot sysScenicSpot = sysScenicSpotMapper.selectByPrimaryKey(Long.parseLong(spotId));
+                    if (!StringUtils.isEmpty(sysScenicSpot.getCoordinateRange())){
+                        String[] split = sysScenicSpot.getCoordinateRange().split(",");
+                        from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                        to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+                        double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+                        list.get(0).setDistance(distanceOne);
+                    }
+                }
+            }else{
+                list = sysScenicSpotBannerMapper.getScenicSpotBanner(search);
+            }
+            return list;
 
-        return list;
+        }else{
+            //景区轮播图
+            List<SysScenicSpotBanner> list = new ArrayList<>();
+            SysScenicSpotBanner sysScenicSpotBanner = new SysScenicSpotBanner();
+            list = sysScenicSpotBannerMapper.getScenicSpotBanner(search);
+            Point2D.Double from = new Point2D.Double();
+            Point2D.Double to = new Point2D.Double();
+//        SysScenicSpot sysScenicSpot = sysScenicSpotMapper.selectByPrimaryKey((Long) search.get("spotId"));
+            List<SysScenicSpot> scenicSpots = sysScenicSpotMapper.adminSysScenicSpotFilesList(search);
+            if (list.size()==0){
+               sysScenicSpotBanner.setSpotId(scenicSpots.get(0).getScenicSpotId().toString());
+               list.add(sysScenicSpotBanner);
+            }
+            list.get(0).setUrl(scenicSpots.get(0).getScenicSpotImgUrl());
+            if (!StringUtils.isEmpty(lng) && !StringUtils.isEmpty(lat)){
+                if (!StringUtils.isEmpty(scenicSpots.get(0).getCoordinateRange())){
+                    String[] split = scenicSpots.get(0).getCoordinateRange().split(",");
+                    from = new Point2D.Double(Double.valueOf(split[0]),Double.valueOf(split[1]));
+                    to = new Point2D.Double(Double.valueOf(lng),Double.valueOf(lat));
+                    double distanceOne = LngLonUtil.calculateWithSdk(from, to);
+                    list.get(0).setDistance(distanceOne);
+                }
+            }
+            return list;
+        }
     }
 
     @Override

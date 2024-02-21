@@ -12,10 +12,17 @@
     <result column="introduction" property="introduction" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="VARCHAR" />
     <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="shops_state" property="shopsState" jdbcType="VARCHAR"/>
+    <result column="shops_pinyin_name" property="shopsPinyinName" jdbcType="VARCHAR"/>
+    <result column="shops_gps_baidu" property="shopsGpsBaidu" jdbcType="VARCHAR"/>
+    <result column="shops_range" property="shopsRange" jdbcType="VARCHAR"/>
+    <result column="shops_gps_gaode" property="shopsGpsGaode" jdbcType="VARCHAR"/>
+    <result column="business_hours" property="businessHours" jdbcType="VARCHAR"/>
+    <result column="product_introduction" property="productIntroduction" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     shops_id, scenic_spot_id, shops_name, shops_phone, shops_address, shops_gps, shops_pic, 
-    introduction, create_time, update_time
+    introduction, create_time, update_time,shops_state,shops_pinyin_name,shops_gps_baidu,shops_range,shops_gps_gaode,business_hours
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -63,6 +70,7 @@
         LEFT JOIN sys_scenic_spot_shops_type b ON a.shops_id = b.shops_id
         LEFT JOIN sys_scenic_spot_shops_details c ON b.type_id = c.type_id
     WHERE a.shops_id = #{shopsId,jdbcType=BIGINT}
+    AND c.state = 1
   </select>
 
 
@@ -74,11 +82,12 @@
     insert into sys_scenic_spot_shops (shops_id, scenic_spot_id, shops_name, 
       shops_phone, shops_address, shops_gps, 
       shops_pic, introduction, create_time, 
-      update_time)
+      update_time,shops_state,shops_pinyin_name,shops_gps_baidu,shops_range,shops_gps_gaode)
     values (#{shopsId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{shopsName,jdbcType=VARCHAR}, 
       #{shopsPhone,jdbcType=VARCHAR}, #{shopsAddress,jdbcType=VARCHAR}, #{shopsGps,jdbcType=VARCHAR}, 
       #{shopsPic,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, #{createTime,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=VARCHAR},#{shopsState,jdbcType=VARCHAR},#{shopsPinyinName,jdbcType=VARCHAR},
+      #{shopsGpsBaidu,jdbcType=VARCHAR},#{shopsRange,jdbcType=VARCHAR},#{shopsGpsGaode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops" >
     insert into sys_scenic_spot_shops
@@ -113,6 +122,27 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="shopsState != null">
+        shops_state,
+      </if>
+      <if test="shopsPinyinName != null">
+        shops_pinyin_name,
+      </if>
+      <if test="shopsGpsBaidu !=null">
+        shops_gps_baidu,
+      </if>
+      <if test="shopsRange != null">
+        shops_range,
+      </if>
+      <if test="shopsGpsGaode != null">
+        shops_gps_gaode,
+      </if>
+      <if test="businessHours != null">
+        business_hours,
+      </if>
+      <if test="productIntroduction != null">
+        product_introduction,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="shopsId != null" >
@@ -144,6 +174,27 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsState != null">
+        #{shopsState,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPinyinName != null">
+        #{shopsPinyinName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGpsBaidu != null">
+        #{shopsGpsBaidu,jdbcType = VARCHAR},
+      </if>
+      <if test="shopsRange != null">
+        #{shopsRange,jdbcType = VARCHAR},
+      </if>
+      <if test="shopsGpsGaode != null">
+        #{shopsGpsGaode,jdbcType = VARCHAR},
+      </if>
+      <if test="businessHours != null">
+        #{businessHours,jdbcType = VARCHAR},
+      </if>
+      <if test="productIntroduction != null">
+        #{productIntroduction,jdbcType = VARCHAR},
       </if>
     </trim>
   </insert>
@@ -177,6 +228,27 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=VARCHAR},
       </if>
+      <if test="shopsState != null">
+        shops_state = #{shopsState,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPinyinName != null">
+        shops_pinyin_name = #{shopsPinyinName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGpsBaidu != null">
+        shops_gps_baidu = #{shopsGpsBaidu,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsRange !=null">
+        shops_range = #{shopsRange,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGpsGaode != null">
+        shops_gps_gaode = #{shopsGpsGaode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessHours != null">
+        business_hours = #{businessHours,jdbcType=VARCHAR},
+      </if>
+      <if test="productIntroduction != null">
+        product_introduction = #{productIntroduction,jdbcType=VARCHAR},
+      </if>
     </set>
     where shops_id = #{shopsId,jdbcType=BIGINT}
   </update>
@@ -190,7 +262,13 @@
       shops_pic = #{shopsPic,jdbcType=VARCHAR},
       introduction = #{introduction,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=VARCHAR}
+      update_time = #{updateTime,jdbcType=VARCHAR},
+      shops_state = #{shopsState,jdbcType = VARCHAR},
+      shops_pinyin_name = #{shopsPinyinName,jdbcType=VARCHAR},
+      shops_gps_baidu = #{shopsGpsBaidu,jdbcType =VARCHAR},
+      shops_range  = #{shopsRange,jdbcType = VARCHAR},
+      shops_gps_gaode = #{shopsGpsGaode,jdbcType =VARCHAR},
+      business_hours = #{businessHours,jdbcType = VARCHAR}
     where shops_id = #{shopsId,jdbcType=BIGINT}
   </update>
 
@@ -206,8 +284,149 @@
       <if test="scenicSpotId != null and scenicSpotId != ''">
           a.scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT}
       </if>
+          and c.state = 1
     </where>
   </select>
 
+
+  <select id="getSotShopsList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotShops">
+    select ssss.*,sss.SCENIC_SPOT_NAME as spotName
+    from sys_scenic_spot_shops ssss
+    left join SYS_SCENIC_SPOT sss
+    on ssss.scenic_spot_id = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="shopsName != null and shopsName != ''">
+        ssss.shops_name like concat('%',#{shopsName},'%')
+      </if>
+      <if test="spotId != null and spotId != ''">
+        and ssss.scenic_spot_id = #{spotId}
+      </if>
+    </where>
+    order by create_time DESC
+  </select>
+
+
+  <select id="getScenicShopsList"  resultMap="BaseResultMapMax" parameterType="java.util.HashMap">
+    SELECT
+      *
+    FROM
+    sys_scenic_spot_shops a
+    LEFT JOIN sys_scenic_spot_shops_type b ON a.shops_id = b.shops_id
+    LEFT JOIN sys_scenic_spot_shops_details c ON b.type_id = c.type_id
+    <where>
+      <if test="spotId != null and spotId != ''">
+          a.scenic_spot_id = #{spotId}
+      </if>
+    </where>
+  </select>
+
+  <select id="uploadExcelShop" resultType="com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotShopsExcel">
+    select ssss.*,sss.SCENIC_SPOT_NAME as spotName
+    from sys_scenic_spot_shops ssss
+    left join SYS_SCENIC_SPOT sss
+    on ssss.scenic_spot_id = sss.SCENIC_SPOT_ID
+    <where>
+      <if test="shopsName != null and shopsName != ''">
+        ssss.shops_name like concat('%',#{shopsName},'%')
+      </if>
+      <if test="spotId != null and spotId != ''">
+        and ssss.scenic_spot_id = #{spotId}
+      </if>
+    </where>
+    order by create_time DESC
+  </select>
+
+
+  <insert id="addImportShops" parameterType="com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicSpotShopsExcel" >
+    insert into sys_scenic_spot_shops
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="shopsId != null" >
+        shops_id,
+      </if>
+      <if test="scenicSpotId != null" >
+        scenic_spot_id,
+      </if>
+      <if test="shopsName != null" >
+        shops_name,
+      </if>
+      <if test="shopsPhone != null" >
+        shops_phone,
+      </if>
+      <if test="shopsAddress != null" >
+        shops_address,
+      </if>
+      <if test="shopsGps != null" >
+        shops_gps,
+      </if>
+      <if test="introduction != null" >
+        introduction,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="shopsPinyinName != null">
+        shops_pinyin_name,
+      </if>
+      <if test="shopsGpsBaidu !=null">
+        shops_gps_baidu,
+      </if>
+      <if test="shopsRange != null">
+        shops_range,
+      </if>
+      <if test="shopsGpsGaode != null">
+        shops_gps_gaode,
+      </if>
+      <if test="productIntroduction != null">
+        product_introduction,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="shopsId != null" >
+        #{shopsId,jdbcType=BIGINT},
+      </if>
+      <if test="scenicSpotId != null" >
+        #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="shopsName != null" >
+        #{shopsName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPhone != null" >
+        #{shopsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsAddress != null" >
+        #{shopsAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGps != null" >
+        #{shopsGps,jdbcType=VARCHAR},
+      </if>
+      <if test="introduction != null" >
+        #{introduction,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsPinyinName != null">
+        #{shopsPinyinName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopsGpsBaidu != null">
+        #{shopsGpsBaidu,jdbcType = VARCHAR},
+      </if>
+      <if test="shopsRange != null">
+        #{shopsRange,jdbcType = VARCHAR},
+      </if>
+      <if test="shopsGpsGaode != null">
+        #{shopsGpsGaode,jdbcType = VARCHAR},
+      </if>
+      <if test="productIntroduction != null">
+        #{productIntroduction,jdbcType = VARCHAR},
+      </if>
+    </trim>
+  </insert>
 
 </mapper>

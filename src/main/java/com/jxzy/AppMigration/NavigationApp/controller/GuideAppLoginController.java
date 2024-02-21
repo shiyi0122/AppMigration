@@ -1,38 +1,33 @@
 package com.jxzy.AppMigration.NavigationApp.controller;
 
-import com.alibaba.fastjson.JSON;
+
+import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.dypnsapi.model.v20170525.GetMobileRequest;
-import com.aliyuncs.dypnsapi.model.v20170525.GetMobileResponse;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.profile.DefaultProfile;
 import com.github.pagehelper.util.StringUtil;
-import com.google.gson.Gson;
 import com.jxzy.AppMigration.NavigationApp.Service.SysGuideAppUsersService;
 import com.jxzy.AppMigration.NavigationApp.entity.SysGuideAppUsers;
 import com.jxzy.AppMigration.NavigationApp.entity.base.ThirdPartyLoginDTO;
+import com.jxzy.AppMigration.NavigationApp.entity.vo.WXUserInfoVO;
 import com.jxzy.AppMigration.NavigationApp.exception.InformationErrorException;
 import com.jxzy.AppMigration.NavigationApp.util.*;
+import com.jxzy.AppMigration.NavigationApp.util.wxpay.AuthUtil;
 import com.jxzy.AppMigration.common.utils.AppleIdValidationComponent;
-import com.jxzy.AppMigration.common.utils.AuroraOneClickLogin;
 import com.jxzy.AppMigration.common.utils.CacheManagers;
+import com.jxzy.AppMigration.common.utils.DateUtil;
+import com.jxzy.AppMigration.common.utils.IdUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.jacoco.agent.rt.internal_43f5073.core.internal.flow.IFrame;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Api(tags = "导览APP登录相关功能")
 @RestController
@@ -181,7 +176,7 @@ public class GuideAppLoginController extends PublicUtil {
      * @param: phone
      * @description: TODO
      * @return: com.jxzy.AppMigration.NavigationApp.util.ReturnModel
-     * @author: qushaobei,zhang
+     * @author: qushaobei, zhang
      * @date: 2021/11/15 0015
      */
     @ApiOperation("短信验证")
@@ -246,15 +241,15 @@ public class GuideAppLoginController extends PublicUtil {
                 return returnModel;//加密返回
             }
             System.out.println(phoneSign + "当前是手机唯一标识￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥￥");
-            search.put("phoneSign", phoneSign);
-            search.put("userClientGtId", userClientGtId);
+
+
             search.put("userPhone", userPhone);
 
             SysGuideAppUsers user = sysGuideAppUsersService.getPhoneSign(search);
 
             System.out.println(user + "当前用户信息+++++++++++++++++++++++++++++");
             if (user != null) {
-                if ("1".equals(user.getUserState())){
+                if ("1".equals(user.getUserState())) {
                     returnModel.setData("");
                     returnModel.setMsg("此账号已被封禁，无法登录");
                     returnModel.setState(Constant.STATE_FAILURE);
@@ -262,6 +257,7 @@ public class GuideAppLoginController extends PublicUtil {
                 }
                 String token = JWTUtils.sign((String) search.get("userPhone"), user.getUserId(), new Date().toString());
                 user.setLonginTokenId(token);
+                user.setUserClientGtId(userClientGtId);
                 int i = sysGuideAppUsersService.updateAppUsers(user);
 
                 if (!StringUtil.isEmpty(user.getUserPhone()) && userPhone.equals(user.getUserPhone())) {
@@ -271,12 +267,13 @@ public class GuideAppLoginController extends PublicUtil {
                     return returnModel;
                 }
             } else {
+                search.put("phoneSign", phoneSign);
+                search.put("userClientGtId", userClientGtId);
                 user = sysGuideAppUsersService.insertAppUser(search);
                 returnModel.setData(user);
                 returnModel.setMsg("注册成功！");
                 returnModel.setState(Constant.STATE_SUCCESS);
             }
-
             return returnModel;
         } catch (Exception e) {
             logger.info("loginOrVisitor", e);
@@ -323,6 +320,101 @@ public class GuideAppLoginController extends PublicUtil {
         returnModel.setState(Constant.STATE_SUCCESS);
         returnModel.setMsg("绑定成功！");
         return returnModel;
+    }
+
+
+    @ApiOperation("第三方登录(新)")
+    @GetMapping("weChatLogin")
+    public ReturnModel weChatLogin(String code) {
+        ReturnModel returnModel = new ReturnModel();
+        try {
+            SysGuideAppUsers appUser = new SysGuideAppUsers();
+            JSONObject jsonObject = AuthUtil.getAccessToken(code);
+            if (jsonObject.containsKey("errcode")) {
+                throw new RuntimeException("登录失败：" + jsonObject.getString("errmsg"));
+            }
+
+            String accessToken = jsonObject.getString("access_token");
+            String openid = jsonObject.getString("openid");
+            // 根据openid查询数据库，判断数据库表中是否存在当前用户
+            appUser = sysGuideAppUsersService.selectOpenIdByUser(openid);
+
+            if (appUser == null) {
+                // 开始用户注册
+                SysGuideAppUsers appUsers = new SysGuideAppUsers();
+                // 根据token和openid获取用户的信息
+                JSONObject userInfoJsonObject = AuthUtil.getUserInfo(accessToken, openid);
+
+                if (userInfoJsonObject.containsKey("unionid")) {
+                    WXUserInfoVO wxUserInfoVO = userInfoJsonObject.toJavaObject(WXUserInfoVO.class);
+                    appUsers.setAccessToken(accessToken);
+                    appUsers.setUserName(wxUserInfoVO.getNickname());
+//                    Random random = new Random();
+//                    appUsers.setUserName("游娱go用户" + random.nextInt(1000));
+                    appUsers.setUserId(IdUtils.getSeqId());
+                    if (wxUserInfoVO.getSex() == 0) {
+                        appUsers.setUserGender("男");
+                    } else {
+                        appUsers.setUserGender("女");
+                    }
+                    appUsers.setPortraitPic(wxUserInfoVO.getHeadimgurl());
+                    appUsers.setWeChatId(openid);
+                    appUsers.setUserState("0");
+                    appUsers.setLonginTokenId(JWTUtils.sign(appUsers.getUserName(), appUsers.getUserId(), RandomUtil.randomString(32)));
+                    appUsers.setCreateDate(DateUtil.currentDateTime());
+                    appUsers.setUpdateDate(DateUtil.currentDateTime());
+                    sysGuideAppUsersService.insertUser(appUsers);
+                    returnModel.setData(appUsers);
+                    returnModel.setState(Constant.STATE_SUCCESS);
+                    returnModel.setMsg("注册成功！");
+                    return returnModel;
+                }
+            } else {
+                // 用户存在，直接根据openid查询用户信息，通常经过处理返回相应Token
+                appUser = sysGuideAppUsersService.selectOpenIdByUser(openid);
+                appUser.setLonginTokenId(JWTUtils.sign(appUser.getUserName(), appUser.getUserId(), RandomUtil.randomString(32)));
+                appUser.setWeChatId(openid);
+                returnModel.setData(appUser);
+                returnModel.setState(Constant.STATE_SUCCESS);
+                returnModel.setMsg("登录成功！");
+                logger.info("canshu", returnModel);
+                return returnModel;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("登录失败", e);
+        }
+        returnModel.setData("");
+        returnModel.setState(Constant.STATE_SUCCESS);
+        returnModel.setMsg("登录成功！");
+        return returnModel;
+    }
+
+    @ApiOperation("绑定手机号")
+    @GetMapping("setPhone")
+    public ReturnModel setPhone(Long userId, String userPhone, String userName, String code, String key, String userClientGtId) {
+        ReturnModel returnModel = new ReturnModel();
+        if (!code.equals(CacheManagers.getData(key))) {
+            returnModel.setData("");
+            returnModel.setMsg("验证码不正确或已失效！");
+            returnModel.setState(Constant.STATE_FAILURE);
+            return returnModel;
+        }
+        ReturnModel updateById = sysGuideAppUsersService.updateById(userId, userName, userPhone, userClientGtId);
+        return updateById;
+    }
+
+    @ApiOperation("解绑第三方登录")
+    @GetMapping("delectWX")
+    public ReturnModel delectWX(Long userId, String userPhone) {
+        ReturnModel returnModel = new ReturnModel();
+        if (userId == null) {
+            returnModel.setData("");
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("找不到用户");
+            return returnModel;
+        } else {
+            return sysGuideAppUsersService.delectWX(userId, userPhone);
+        }
     }
 
     /**
@@ -388,17 +480,9 @@ public class GuideAppLoginController extends PublicUtil {
      */
     @ApiOperation("更换绑定手机号")
     @PostMapping("replacePhone")
-    public ReturnModel replacePhone(@RequestBody @NotNull String params) {
+    public ReturnModel replacePhone(String phoneOld, String code, String key, String phoneNew) {
 
         ReturnModel returnModel = new ReturnModel();
-
-//        Map<String,Object> mapType = JSON.parseObject(params,Map.class);
-
-        JSONObject jsonObject = JSONObject.parseObject(params);
-        String phoneOld = jsonObject.getString("phoneOld");
-        String phoneNew = jsonObject.getString("phoneNew");
-        String key = jsonObject.getString("key");
-        String code = jsonObject.getString("code");
 
         if (!code.equals(CacheManagers.getData(key))) {
             returnModel.setData("");
@@ -419,11 +503,11 @@ public class GuideAppLoginController extends PublicUtil {
             if (!StringUtils.isEmpty(sysGuideAppUsersOld)) {
                 sysGuideAppUsersOld.setUserPhone(phoneNew);
                 i = sysGuideAppUsersService.updateAppUsers(sysGuideAppUsersOld);
-                if (i>0){
+                if (i > 0) {
                     returnModel.setData(i);
                     returnModel.setState(Constant.STATE_SUCCESS);
                     returnModel.setMsg("更换成功");
-                }else{
+                } else {
                     returnModel.setData(i);
                     returnModel.setState(Constant.STATE_FAILURE);
                     returnModel.setMsg("更换失败");
@@ -437,6 +521,38 @@ public class GuideAppLoginController extends PublicUtil {
                 return returnModel;
             }
         }
+    }
+
+
+    /**
+     * 扫码小程序端，登录同步到游娱go端登录 （添加一个用户信息）
+     */
+    @ApiOperation("扫码小程序端登录用户同步到游娱go端登录")
+    @PostMapping("/addRobotUserId")
+    public ReturnModel addRobotUserId(@RequestBody @NotNull String params) {
+
+        ReturnModel returnModel = new ReturnModel();
+
+        JSONObject jsonObject = JSONObject.parseObject(params);
+        String phone = jsonObject.getString("phone");
+        String openId = jsonObject.getString("openId");
+        String userName = jsonObject.getString("userName");
+
+
+        int i = sysGuideAppUsersService.addRobotUserId(phone, openId, userName);
+
+        if (i > 0) {
+            returnModel.setData(i);
+            returnModel.setState(Constant.STATE_SUCCESS);
+            returnModel.setMsg("添加成功！");
+            return returnModel;
+        } else {
+            returnModel.setData(i);
+            returnModel.setState(Constant.STATE_FAILURE);
+            returnModel.setMsg("添加失败！");
+            return returnModel;
+        }
+
     }
 
 

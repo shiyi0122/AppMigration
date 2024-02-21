@@ -17,4 +17,7 @@ public interface SysScenicSpotUserFootprintService {
     List<SysScenicSpotUserFootprint> getSpotUserFootPrint(String spotId, String uid);
 
 
+    List<SysScenicSpotUserFootprint> getSpotUserFootSameDay(String spotId, String uid);
+
+
 }

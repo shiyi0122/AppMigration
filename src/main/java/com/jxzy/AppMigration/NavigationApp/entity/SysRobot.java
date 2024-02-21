@@ -47,6 +47,16 @@ public class SysRobot {
 
     private String robotModel;
 
+    private String scenicSpotName;
+
+    public String  getScenicSpotName() {
+        return scenicSpotName;
+    }
+
+    public void setScenicSpotName(String scenicSpotName) {
+        this.scenicSpotName = scenicSpotName;
+    }
+
     public Long getRobotId() {
         return robotId;
     }

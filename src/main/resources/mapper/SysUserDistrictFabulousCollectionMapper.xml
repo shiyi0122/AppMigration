@@ -79,7 +79,7 @@
       <result column="FREE_TIME_SETTING" property="freeTimeSetting" jdbcType="VARCHAR" />
       <result column="GIFT_TIME_SETTING" property="giftTimeSetting" jdbcType="VARCHAR" />
       <result column="GIFT_USAGE_SETTING" property="giftUsageSetting" jdbcType="VARCHAR" />
-      <result column="SCNEIC_SPOT_IMG_URL" property="scneicSpotImgUrl" jdbcType="VARCHAR" />
+      <result column="SCENIC_SPOT_IMG_URL" property="scenicSpotImgUrl" jdbcType="VARCHAR" />
       <result column="HEAT" property="heat" jdbcType="BIGINT" />
       <collection property="heatList" column="scenicSpotId"
                   ofType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotHeat">
@@ -241,6 +241,66 @@
       </if>
     </where>
   </select>
+
+  <select id="getSpotIdFabulousCount" resultType="java.lang.Integer">
+    select COUNT(*)
+    from sys_user_district_fabulous_collection
+    where scenic_spot_id = #{scenicSpotId} and fabulous = 1
+  </select>
+
+  <select id="getSpotIdCollectionCount" resultType="java.lang.Integer">
+    select COUNT(*)
+    from sys_user_district_fabulous_collection
+    where scenic_spot_id = #{scenicSpotId} and collection = 1
+  </select>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection">
+    select sudfc.*,sgau.USER_NAME
+    from sys_user_district_fabulous_collection sudfc
+    left join SYS_GUIDE_APP_USERS sgau on sudfc.user_id = sgau.USER_ID
+    <where>
+      <if test="userId != null and userId != ''">
+        sudfc.user_id = #{userId}
+      </if>
+      <if test="userName != null and userName != ''">
+        sgau.USER_NAME like concat('%',#{userName},'%')
+      </if>
+    </where>
+        order by create_time DESC
+  </select>
+
+  <delete id="deleteBySpotId">
+    delete from sys_user_district_fabulous_collection
+    where scenic_spot_id = #{spotId}
+  </delete>
+
+
+  <select id="getUserFabulousCollectionList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserDistrictFabulousCollection">
+    select * from
+    (select sudfc.*,sss.SCENIC_SPOT_NAME
+    from sys_user_district_fabulous_collection sudfc
+    left join SYS_SCENIC_SPOT sss on sudfc.scenic_spot_id = sss.SCENIC_SPOT_ID
+    where  sudfc.fabulous = 1  OR  sudfc.collection = 1) as sudfc
+    <where>
+      <if test="userId !=null and userId != ''">
+        sudfc.user_id = #{userId}
+      </if>
+      <if test="id != null and id != ''">
+        and sudfc.scenic_spot_id = #{id}
+      </if>
+      <if test="spotName != null and spotName != null">
+        and sudfc.SCENIC_SPOT_NAME like concat('%',#{spotName},'%')
+      </if>
+      <if test="time != null and time != ''">
+        and DATE(sudfc.create_time)  &gt;= DATE(#{time})
+      </if>
+      <if test="timeEnd != null and timeEnd != ''">
+        and DATE(sudfc.create_time) &lt;= DATE(#{timeEnd})
+      </if>
+    </where>
+
+  </select>
+
 
 
 </mapper>

@@ -25,7 +25,6 @@ public class SysScenicRankingListController {
     @Autowired
     SysScenicRankingListService sysScenicRankingListService;
 
-
     @ApiOperation("获取榜单标签")
     @GetMapping("getRankingList")
     public ReturnModel getRankingList(SearchDTO searchDTO){

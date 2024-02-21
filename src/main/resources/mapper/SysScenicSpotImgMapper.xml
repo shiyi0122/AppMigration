@@ -90,4 +90,21 @@
       UPDATE_DATE = #{updateDate,jdbcType=VARCHAR}
     where SCNEIC_SPOT_IMG_ID = #{scneicSpotImgId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg">
+    select *
+    from SYS_SCENIC_SPOT_IMG
+    <where>
+      <if test="spotId != null and spotId != ''">
+        SCENIC_SPOT_ID = #{spotId}
+      </if>
+    </where>
+  </select>
+
+
+  <select id="getScenicSpotImgByScenicSpotId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotImg">
+    select *
+    from SYS_SCENIC_SPOT_IMG
+    where SCENIC_SPOT_ID = #{scenicSpotId}
+  </select>
 </mapper>

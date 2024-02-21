@@ -30,6 +30,15 @@ public class SysScenicSpotRouteInBroadcast extends BaseDTO {
 
     private String  broadcastContent;
 
+    private String audioUrl;
+
+    private String videoUrl;
+
+    private String pictureUrl;
+
     private String mediaResourceUrl;
+
+    //景点坐标半径
+    private String  scenicSpotRange;
 
 }

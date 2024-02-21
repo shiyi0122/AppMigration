@@ -201,6 +201,33 @@ public class DateUtil {
         return new Date(time);
     }
 
+
+    /**
+     * 给时间增加相应的天数
+     * @param time 时间
+     * @param i
+     * @return
+     */
+    public static String addDay(String time,int i){
+        String s = "";
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//格式化一下
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(time));
+            calendar.add(Calendar.DATE, i);
+            s = sdf.format(calendar.getTime());
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+        return s;
+    }
+
+
+
+
     /**
      * 失效时间
      * @return Date
@@ -2215,15 +2242,18 @@ public class DateUtil {
     public static void main(String[] args) throws ParseException{
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd");
         Date startTime = ft.parse("2021-10-05");
-        Date endTime = ft.parse("2021-11-09");
-        Date nowTime = new Date();
-        boolean effectiveDate = isEffectiveDates("2021-10-05", "2021-11-09");
-        System.out.println(effectiveDate);
-        if (effectiveDate) {
-            System.out.println("当前时间在范围内");
-        }else {
-            System.out.println("当前时间在不在范围内");
-        }
+        Date endTime = ft.parse("2021-10-04");
+        int i = compareTwoDateYYYYMMDD(startTime, endTime);
+        System.out.println(i);
+
+//        Date nowTime = new Date();
+//        boolean effectiveDate = isEffectiveDates("2021-10-05", "2021-11-09");
+//        System.out.println(effectiveDate);
+//        if (effectiveDate) {
+//            System.out.println("当前时间在范围内");
+//        }else {
+//            System.out.println("当前时间在不在范围内");
+//        }
     }
 
 

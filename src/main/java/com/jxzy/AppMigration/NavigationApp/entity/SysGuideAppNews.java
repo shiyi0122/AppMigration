@@ -6,7 +6,7 @@ import lombok.Data;
 public class SysGuideAppNews {
     private Long guideId;
 
-    private Long guideUserId;
+    private String guideUserId;
 
     private String guideTitle;
 
@@ -17,4 +17,18 @@ public class SysGuideAppNews {
     private String updateDate;
 
     private String guideContent;
+
+    private String plannedTime;
+
+    private String sendStatus;
+
+    private String messageType;
+
+    private String ifRead;
+
+    private  String[] userList;
+
+    private String newsType;
+
+    private String newsLock;
 }

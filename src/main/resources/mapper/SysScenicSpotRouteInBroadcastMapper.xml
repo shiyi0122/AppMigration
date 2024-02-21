@@ -39,6 +39,85 @@
         order by sssrib.sort desc
     </select>
 
+    <select id="getSpotIdAndRouteIdByList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRouteInBroadcast">
+        select sssrib.*,sssb.BROADCAST_NAME as broadcastName,sssb.BROADCAST_GPS_BAI_DU broadcastGpsBaiDu,sssb.BROADCAST_GPS as broadcastGps,sssb.SCENIC_SPOT_RANGE,sssbe.BROADCAST_CONTENT broadcastContent,
+        sssbe1.MEDIA_RESOURCE_URL videoUrl ,
+        sssbe2.MEDIA_RESOURCE_URL audioUrl,
+        sssbe.PICTURE_URL pictureUrl
+        from sys_scenic_spot_route_in_broadcast sssrib
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on  sssrib.sys_scenic_spot_broadcast_id = sssb.BROADCAST_ID
+        LEFT JOIN   SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe ON sssrib.sys_scenic_spot_broadcast_id = sssbe.BROADCAST_ID and sssbe.MEDIA_TYPE = 1
+        left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe1 ON sssrib.sys_scenic_spot_broadcast_id = sssbe1.BROADCAST_ID and sssbe1.MEDIA_TYPE = 2
+        left join SYS_SCENIC_SPOT_BROADCAST_EXTEND sssbe2 ON sssrib.sys_scenic_spot_broadcast_id = sssbe2.BROADCAST_ID and sssbe2.MEDIA_TYPE = 3
+        <where>
+            <if test="routeId != null and routeId != ''">
+                sssrib.sys_scenic_spot_route_id = #{routeId}
+            </if>
+        </where>
+        GROUP BY sssrib.sys_scenic_spot_broadcast_id
+        order by sssrib.sort asc
+    </select>
+
+    <delete id="deleteByRouteId">
+        DELETE FROM sys_scenic_spot_route_in_broadcast WHERE sys_scenic_spot_route_id = #{routeId}
+    </delete>
+
+    <insert id="insertService">
+        insert into sys_scenic_spot_route_in_broadcast
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sysScenicSpotRouteId != null" >
+                sys_scenic_spot_route_id,
+            </if>
+            <if test="sysScenicSpotBroadcastId != null" >
+                sys_scenic_spot_broadcast_id,
+            </if>
+            <if test="sort != null" >
+                sort,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sysScenicSpotRouteId != null" >
+                #{sysScenicSpotRouteId,jdbcType=BIGINT},
+            </if>
+            <if test="sysScenicSpotBroadcastId != null" >
+                #{sysScenicSpotBroadcastId,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null" >
+                #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+
+    <delete id="deleteById">
+        DELETE FROM sys_scenic_spot_route_in_broadcast WHERE id = #{id}
+    </delete>
+
+    <select id="selectSpotRouteId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRouteInBroadcast">
+        select  sssrib.sys_scenic_spot_route_id,sssrib.sys_scenic_spot_broadcast_id,sssb.BROADCAST_ID,sssb.BROADCAST_NAME
+        from sys_scenic_spot_route_in_broadcast sssrib
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on sssrib.sys_scenic_spot_broadcast_id = sssb.BROADCAST_ID
+        where sssrib.sys_scenic_spot_route_id = #{routeId}
+    </select>
 
 
 </mapper>

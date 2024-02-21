@@ -26,4 +26,11 @@ public interface SysScenicDistrictRankingMapper {
      * @date: 2022/8/3 0003
      */
     SysScenicDistrictRanking bestRanking(Map<String, Object> search);
+
+    /**
+     * 清空排行数据
+     * @return
+     */
+    int updateRanking();
+
 }

@@ -15,10 +15,12 @@
     <result column="USE_TIME" property="useTime" jdbcType="VARCHAR"/>
     <result column="HEAT" property="heat" jdbcType="VARCHAR"/>
     <result column="PICTURE_URL" property="pictureUrl" jdbcType="VARCHAR"/>
+    <result column="ROUTE_STATE" property="routeState" jdbcType="VARCHAR"/>
+    <result column="ROUTE_GPS_BAI_DU" property="routeGpsBaiDu" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List" >
     ROUTE_ID, SCENIC_SPOT_ID, ROUTE_NAME, ROUTE_NAME_PIN_YIN, ROUTE_INTRODUCE, ROUTE_GPS, 
-    ROUTE_GPS_BAI_DU, CREATE_DATE, UPDATE_DATE,TOTAL_KM,USE_TIME,HEAT,PICTURE_URL
+    ROUTE_GPS_BAI_DU, CREATE_DATE, UPDATE_DATE,TOTAL_KM,USE_TIME,HEAT,PICTURE_URL,ROUTE_STATE,ROUTE_GPS_BAI_DU
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -40,13 +42,13 @@
   <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute" >
     insert into SYS_SCENIC_SPOT_RECOMMENDED_ROUTE (ROUTE_ID, SCENIC_SPOT_ID, ROUTE_NAME, 
       ROUTE_NAME_PIN_YIN, ROUTE_INTRODUCE, ROUTE_GPS, 
-      ROUTE_GPS_BAI_DU, CREATE_DATE, UPDATE_DATE,TOTAL_KM,USE_TIME,HEAT,PICTURE_URL
+      ROUTE_GPS_BAI_DU, CREATE_DATE, UPDATE_DATE,TOTAL_KM,USE_TIME,HEAT,PICTURE_URL,ROUTE_STATE
       )
     values (#{routeId,jdbcType=BIGINT}, #{scenicSpotId,jdbcType=BIGINT}, #{routeName,jdbcType=VARCHAR}, 
       #{routeNamePinYin,jdbcType=VARCHAR}, #{routeIntroduce,jdbcType=VARCHAR}, #{routeGps,jdbcType=VARCHAR}, 
       #{routeGpsBaiDu,jdbcType=VARCHAR}, #{createDate,jdbcType=VARCHAR}, #{updateDate,jdbcType=VARCHAR},
-      #{totalKm,jdbcType = VARCHAR},#{useTime,jdbcType = VARCHAR},#{heat,jdbcType=VARCHAR},#{pictureUrl,jdbcType=VARCHAR}
-      )
+      #{totalKm,jdbcType = VARCHAR},#{useTime,jdbcType = VARCHAR},#{heat,jdbcType=VARCHAR},#{pictureUrl,jdbcType=VARCHAR},
+      #{rjouteState,jdbcType = VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute" >
     insert into SYS_SCENIC_SPOT_RECOMMENDED_ROUTE
@@ -90,6 +92,12 @@
       <if test="pictureUrl != null">
         PICTURE_URL,
       </if>
+      <if test="routeState != null">
+        ROUTE_STATE,
+      </if>
+      <if test="routeGpsGaoDe != null">
+        ROUTE_GPS_GAO_DE,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="routeId != null" >
@@ -130,6 +138,12 @@
       </if>
       <if test="pictureUrl != null">
         #{pictureUrl,jdbcType = VARCHAR},
+      </if>
+      <if test="routeState != null">
+        #{routeState,jdbcType = VARCHAR},
+      </if>
+      <if test="routeGpsGaoDe != null">
+        #{routeGpsGaoDe,jdbcType = VARCHAR},
       </if>
     </trim>
   </insert>
@@ -172,6 +186,12 @@
       <if test="pictureUrl != null">
         PICTURE_URL = #{pictureUrl,jdbcType = VARCHAR},
       </if>
+      <if test="routeState != null">
+        ROUTE_STATE = #{routeState,jdbcType = VARCHAR},
+      </if>
+      <if test="routeGpsGaoDe != null">
+        ROUTE_GPS_GAO_DE = #{routeGpsGaoDe},
+      </if>
     </set>
     where ROUTE_ID = #{routeId,jdbcType=BIGINT}
   </update>
@@ -188,7 +208,9 @@
       TOTAL_KM    = #{totalKm,jdbcType=VARCHAR},
       USE_TIME   = #{useTime,jdbcType=VARCHAR},
       HEAT    = #{heat,jdbcType = VARCHAR},
-      PICTURE_URL = #{pictureUrl,jdbcType = VARCHAR}
+      PICTURE_URL = #{pictureUrl,jdbcType = VARCHAR},
+      ROUTE_STATE = #{routeState,jdbcType = VARCHAR},
+      ROUTE_GPS_GAO_DE = #{routeGpsGaoDe,jdbcType = VARCHAR},
     where ROUTE_ID = #{routeId,jdbcType=BIGINT}
   </update>
 
@@ -200,6 +222,7 @@
       <if test="spotId != null and spotId != ''">
         and SCENIC_SPOT_ID = #{spotId}
       </if>
+        and ROUTE_STATE = 1
     </where>
     order by heat DESC
   </select>
@@ -212,6 +235,7 @@
       <if test="spotId != null and spotId != ''">
         and SCENIC_SPOT_ID = #{spotId}
       </if>
+        and ROUTE_STATE = 1
     </where>
   </select>
 
@@ -222,8 +246,12 @@
       <if test="spotId != null and spotId != ''">
         and SCENIC_SPOT_ID = #{spotId}
       </if>
+      <if test="routeId != null and routeId != ''">
+        and ROUTE_ID = #{routeId}
+      </if>
+        and ROUTE_STATE = 1
     </where>
-    order by heat ASC
+    order by CREATE_DATE DESC
   </select>
 
   <update id="addHotRouteInBroadcast">
@@ -237,6 +265,57 @@
     from SYS_SCENIC_SPOT_RECOMMENDED_ROUTE
     where SCENIC_SPOT_ID = #{spotId}
     and  ROUTE_GPS like CONCAT('%',#{broadcastGps},'%')
+  </select>
+
+  <select id="getRecommendedRouteList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute">
+    SELECT
+    A.*,
+    B.SCENIC_SPOT_NAME AS scenicSpotName
+    FROM SYS_SCENIC_SPOT_RECOMMENDED_ROUTE A
+    LEFT JOIN SYS_SCENIC_SPOT B ON A.SCENIC_SPOT_ID = B.SCENIC_SPOT_ID
+    LEFT JOIN sys_scenic_spot_route_in_broadcast sssrib on A.ROUTE_ID = sssrib.sys_scenic_spot_route_id
+    LEFT JOIN SYS_SCENIC_SPOT_BROADCAST sssb on sssb.BROADCAST_ID = sssrib.sys_scenic_spot_broadcast_id
+    <where>
+      <if test="scenicSpotId != null and scenicSpotId !='' ">
+        A.SCENIC_SPOT_ID = #{scenicSpotId}
+      </if>
+      <if test="routeName != null and routeName != ''">
+        AND A.ROUTE_NAME LIKE CONCAT('%',#{routeName},'%')
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+        AND sssb.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+    </where>
+    GROUP BY ROUTE_ID
+    ORDER BY A.CREATE_DATE DESC
+  </select>
+
+  <select id="uploadExcelRecommendedRoute" resultType="com.jxzy.AppMigration.NavigationApp.entity.Excel.SysScenicReommendedRoute">
+    select sssrr.ROUTE_ID,sssrr.ROUTE_NAME,sssrr.ROUTE_NAME_PIN_YIN,sssrr.ROUTE_INTRODUCE,sssrr.ROUTE_GPS,sssrr.ROUTE_GPS_BAI_DU,sssrr.TOTAL_KM,sssrr.USE_TIME,
+          sss.SCENIC_SPOT_NAME
+    from SYS_SCENIC_SPOT_RECOMMENDED_ROUTE sssrr
+    LEFT JOIN sys_scenic_spot_route_in_broadcast sssrib on sssrr.ROUTE_ID = sssrib.sys_scenic_spot_route_id
+    LEFT JOIN SYS_SCENIC_SPOT_BROADCAST sssb on sssb.BROADCAST_ID = sssrib.sys_scenic_spot_broadcast_id
+    LEFT JOIN SYS_SCENIC_SPOT sss ON sss.SCENIC_SPOT_ID = sssrr.SCENIC_SPOT_ID
+    <where>
+      <if test="scenicSpotId != null and scenicSpotId !='' ">
+        sssrr.SCENIC_SPOT_ID = #{scenicSpotId}
+      </if>
+      <if test="routeName != null and routeName != ''">
+        AND sssrr.ROUTE_NAME LIKE CONCAT('%',#{routeName},'%')
+      </if>
+      <if test="broadcastName != null and broadcastName != ''">
+        AND sssb.BROADCAST_NAME like concat('%',#{broadcastName},'%')
+      </if>
+    </where>
+    GROUP BY ROUTE_ID
+    ORDER BY sssrr.CREATE_DATE DESC
+  </select>
+
+  <select id="getSpotIdAndSpotRecommendedName" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute">
+    select * from SYS_SCENIC_SPOT_RECOMMENDED_ROUTE
+    where SCENIC_SPOT_ID = #{scenicSpotId}
+    and ROUTE_NAME = #{routeName}
   </select>
 
 

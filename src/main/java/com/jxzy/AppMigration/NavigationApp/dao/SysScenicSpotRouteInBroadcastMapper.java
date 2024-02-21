@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.dao;
 
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcast;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommendedRoute;
 
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRouteInBroadcast;
@@ -21,5 +22,36 @@ public interface SysScenicSpotRouteInBroadcastMapper {
      * @return
      */
     List<SysScenicSpotRouteInBroadcast> selectSpotRouteIdByList(Long routeId);
+
+    /**
+     * 根据景区id和线路id，查询景点
+     * @param search
+     * @return
+     */
+    List<SysScenicSpotRouteInBroadcast> getSpotIdAndRouteIdByList(Map<String, Object> search);
+
+
+    /**
+     * 后台管理—— 删除经典线路中的各个景点
+     * @param routeId
+     * @return
+     */
+    int deleteByRouteId(Long routeId);
+
+    /**
+     * 后台管理-- 添加线路关联景点
+     * @param sysScenicSpotRouteInBroadcast
+     * @return
+     */
+    int insertService(SysScenicSpotRouteInBroadcast sysScenicSpotRouteInBroadcast);
+    /**
+     *
+     * 后台管理—— 根据id删除线路关联景点
+     * @param
+     */
+
+    int deleteById(Long id);
+
+    List<SysScenicSpotRouteInBroadcast> selectSpotRouteId(Long routeId);
 
 }

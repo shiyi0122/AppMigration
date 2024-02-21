@@ -1,5 +1,6 @@
 package com.jxzy.AppMigration.NavigationApp.Service;
 
+import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinate;
 import com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotGpsCoordinateWithBLOBs;
 
 import java.util.List;
@@ -24,4 +25,34 @@ public interface SysScenicSpotGpsCoordinateService {
      * @date: 2022/8/3 0003
      */
     List<SysScenicSpotGpsCoordinateWithBLOBs> queryLocationScenicSpot();
+
+    /**\
+     * 根据景区id查询围栏
+     * @param coordinateScenicSpotId
+     * @return
+     */
+    SysScenicSpotGpsCoordinateWithBLOBs getSpotIdByGpsCoordinate(Long coordinateScenicSpotId);
+
+    /**
+     * 定时任务中添加围栏
+     * @param sysScenicSpotGpsCoordinateWithBLOBs
+     * @return
+     */
+    int insert(SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs);
+
+    /**
+     * 根据id查询
+     * @param coordinateId
+     * @return
+     */
+    SysScenicSpotGpsCoordinateWithBLOBs getSpotGpsCoordinateId(Long coordinateId);
+
+    /**
+     * 修改围栏信息
+     * @param sysScenicSpotGpsCoordinateWithBLOBs
+     * @return
+     */
+    int edit(SysScenicSpotGpsCoordinateWithBLOBs sysScenicSpotGpsCoordinateWithBLOBs);
+
+
 }
