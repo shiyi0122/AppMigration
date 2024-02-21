@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessUserLookTimeMapper" >
+
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLookTime" parameterType="java.util.Map">
+        select *
+        from BUSINESS_USER_LOOK_TIME
+        <where>
+            1=1
+            <if test="userId != null and userId != ''">
+                and  USER_ID = #{userId}
+            </if>
+            <if test="robotCode != null and robotCode != ''">
+                and ROBOT_CODE = #{robotCode}
+            </if>
+        </where>
+    </select>
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLookTime">
+        update BUSINESS_USER_LOOK_TIME
+        <set>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null">
+                ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="viewingTime != null">
+                VIEWING_TIME = #{viewingTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLookTime">
+        insert into BUSINESS_USER_LOOK_TIME
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="robotCode != null">
+                ROBOT_CODE,
+            </if>
+            <if test="viewingTime != null">
+                VIEWING_TIME,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+            <if test="dataSide != null">
+                DATA_SIDE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null">
+                #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="viewingTime != null">
+                #{viewingTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataSide != null">
+                #{dataSide,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+</mapper>

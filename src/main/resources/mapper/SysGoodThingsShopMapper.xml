@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGoodThingsShopMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThingsShop">
+        insert into sys_good_things_shop
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotId != null" >
+                spot_id,
+            </if>
+            <if test="goodThingsName != null" >
+                good_things_name,
+            </if>
+            <if test="goodThingsPinyin != null" >
+                good_things_pinyin,
+            </if>
+            <if test="goodThingsGpsBaiDu != null" >
+                good_things_gps_bai_du,
+            </if>
+            <if test="goodThingsGpsGaoDe != null">
+                good_things_gps_gao_de,
+            </if>
+            <if test="goodThingsGps != null" >
+                good_things_gps,
+            </if>
+            <if test="goodThingsIntroduce != null" >
+                good_things_introduce,
+            </if>
+            <if test="phone != null" >
+                phone,
+            </if>
+            <if test="businessHours != null" >
+                business_hours,
+            </if>
+            <if test="recommendNumber != null" >
+                recommend_number,
+            </if>
+            <if test="coverPic != null" >
+                cover_pic,
+            </if>
+            <if test="detailsPic != null" >
+                details_pic,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="broadcastContent != null">
+                broadcast_content,
+            </if>
+            <if test="coordinateRadius != null">
+                coordinate_radius,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="introduce != null">
+                introduce,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null" >
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="goodThingsName != null" >
+                #{goodThingsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsPinyin != null" >
+                #{goodThingsPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGpsBaiDu != null" >
+                #{goodThingsGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGpsGaoDe != null" >
+                #{goodThingsGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGps != null" >
+                #{goodThingsGps,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsIntroduce != null" >
+                #{goodThingsIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null" >
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="businessHours != null" >
+                #{businessHours,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null" >
+                #{recommendNumber,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null" >
+                #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="detailsPic != null" >
+                #{detailsPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastContent != null">
+                #{broadcastContent,jdbcType = VARCHAR},
+            </if>
+            <if test="coordinateRadius != null">
+                #{coordinateRadius,jdbcType = VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType = VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType = VARCHAR},
+            </if>
+            <if test="introduce != null">
+                #{introduce,jdbcType = VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThingsShop">
+        update sys_good_things_shop
+        <set >
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="goodThingsName != null and goodThingsName != '' " >
+                good_things_name = #{goodThingsName,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsPinyin != null and goodThingsPinyin != '' " >
+                good_things_pinyin = #{goodThingsPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGpsGaoDe != null and goodThingsGpsGaoDe != ''">
+                good_things_gps_gao_de = #{goodThingsGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGpsBaiDu != null and goodThingsGpsBaiDu != '' " >
+                good_things_gps_bai_du = #{goodThingsGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsGps != null and goodThingsGps != '' " >
+                good_things_gps = #{goodThingsGps,jdbcType=VARCHAR},
+            </if>
+            <if test="goodThingsIntroduce != null and goodThingsIntroduce != '' " >
+                good_things_introduce = #{goodThingsIntroduce,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != '' " >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="businessHours != null and businessHours != '' " >
+                business_hours = #{businessHours,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null" >
+                recommend_number = #{recommend_number,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null and coverPic != ''" >
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="detailsPic != null and detailsPic != ''" >
+                details_pic = #{detailsPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null and province !=''">
+                province = #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null and city !=''">
+                city = #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null and area !=''">
+                area = #{area,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastContent != null">
+                broadcast_content = #{broadcastContent,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinateRadius != null">
+                coordinate_radius = #{coordinateRadius,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null">
+                introduce = #{introduce,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_good_things_shop
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThingsShop">
+        select * , sss.SCENIC_SPOT_NAME,sssb1.SCENIC_SPOT_FNAME as provinceName,sssb2.SCENIC_SPOT_FNAME as cityName,sssb3.SCENIC_SPOT_FNAME as areaName
+        from sys_good_things_shop sgts
+        left join SYS_SCENIC_SPOT sss
+        on sgts.spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_BINDING sssb1
+        on sgts.province = sssb1.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb2
+        on sgts.city = sssb2.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb3
+        on sgts.area = sssb3.SCENIC_SPOT_FID
+        <where>
+            <if test="spotId != null">
+                sgts.spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and  sgts.good_things_name like CONCAT('%',#{content},'%')
+            </if>
+            <if test="province != null">
+                and sgts.province = #{province}
+            </if>
+            <if test="city != null">
+                and sgts.city = #{city}
+            </if>
+            <if test="area != null">
+                and sgts.area = #{area}
+            </if>
+            <if test="cityId != null">
+                and  (province = #{cityId} or city = #{cityId} or area = #{cityId})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThingsShop">
+        select *
+        from sys_good_things_shop
+        where id = #{shopsId}
+    </select>
+
+
+    <insert id="addGiveTheThumbsUp">
+        update  sys_good_things_shop set recommend_number = recommend_number + 1
+    </insert>
+
+    <select id="getUidAndShopIdAndTypeByGoodThings" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_good_things_fabulous
+        where featured_food_id = #{id}
+        and user_id = #{uid}
+        and type = #{type}
+    </select>
+
+
+
+</mapper>

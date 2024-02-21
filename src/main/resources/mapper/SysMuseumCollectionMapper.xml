@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysMuseumCollectionMapper" >
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumCollection">
+        <id column="id" property="id"/>
+        <result column="collection_id" property="collectionId"/>
+        <result column="museum_id" property="museumId"/>
+        <result column="museum_collection_name" property="museumCollectionName"/>
+        <result column="museum_collection_pinyin" property="museumCollectionPinyin"/>
+        <result column="museum_collection_floor" property="museumCollectionFloor"/>
+        <result column="museum_collection_introduce" property="museumCollectionIntroduce"/>
+        <result column="museum_collection_pictures" property="museumCollectionPictures"/>
+        <result column="museum_collection_cover_pic" property="museumCollectionCoverPic"/>
+        <result column="museum_collection_long" property="museumCollectionLong"/>
+        <result column="museum_collection_wide" property="museumCollectionWide"/>
+        <result column="museum_collection_high" property="museumCollectionHigh"/>
+        <result column="museum_collection_feature" property="museumCollectionFeature"/>
+        <result column="museum_collection_story" property="museumCollectionStory"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="line_x" property="lineX"/>
+        <result column="line_y" property="lineY"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , collection_id, museum_id, museum_collection_name, museum_collection_pinyin, museum_collection_floor, museum_collection_introduce, museum_collection_pictures, museum_collection_cover_pic, museum_collection_long, museum_collection_wide, museum_collection_high, museum_collection_feature, museum_collection_story, create_time, update_time, line_x, line_y
+    </sql>
+    <select id="getMuseumCollectionNumber" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_museum_collection
+        <where>
+            <if test="id != null and id != ''">
+                museum_id = #{id}
+            </if>
+        </where>
+    </select>
+    <select id="selectMuseumIdByList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumCollection">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_museum_collection
+        <where>
+            <if test="id != null and id != ''">
+                and museum_id = #{id}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getMuseumCollectionIdDetails"
+            resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumCollection">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_museum_collection
+        <where>
+            <if test="id != null and id !=''">
+                and id = #{id}
+            </if>
+            <if test="museumCollectionName != null and museumCollectionName != ''">
+                and museum_collection_name like CONCAT('%',#{museumCollectionName},'%')
+            </if>
+            <if test="museumId != null and museumId != ''">
+                and museum_id = #{museumId}
+            </if>
+            <if test="collectionId != null and collectionId != ''">
+                and collection_id = #{collectionId}
+            </if>
+            <if test="pinyin != null and pinyin != ''">
+                and museum_collection_pinyin = #{pinyin}
+            </if>
+        </where>
+    </select>
+    <select id="selectCollectionByCondition"
+            resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumCollection">
+        select smc.id
+        , collection_id, museum_id, museum_collection_name, museum_collection_pinyin, museum_collection_floor,
+        museum_collection_introduce, museum_collection_pictures, museum_collection_cover_pic, museum_collection_long,
+        museum_collection_wide, museum_collection_high, museum_collection_feature, museum_collection_story, smc.create_time,
+        smc.update_time, line_x, line_y,museum_name museumName
+        from sys_museum_collection smc left join sys_museum sm on sm.id =smc.museum_id
+        <where>
+            <if test="museumName!=null and museumName!=''">
+                sm.museum_name like concat('%',#{museumName},'%')
+            </if>
+            <if test="museumCollectionName!=null and museumCollectionName!=''">
+                and smc.museum_collection_name like concat('%',#{museumCollectionName},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

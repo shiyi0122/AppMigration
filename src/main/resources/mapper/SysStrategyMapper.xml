@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysStrategyMapper">
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        insert into sys_strategy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="strategySpotId != null">
+                strategy_spot_id,
+            </if>
+            <if test="placeOfOwnership != null">
+                place_of_ownership,
+            </if>
+            <if test="strategyIntroduction != null">
+                strategy_introduction,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="coverPic != null">
+                cover_pic,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="strategyNumber != null">
+                strategy_number,
+            </if>
+            <if test="toExamineResult != null">
+                to_examine_result,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="strategyState != null">
+                strategy_state,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="takePhotos != null">
+                take_photos,
+            </if>
+            <if test="temporaryHeadUrl != null">
+                temporary_head_url,
+            </if>
+            <if test="temporaryUserName != null">
+                temporary_user_name,
+            </if>
+            <if test="publishingType != null">
+                publishing_type,
+            </if>
+            <if test="publishCoordinates != null">
+                publish_coordinates,
+            </if>
+            <if test="mapScreenshotUrl != null">
+                map_screenshot_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="strategySpotId != null">
+                #{strategySpotId,jdbcType=BIGINT},
+            </if>
+            <if test="placeOfOwnership != null">
+                #{placeOfOwnership,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyIntroduction != null">
+                #{strategyIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="coverPic != null">
+                #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyNumber != null">
+                #{strategyNumber,jdbcType=BIGINT},
+            </if>
+            <if test="toExamineResult != null">
+                #{toExamineResult,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyState != null">
+                #{strategyState,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=BIGINT},
+            </if>
+            <if test="takePhotos != null">
+                #{takePhotos,jdbcType=VARCHAR},
+            </if>
+            <if test="temporaryHeadUrl != null">
+                #{temporaryHeadUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="temporaryUserName != null">
+                #{temporaryUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishingType != null">
+                #{publishingType,jdbcType=VARCHAR},
+            </if>
+            <if test="publishCoordinates != null">
+                #{publishCoordinates,jdbcType=VARCHAR},
+            </if>
+            <if test="mapScreenshotUrl != null">
+                #{mapScreenshotUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="addUserOperation">
+        insert into user_operation_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                ID,
+            </if>
+            <if test="phone != null and phone != ''">
+                phone,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="spotId != null and spotId != ''">
+                spot_id,
+            </if>
+            <if test="spotName != null and spotName != ''">
+                spot_name,
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time,
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="phone != null and phone != ''">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null and type != ''">
+                #{type,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null and spotId != ''">
+                #{spotId,jdbcType=VARCHAR},
+            </if>
+            <if test="spotName != null and spotName != ''">
+                #{spotName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                #{createTime,jdbcType=DATE},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                #{updateTime,jdbcType=DATE}
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select ss.*,sss.SCENIC_SPOT_NAME,sgau.PORTRAIT_PIC as temporaryHeadUrl,sgau.USER_NAME as temporaryUserName
+        from sys_strategy ss
+        left join SYS_SCENIC_SPOT sss
+        on ss.strategy_spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_GUIDE_APP_USERS sgau
+        on ss.user_id = sgau.USER_ID
+        <where>
+            1=1
+            <if test="spotId != null">
+                and ss.strategy_spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and ss.title like CONCAT('%',#{content},'%')
+            </if>
+            <if test="cityId != null">
+                and (province = #{cityId} or city = #{cityId} or area = #{area})
+            </if>
+            <if test="uid != null">
+                and ss.user_id = #{uid}
+            </if>
+            <if test="type == 1">
+                and to_examine_result = 2
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+            <if test="type == 2">
+                and to_examine_result = 2
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+            <if test="type == 3">
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+            <if test="cityType != null">
+                and ss.city_type = #{cityType}
+            </if>
+        </where>
+        order by ss.create_time DESC
+    </select>
+
+    <select id="getSysStrategyAppDetails" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select ss.*,sgau.USER_NAME,sss.SCENIC_SPOT_NAME
+        from sys_strategy ss
+        left join SYS_GUIDE_APP_USERS sgau on ss.user_id = sgau.USER_ID
+        left join SYS_SCENIC_SPOT sss on ss.strategy_spot_id = sss.SCENIC_SPOT_ID
+        <where>
+            1=1
+            <if test="id != null">
+                and ss.id = #{id}
+            </if>
+            <if test="type != null">
+                and ss.type = #{type}
+            </if>
+        </where>
+        order by strategy_number DESC
+    </select>
+
+    <select id="getUserStrategyNumber" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_strategy
+        where user_id = #{userId}
+        and type = #{type}
+        and to_examine_result = 2
+    </select>
+
+    <update id="addSysStrategyNumber">
+        update sys_strategy
+        set strategy_number = strategy_number + 1
+        where  id = #{id}
+    </update>
+
+
+    <select id="getSysStrategyList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select ss.* , sgau.USER_NAME as temporaryUserName,sss.SCENIC_SPOT_NAME,sssb1.SCENIC_SPOT_FNAME as provinceName,
+        sssb2.SCENIC_SPOT_FNAME as cityName,sssb3.SCENIC_SPOT_FNAME as areaName
+        from sys_strategy ss
+        left join SYS_GUIDE_APP_USERS sgau on ss.user_id = sgau.USER_ID
+        left join SYS_SCENIC_SPOT sss on ss.strategy_spot_id = sss.SCENIC_SPOT_ID
+        left join (select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_TYPE = 1) sssb1 on ss.province =
+        sssb1.SCENIC_SPOT_FID
+        left join (select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_TYPE = 3) sssb2 on ss.city =
+        sssb2.SCENIC_SPOT_FID
+        left join (select * from SYS_SCENIC_SPOT_BINDING where SCENIC_SPOT_TYPE = 4) sssb3 on ss.area =
+        sssb3.SCENIC_SPOT_FID
+        <where>
+            1=1
+            <if test="content != null">
+                and title like CONCAT('%',#{content},'%')
+            </if>
+            <if test="spotId != null">
+                and strategy_spot_id = #{spotId}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="startTime != null">
+                and DATE(SUBSTR(create_time,1,10)) <![CDATA[ <= ]]> #{startTime}
+            </if>
+        </where>
+        order by ss.create_time DESC
+    </select>
+
+
+    <update id="editSysStrategyToExamine">
+        update sys_strategy
+        set to_examine_result = #{state},
+        to_examine_time = now()
+        where id = #{id}
+    </update>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        update sys_strategy
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="strategySpotId != null and strategySpotId != ''">
+                strategy_spot_id = #{strategySpotId,jdbcType=BIGINT},
+            </if>
+            <if test="placeOfOwnership != null and placeOfOwnership != ''">
+                place_of_ownership = #{placeOfOwnership,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyIntroduction != null and strategyIntroduction != ''">
+                strategy_introduction = #{strategyIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="coverPic != null and coverPic != ''">
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyNumber != null and strategyNumber != ''">
+                strategy_number = #{strategyNumber,jdbcType=BIGINT},
+            </if>
+            <if test="toExamineResult != null and toExamineResult != ''">
+                to_examine_result = #{toExamineResult,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyState != null and strategyState != ''">
+                strategy_state = #{strategyState,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null and area != ''">
+                area = #{area,jdbcType=BIGINT},
+            </if>
+            <if test="takePhotos != null and takePhotos != ''">
+                take_photos = #{takePhotos,jdbcType=VARCHAR},
+            </if>
+            <if test="reviewComments != null and reviewComments != ''">
+                review_comments = #{reviewComments,jdbcType=VARCHAR},
+            </if>
+            <if test="temporaryHeadUrl != null and temporaryHeadUrl != ''">
+                temporary_head_url = #{temporaryHeadUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="temporaryUserName != null and temporaryUserName != ''">
+                temporary_user_name = #{temporaryUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="publishingType != null and publishingType != ''">
+                publishing_type = #{publishingType,jdbcType=VARCHAR},
+            </if>
+            <if test="publishCoordinates != null and publishCoordinates != ''">
+                publish_coordinates = #{publishCoordinates,jdbcType=VARCHAR},
+            </if>
+            <if test="mapScreenshotUrl != null and mapScreenshotUrl != ''">
+                map_screenshot_url = #{mapScreenshotUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPhone">
+        update SYS_GUIDE_APP_USERS
+        <set>
+            <if test="fristSpotId != null and fristSpotId != ''">
+                FIRST_SPOT_ID =#{fristSpotId,jdbcType=VARCHAR},
+            </if>
+            <if test="fristSpotName != null and fristSpotName != ''">
+                FIRST_SPOT_NAME =#{fristSpotName,jdbcType=VARCHAR},
+            </if>
+            <if test="spotId != null and spotId != ''">
+                SPOT_ID =#{spotId,jdbcType=VARCHAR},
+            </if>
+            <if test="spotName != null and spotName != ''">
+                SPOT_NAME =#{spotName,jdbcType=VARCHAR},
+            </if>
+            <if test="userNowIp != null and userNowIp != ''">
+                USER_NOW_IP =#{userNowIp,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null and updateDate !=''">
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where USER_PHONE =#{userPhone,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete">
+        delete from sys_strategy
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select *
+        from sys_strategy
+        where id = #{sysStrategyId}
+    </select>
+
+    <select id="myList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select ss.*,sss.SCENIC_SPOT_NAME,sgau.PORTRAIT_PIC as temporaryHeadUrl,sgau.USER_NAME as temporaryUserName
+        from sys_strategy ss
+        left join SYS_SCENIC_SPOT sss
+        on ss.strategy_spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_GUIDE_APP_USERS sgau
+        on ss.user_id = sgau.USER_ID
+        <where>
+            1=1
+            <if test="spotId != null">
+                and ss.strategy_spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and ss.title like CONCAT('%',#{content},'%')
+            </if>
+            <if test="cityId != null">
+                and province = #{cityId} or city = #{cityId} or area = #{area}
+            </if>
+            <if test="uid != null">
+                and ss.user_id = #{uid}
+            </if>
+            <if test="type == 1">
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+            <if test="type == 2">
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+            <if test="type == 3">
+                and type = #{type}
+                and strategy_state = 2
+            </if>
+        </where>
+        order by ss.create_time DESC
+    </select>
+    <select id="selectByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.UserOperationLog">
+        SELECT
+        id,
+        phone,
+        type,
+        spot_id,
+        spot_name,
+        create_time,
+        update_time,
+        wx_name,
+        frist_spot_id,
+        frist_spot_name,
+        now_location,
+        user_location,
+        ip_address
+        FROM
+        user_operation_log
+        <where>
+            1=1
+            <if test="phone != null and phone != ''">
+                and phone =#{phone}
+            </if>
+            <if test="type != null and type != ''">
+                and type =#{type}
+            </if>
+            <if test="spotId != null and spotId != ''">
+                and spot_id =#{spotId}
+            </if>
+            <if test="spotName != null and spotName != ''">
+                and spot_name =#{spotName}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                AND DATE(A.CREATE_TIME) <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                AND DATE(A.CREATE_TIME) <![CDATA[ <= ]]> #{updateTime}
+            </if>
+        </where>
+        GROUP BY
+        spot_id
+    </select>
+
+    <select id="getUserOperationAll" resultType="com.jxzy.AppMigration.NavigationApp.entity.UserOperationLog">
+        SELECT
+            spot_id,
+            SUM(CASE WHEN type = 0 THEN 1 ELSE 0 END) AS registerNumber,
+            SUM(CASE WHEN type = 1 THEN 1 ELSE 0 END) AS installNumber,
+            SUM(CASE WHEN type = 2 THEN 1 ELSE 0 END) AS openNumber
+        FROM
+            user_operation_log
+            <where>
+                <if test="spotId != null and spotId != ''">
+                    and spot_id =#{spotId}
+                </if>
+                <if test="spotName != null and spotName != ''">
+                    and spot_name LIKE CONCAT('%',#{spotName},'%')
+                </if>
+                <if test="createTime != null and createTime != ''">
+                    AND DATE(A.CREATE_TIME) <![CDATA[ >= ]]> #{createTime}
+                </if>
+                <if test="updateTime != null and updateTime != ''">
+                    AND DATE(A.CREATE_TIME) <![CDATA[ <= ]]> #{updateTime}
+                </if>
+            </where>
+        GROUP BY
+            spot_id
+    </select>
+
+
+</mapper>

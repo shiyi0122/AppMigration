@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysMuseumBannerMapper" >
+
+    <select id="getMuseumBannerList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumBanner">
+        select
+        *
+        from sys_museum_banner
+        <where>
+            1 = 1
+            <if test="museumId != null and museumId != ''">
+                and museum_id = #{museumId}
+            </if>
+            and state = 1
+        </where>
+        order by sort ASC
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysAppVersionMapper" >
+
+    <sql id="Base_Column_List" >
+        id, app_url, app_url, app_size, app_version, app_description,update_type,package_type, start_time,end_time,create_date,update_date,spot_type
+    </sql>
+
+    <select id="getAppNumberNew" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        select
+        <include refid="Base_Column_List" />
+        from  sys_app_version
+        where package_type = #{packageType}
+        ORDER BY app_version DESC
+        LIMIT 1
+    </select>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        insert into sys_app_version
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="appUrl != null" >
+                app_url,
+            </if>
+            <if test="appType != null" >
+                app_type,
+            </if>
+            <if test="appSize != null" >
+                app_size,
+            </if>
+            <if test="appVersion != null" >
+                app_version,
+            </if>
+            <if test="appDescription != null" >
+                app_description,
+            </if>
+            <if test="updateType != null">
+                update_type,
+            </if>
+            <if test="packageType != null">
+                package_type,
+            </if>
+            <if test="startTime != null">
+                start_time,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="spotType != null">
+                spot_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="appUrl != null" >
+                #{appUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="appType != null" >
+                #{appType,jdbcType=VARCHAR},
+            </if>
+            <if test="appSize != null" >
+                #{appSize,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null" >
+                #{appVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="appDescription != null" >
+                #{appDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="updateType != null" >
+                #{updateType,jdbcType=VARCHAR},
+            </if>
+            <if test="packageType != null" >
+                #{packageType,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null" >
+                #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null">
+                #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="spotType != null">
+                #{spotType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        update sys_app_version
+        <set >
+            <if test="appUrl != null and appUrl != ''" >
+                app_url = #{appUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="appType != null and appType != '' " >
+                app_type = #{appType,jdbcType=VARCHAR},
+            </if>
+            <if test="appSize != null and appSize != ''" >
+                app_size = #{appSize,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null and appVersion !=''">
+                app_version = #{appVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="appDescription != null and appDescription != ''">
+                app_description = #{appDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="updateType != null and updateType != ''">
+                update_type = #{updateType,jdbcType=VARCHAR},
+            </if>
+            <if test="packageType != null and packageType != ''">
+                package_type = #{packageType,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null and startTime != ''">
+                start_time = #{startTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null and endTime != ''">
+                end_time = #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null and createDate != ''">
+                create_date = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                update_date = #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="spotType != null and spotType != ''">
+                spot_type = #{spotType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_app_version
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="getAdminSysAppVersionList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        select *
+        from sys_app_version
+        <where>
+            1=1
+            <if test="type != null">
+               and package_type = #{type}
+            </if>
+            <if test="spotType != null">
+               and spot_type = #{spotType}
+            </if>
+        </where>
+       order by app_version desc
+    </select>
+
+    <select id="getSysAppVersionUpToDate" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        select *
+        from sys_app_version
+        order by app_version desc
+        limit 1
+    </select>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        select
+        <include refid="Base_Column_List" />
+        from sys_app_version
+        where id = #{id}
+    </select>
+
+    <select id="getSysAppVersionUpToDateNew" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAppVersion">
+        select *
+        from sys_app_version
+        <where>
+            <if test="spotType != null">
+                spot_type = #{spotType}
+            </if>
+        </where>
+        order by app_version desc
+        limit 1
+    </select>
+
+</mapper>

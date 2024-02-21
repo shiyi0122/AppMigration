@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysRobotProblemExtendMapper" >
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysRobotProblemExtend" >
+        <id column="EXTEND_ID" property="extendId" jdbcType="BIGINT" />
+        <result column="CORPUS_ID" property="corpusId" jdbcType="BIGINT" />
+        <result column="SCENIC_SPOT_ID" property="scenicSpotId" jdbcType="BIGINT" />
+        <result column="EXTEND_CORPUS_PROBLEM" property="extendCorpusProblem" jdbcType="VARCHAR" />
+        <result column="EXTEND_CORPUS_PINYIN" property="extendCorpusPinyin" jdbcType="VARCHAR" />
+        <result column="EXTEND_TYPE" property="extendType" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotProblemExtend" >
+        insert into SYS_ROBOT_PROBLEM_EXTEND
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="extendId != null" >
+                EXTEND_ID,
+            </if>
+            <if test="corpusId != null" >
+                CORPUS_ID,
+            </if>
+            <if test="scenicSpotId != null" >
+                SCENIC_SPOT_ID,
+            </if>
+            <if test="extendCorpusProblem != null" >
+                EXTEND_CORPUS_PROBLEM,
+            </if>
+            <if test="extendCorpusPinyin != null" >
+                EXTEND_CORPUS_PINYIN,
+            </if>
+            <if test="extendType != null" >
+                EXTEND_TYPE,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="extendId != null" >
+                #{extendId,jdbcType=BIGINT},
+            </if>
+            <if test="corpusId != null" >
+                #{corpusId,jdbcType=BIGINT},
+            </if>
+            <if test="scenicSpotId != null" >
+                #{scenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="extendCorpusProblem != null" >
+                #{extendCorpusProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="extendCorpusPinyin != null" >
+                #{extendCorpusPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="extendType != null" >
+                #{extendType,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotProblemExtend" >
+        update SYS_ROBOT_PROBLEM_EXTEND
+        <set >
+            <if test="corpusId != null" >
+                CORPUS_ID = #{corpusId,jdbcType=BIGINT},
+            </if>
+            <if test="scenicSpotId != null" >
+                SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="extendCorpusProblem != null" >
+                EXTEND_CORPUS_PROBLEM = #{extendCorpusProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="extendCorpusPinyin != null" >
+                EXTEND_CORPUS_PINYIN = #{extendCorpusPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="extendType != null" >
+                EXTEND_TYPE = #{extendType,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where EXTEND_ID = #{extendId,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from SYS_ROBOT_PROBLEM_EXTEND
+        where EXTEND_ID = #{extendId,jdbcType=BIGINT}
+    </delete>
+
+
+    <select id="getSysRobotProblemExtendList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotProblemExtend">
+        select * from SYS_ROBOT_PROBLEM_EXTEND where CORPUS_ID = #{id}
+
+    </select>
+</mapper>

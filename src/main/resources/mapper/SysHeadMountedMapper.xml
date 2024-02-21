@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysHeadMountedMapper" >
+
+
+    <select id="getSysHeadMountedList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysHeadMounted">
+        select *
+        from sys_head_mounted
+        <where>
+            <if test="museumId != null and museumId != ''">
+                museum_id = #{museumId}
+            </if>
+        </where>
+        order by create_time DESC
+    </select>
+
+    <update id="editSysHeadMountedState">
+        update sys_head_mounted
+        set use_state = #{state},
+            update_time = now()
+        where id = #{id}
+    </update>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysHeadMounted">
+        insert into sys_head_mounted
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="museumId != null" >
+                museum_id,
+            </if>
+            <if test="headMountedModel != null" >
+                head_mounted_model,
+            </if>
+            <if test="headMountedCode != null" >
+                head_mounted_code,
+            </if>
+            <if test="headMountedSimCard != null">
+                head_mounted_sim_card,
+            </if>
+            <if test="headMountedPic != null">
+                head_mounted_pic,
+            </if>
+            <if test="bluetoothNumber != null">
+                bluetooth_number,
+            </if>
+            <if test="usedSpace != null">
+                used_space,
+            </if>
+            <if test="totalSpace != null">
+                total_space,
+            </if>
+            <if test="devicePower != null">
+                device_power,
+            </if>
+            <if test="useState != null">
+                use_state,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="museumId != null" >
+                #{museumId,jdbcType=BIGINT},
+            </if>
+            <if test="headMountedModel != null" >
+                #{headMountedModel,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedCode != null">
+                #{headMountedCode,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedSimCard != null" >
+                #{headMountedSimCard,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedPic != null">
+                #{headMountedPic,jdbcType=VARCHAR},
+            </if>
+            <if test="bluetoothNumber != null">
+                #{bluetoothNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="usedSpace != null">
+                #{usedSpace,jdbcType=VARCHAR},
+            </if>
+            <if test="totalSpace != null">
+                #{totalSpace,jdbcType=VARCHAR},
+            </if>
+            <if test="devicePower != null">
+                #{devicePower,jdbcType=VARCHAR},
+            </if>
+            <if test="useState != null">
+                #{useState,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysHeadMounted">
+        update sys_head_mounted
+        <set >
+            <if test="museumId != null and museumId != ''" >
+                museum_id = #{museumId,jdbcType=BIGINT},
+            </if>
+            <if test="headMountedModel != null and headMountedModel != ''" >
+                head_mounted_model = #{headMountedModel,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedCode != null and headMountedCode != '' " >
+                head_mounted_code = #{headMountedCode,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedSimCard != null and headMountedSimCard != ''" >
+                head_mounted_sim_card = #{headMountedSimCard,jdbcType=VARCHAR},
+            </if>
+            <if test="headMountedPic != null and headMountedPic !=''">
+                head_mounted_pic = #{headMountedPic,jdbcType=VARCHAR},
+            </if>
+            <if test="bluetoothNumber != null and bluetoothNumber != ''">
+                bluetooth_number = #{bluetoothNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="usedSpace != null and usedSpace != ''">
+                used_space = #{usedSpace,jdbcType=VARCHAR},
+            </if>
+            <if test="totalSpace != null and totalSpace != ''">
+                total_space = #{totalSpace,jdbcType=VARCHAR},
+            </if>
+            <if test="devicePower != null and devicePower != ''">
+                device_power = #{devicePower,jdbcType=VARCHAR},
+            </if>
+            <if test="useState != null and useState != ''">
+                use_state = #{useState,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_head_mounted
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+
+</mapper>

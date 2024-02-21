@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysRobotCorpusMapper" >
+
+
+    <select id="getSysRobotCorpus" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotCorpus">
+        select * from SYS_ROBOT_CORPUS
+        <where>
+            <if test="name != null and name != ''">
+                PIN_YIN_PROBLEM = #{name}
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="getSysRobotCorpusList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotCorpus">
+        select *
+        from SYS_ROBOT_CORPUS
+        <where>
+            <if test="content != null and content != ''">
+                CORPUS_PROBLEM like CONCAT('%',#{content},'%')
+            </if>
+        </where>
+        order by CREATE_DATE DESC
+    </select>
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotCorpus" >
+        insert into SYS_ROBOT_CORPUS
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="corpusId != null" >
+                CORPUS_ID,
+            </if>
+            <if test="corpusProblem != null" >
+                CORPUS_PROBLEM,
+            </if>
+            <if test="pinYinProblem != null" >
+                PIN_YIN_PROBLEM,
+            </if>
+            <if test="corpusAnswer != null" >
+                CORPUS_ANSWER,
+            </if>
+            <if test="semanticType != null" >
+                SEMANTIC_TYPE,
+            </if>
+            <if test="corpusType != null" >
+                CORPUS_TYPE,
+            </if>
+            <if test="genericType != null" >
+                GENERIC_TYPE,
+            </if>
+            <if test="corpusResUrl != null" >
+                CORPUS_RES_URL,
+            </if>
+            <if test="corpusResUrlPic != null" >
+                CORPUS_RES_URL_PIC,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="corpusId != null" >
+                #{corpusId,jdbcType=BIGINT},
+            </if>
+            <if test="corpusProblem != null" >
+                #{corpusProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="pinYinProblem != null" >
+                #{pinYinProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusAnswer != null" >
+                #{corpusAnswer,jdbcType=VARCHAR},
+            </if>
+            <if test="semanticType != null" >
+                #{semanticType,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusType != null" >
+                #{corpusType,jdbcType=VARCHAR},
+            </if>
+            <if test="genericType != null" >
+                #{genericType,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusResUrl != null" >
+                #{corpusResUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusResUrlPic != null" >
+                #{corpusResUrlPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotCorpus" >
+        update SYS_ROBOT_CORPUS
+        <set >
+            <if test="corpusProblem != null and corpusProblem != ''" >
+                CORPUS_PROBLEM = #{corpusProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="pinYinProblem != null and pinYinProblem != '' " >
+                PIN_YIN_PROBLEM = #{pinYinProblem,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusAnswer != null and corpusAnswer != '' " >
+                CORPUS_ANSWER = #{corpusAnswer,jdbcType=VARCHAR},
+            </if>
+            <if test="semanticType != null and semanticType != ''" >
+                SEMANTIC_TYPE = #{semanticType,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusType != null and  corpusType !=''" >
+                CORPUS_TYPE = #{corpusType,jdbcType=VARCHAR},
+            </if>
+            <if test="genericType != null and genericType != ''" >
+                GENERIC_TYPE = #{genericType,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusResUrl != null and corpusResUrl != ''" >
+                CORPUS_RES_URL = #{corpusResUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="corpusResUrlPic != null and corpusResUrlPic != ''" >
+                CORPUS_RES_URL_PIC = #{corpusResUrlPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null and createDate != ''" >
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null and updateDate !=''">
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where CORPUS_ID = #{corpusId,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delSysRobotCorpus"  parameterType="java.lang.Long" >
+        delete from SYS_ROBOT_CORPUS
+        where CORPUS_ID = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysRobotCorpus" parameterType="java.lang.Long" >
+        select
+        *
+        from SYS_ROBOT_CORPUS
+        where CORPUS_ID = #{corpusId,jdbcType=BIGINT}
+    </select>
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessUserLiveDeviceExperienceLogMapper" >
+
+    <select id="getRobotResidueTime" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceExperienceLog">
+        select *
+        from BUSINESS_USER_LIVE_DEVICE_EXPERIENCE_LOG
+        <where>
+            1=1
+            <if test="nowDay != null and nowDay != ''">
+                and  RECORDING_TIME = #{nowDay}
+            </if>
+            <if test="robotCode != null and robotCode != ''">
+                and  ROBOT_CODE = #{robotCode}
+            </if>
+            <if test="userId != null and userId != null">
+                and  USER_ID = #{userId}
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceExperienceLog">
+        insert into BUSINESS_USER_LIVE_DEVICE_EXPERIENCE_LOG
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="robotCode != null">
+                ROBOT_CODE,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="watchedDuration != null">
+                WATCHED_DURATION,
+            </if>
+            <if test="recordingTime != null">
+                RECORDING_TIME,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+            <if test="dataSide != null">
+                DATA_SIDE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null">
+                #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="watchedDuration != null">
+                #{watchedDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="recordingTime != null">
+                #{recordingTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataSide  != null">
+                #{dataSide,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceExperienceLog">
+        update BUSINESS_USER_LIVE_DEVICE_EXPERIENCE_LOG
+        <set>
+            <if test="robotCode != null">
+                ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="watchedDuration != null">
+                WATCHED_DURATION = #{watchedDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="recordingTime != null">
+                RECORDING_TIME = #{recordingTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="dataSide  != null">
+                DATA_SIDE = #{dataSide,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

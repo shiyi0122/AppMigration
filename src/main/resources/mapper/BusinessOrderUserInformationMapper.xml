@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessOrderUserInformationMapper" >
+
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        insert into business_order_user_information
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="orderId != null" >
+                order_id,
+            </if>
+            <if test="admissionFeeId != null" >
+                admission_fee_id,
+            </if>
+            <if test="appUserId != null" >
+                app_user_id,
+            </if>
+            <if test="appUserName != null" >
+                app_user_name,
+            </if>
+            <if test="userPhone != null">
+                user_phone,
+            </if>
+            <if test="identityCard != null">
+                identity_card,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="spotId != null">
+                spot_id,
+            </if>
+            <if test="broadcastId != null">
+                broadcast_id,
+            </if>
+            <if test="isUse != null">
+                is_use,
+            </if>
+            <if test="effectiveStartDate != null">
+                effective_start_date,
+            </if>
+            <if test="effectiveEndDate != null">
+                effective_end_date,
+            </if>
+            <if test="usedDate != null">
+                used_date,
+            </if>
+            <if test="effectiveDays != null">
+                effective_days,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null" >
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="admissionFeeId != null" >
+                #{admissionFeeId,jdbcType=BIGINT},
+            </if>
+            <if test="appUserId != null" >
+                #{appUserId,jdbcType=BIGINT},
+            </if>
+            <if test="appUserName != null" >
+                #{appUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null">
+                #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCard != null" >
+                #{identityCard,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="spotId != null">
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null">
+                #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="isUse != null">
+                #{isUse,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveStartDate != null">
+                #{effectiveStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveEndDate != null">
+                #{effectiveEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="usedDate != null">
+                #{usedDate,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDays != null">
+                #{effectiveDays,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+    <select id="getBusinessOrderId" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        select *
+        from business_order_commodity
+        where order_id = #{id}
+
+    </select>
+
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        select boui.*,sss.SCENIC_SPOT_NAME,IFNULL(sssbaf.admission_fee_name,sssaf.admission_fee_name) as admissionFeeName,IFNULL(sssbaf.admission_fee_price,sssaf.admission_fee_price) as admissionFeePrice
+        from business_order_user_information boui
+        left join SYS_SCENIC_SPOT sss on boui.spot_id = sss.SCENIC_SPOT_ID
+        left join sys_scenic_spot_admission_fee sssaf on boui.admission_fee_id = sssaf.id
+        left join sys_scenic_spot_broadcast_admission_fee sssbaf on boui.admission_fee_id = sssbaf.id
+        <where>
+            1=1
+            <if test="uid != null">
+               and boui.app_user_id = #{uid}
+            </if>
+            <if test="type != null">
+                and boui.is_use = #{type}
+            </if>
+        </where>
+        order by boui.create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        select boui.*,IFNULL(sssbaf.admission_fee_name,sssaf.admission_fee_name) as admissionFeeName,IFNULL(sssbaf.admission_fee_price,sssaf.admission_fee_price) as admissionFeePrice,
+        sss.SCENIC_SPOT_NAME,sssb.BROADCAST_NAME
+        from business_order_user_information boui
+        left join SYS_SCENIC_SPOT sss on boui.spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on boui.broadcast_id = sssb.BROADCAST_ID
+        left join sys_scenic_spot_admission_fee sssaf on boui.admission_fee_id = sssaf.id
+        left join sys_scenic_spot_broadcast_admission_fee sssbaf on boui.admission_fee_id = sssbaf.id
+        where boui.id = #{id}
+    </select>
+
+    <update id="cancellationReservation">
+        update business_order_user_information
+        set is_use = 4
+        where id = #{id}
+    </update>
+
+    <select id="getBusinessOrderIsUse" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        select  *
+        from business_order_user_information
+        where is_use = #{isUse}
+
+    </select>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderUserInformation">
+        update business_order_user_information
+        <set >
+            <if test="orderId != null and orderId != ''" >
+                order_id = #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="admissionFeeId != null and admissionFeeId != '' " >
+                admission_fee_id = #{admissionFeeId,jdbcType=BIGINT},
+            </if>
+            <if test="appUserId != null and appUserId != ''" >
+                app_user_id = #{appUserId,jdbcType=BIGINT},
+            </if>
+            <if test="appUserName != null and appUserName !=''">
+                app_user_name = #{appUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPhone != null and userPhone != ''">
+                user_phone = #{userPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="identityCard != null and identityCard != ''">
+                identity_card = #{identityCard,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="spotId != null and spotId != ''">
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null and broadcastId != ''">
+                broadcast_id = #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="isUse != null and isUse != ''">
+                is_use = #{isUse,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveStartDate != null and effectiveStartDate != ''">
+                effective_start_date = #{effectiveStartDate,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveEndDate != null and effectiveEndDate != ''">
+                effective_end_date = #{effectiveEndDate,jdbcType=VARCHAR},
+            </if>
+            <if test="usedDate != null and usedDate != ''">
+                used_date = #{usedDate,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDays != null and effectiveDays != ''">
+                effective_days = #{effectiveDays,jdbcType=VARCHAR},
+            </if>
+            <if test="writeUserId != null and writeUserId != ''">
+                write_user_id = #{writeUserId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

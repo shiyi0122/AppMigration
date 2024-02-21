@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotAudioMapper" >
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotAudio" >
+        insert into SYS_SCENIC_SPOT_AUDIO
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="scneicSpotAudioId != null" >
+                SCNEIC_SPOT_AUDIO_ID,
+            </if>
+            <if test="scenicSpotId != null" >
+                SCENIC_SPOT_ID,
+            </if>
+            <if test="scneicSpotAudioUrl != null" >
+                SCNEIC_SPOT_AUDIO_URL,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="scneicSpotAudioId != null" >
+                #{scneicSpotAudioId,jdbcType=BIGINT},
+            </if>
+            <if test="scenicSpotId != null" >
+                #{scenicSpotId,jdbcType=VARCHAR},
+            </if>
+            <if test="scneicSpotAudioUrl != null" >
+                #{scneicSpotAudioUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectBySpotId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotAudio">
+        select *
+        from SYS_SCENIC_SPOT_AUDIO
+        where SCENIC_SPOT_ID = #{scenicSpotId}
+        order by UPDATE_DATE
+    </select>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotAudio">
+        update SYS_SCENIC_SPOT_AUDIO
+        <set >
+            <if test="scenicSpotId != null" >
+                SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="scneicSpotAudioUrl != null" >
+                SCNEIC_SPOT_AUDIO_URL = #{scneicSpotAudioUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where SCNEIC_SPOT_AUDIO_ID = #{scneicSpotAudioId,jdbcType=BIGINT}
+    </update>
+
+</mapper>

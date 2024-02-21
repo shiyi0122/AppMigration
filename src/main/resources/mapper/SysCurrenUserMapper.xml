@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysCurrenUserMapper" >
+
+
+    <select id="selectPhoneByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysCurrenUser">
+        select
+        *
+        from SYS_CURRENT_USER
+        where CURRENT_USER_PHONE = #{phone}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysCurrenUser">
+        update SYS_CURRENT_USER
+        <set>
+            <if test="smallAppMonitorState != null" >
+                SMALL_APP_MONITOR_STATE = #{smallAppMonitorState,jdbcType=VARCHAR},
+            </if>
+            <if test="currentUserPhone != null" >
+                CURRENT_USER_PHONE = #{currentUserPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="currentOpenId != null" >
+                CURRENT_OPEN_ID = #{currentOpenId,jdbcType=VARCHAR},
+            </if>
+            <if test="currentSessionKey != null" >
+                CURRENT_SESSION_KEY = #{currentSessionKey,jdbcType=VARCHAR},
+            </if>
+            <if test="currentThdSession != null" >
+                CURRENT_THD_SESSION = #{currentThdSession,jdbcType=VARCHAR},
+            </if>
+            <if test="depositPayState != null" >
+                DEPOSIT_PAY_STATE = #{depositPayState,jdbcType=VARCHAR},
+            </if>
+            <if test="depositPayAmount != null" >
+                DEPOSIT_PAY_AMOUNT = #{depositPayAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="creditArrearsState != null" >
+                CREDIT_ARREARS_STATE = #{creditArrearsState,jdbcType=VARCHAR},
+            </if>
+            <if test="gpsCoordinates != null" >
+                GPS_COORDINATES = #{gpsCoordinates,jdbcType=VARCHAR},
+            </if>
+            <if test="depositPayTime != null" >
+                DEPOSIT_PAY_TIME = #{depositPayTime,jdbcType=VARCHAR},
+            </if>
+            <if test="returnDepositPayTime != null" >
+                RETURN_DEPOSIT_PAY_TIME = #{returnDepositPayTime,jdbcType=VARCHAR},
+            </if>
+            <if test="scenicSpotId != null" >
+                SCENIC_SPOT_ID = #{scenicSpotId,jdbcType=VARCHAR},
+            </if>
+            <if test="smallPolling != null" >
+                SMALL_POLLING = #{smallPolling,jdbcType=VARCHAR},
+            </if>
+            <if test="continuationStatus != null" >
+                CONTINUATION_STATUS = #{continuationStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="payUserId != null" >
+                PAY_USER_ID = #{payUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentChannels != null" >
+                PAYMENT_CHANNELS = #{paymentChannels,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where CURRENT_USER_ID = #{currentUserId,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectUserIdByUser" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysCurrenUser">
+        select
+        *
+        from SYS_CURRENT_USER
+        where CURRENT_USER_ID = #{depositUserId}
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysMuseumMapResMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumMapRes">
+        <id column="res_id" property="resId"/>
+        <result column="res_museum_id" property="resMuseumId"/>
+        <result column="res_url" property="resUrl"/>
+        <result column="res_type" property="resType"/>
+        <result column="res_size" property="resSize"/>
+        <result column="res_version" property="resVersion"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="res_floor" property="resFloor"/>
+        <result column="res_pic" property="resPic"/>
+        <result column="res_mark_pic" property="resMarkPic"/>
+        <result column="res_mark_pic_file" property="resMarkPicFile"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        res_id, res_museum_id, res_url, res_type, res_size, res_version, create_date, update_date, res_floor,res_pic,res_mark_pic,res_mark_pic_file
+    </sql>
+    <select id="selectByMuseumId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumMapRes">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_museum_map_res
+        where res_museum_id = #{id}
+    </select>
+    <select id="getMuseumMapResByCondition" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumMapRes">
+        select res_id, res_museum_id, res_url, res_type, res_size, res_version, create_date, update_date,
+        res_floor,res_pic,res_mark_pic,res_mark_pic_file,museum_name museumName
+        from sys_museum_map_res smmr left join sys_museum sm on smmr.res_museum_id=sm.id
+        <where>
+            <if test="museumName!=null and museumName!=''">
+                sm.museum_name =#{museumName}
+            </if>
+        </where>
+    </select>
+</mapper>

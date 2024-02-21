@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysUserActualGpsMapper">
+
+
+    <select id="getUserGpsCityIdList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        select *
+        from sys_user_actual_gps
+        <where>
+            1=1
+            <if test="id != null">
+                and (provinces_id = #{id} or city_id = #{id} or area_id = #{id})
+            </if>
+        </where>
+
+
+    </select>
+    <select id="getUserGpsSpotIdList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        select *
+        from sys_user_actual_gps
+        where spot_id = #{id}
+    </select>
+    <select id="getUserGpsBroadcastIdList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        select *
+        from sys_user_actual_gps
+        where broadcast_id = #{id}
+    </select>
+
+    <select id="getUserIdByGps" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        select *
+        from sys_user_actual_gps
+        where user_id = #{userId}
+    </select>
+    <select id="listByPhone" resultType="com.jxzy.AppMigration.NavigationApp.entity.UserRoleText">
+        select
+        user_phone,
+        user_type,
+        user_name,
+        create_time,
+        update_time
+        from
+        user_role_text
+        <where>
+            1=1
+            <if test="userPhone != null and userPhone != ''">
+                and user_phone =#{userPhone}
+            </if>
+        </where>
+    </select>
+    <select id="getLock" resultType="com.jxzy.AppMigration.NavigationApp.entity.LockText">
+        SELECT
+            *
+        FROM
+            lock_text
+        WHERE
+        id = 1
+    </select>
+    <select id="getLockNew" resultType="com.jxzy.AppMigration.NavigationApp.entity.LockText">
+        SELECT
+            *
+        FROM
+            lock_text
+        WHERE
+            id = 2
+    </select>
+
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        insert into sys_user_actual_gps
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userCoordinatesGps != null">
+                user_coordinates_gps,
+            </if>
+            <if test="userCoordinatesBaidu != null">
+                user_coordinates_baidu,
+            </if>
+            <if test="userCoordinatesGaode != null">
+                user_coordinates_gaode,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="spotId != null">
+                spot_id,
+            </if>
+            <if test="broadcastId != null">
+                broadcast_id,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="provincesId != null">
+                provinces_id,
+            </if>
+            <if test="areaId != null">
+                area_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCoordinatesGps != null">
+                #{userCoordinatesGps,jdbcType=VARCHAR},
+            </if>
+            <if test="userCoordinatesBaidu != null">
+                #{userCoordinatesBaidu,jdbcType=VARCHAR},
+            </if>
+            <if test="userCoordinatesGaode != null">
+                #{userCoordinatesGaode,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null">
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null">
+                #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="provincesId != null">
+                #{provincesId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null">
+                #{areaId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysUserActualGps">
+        update sys_user_actual_gps
+        <set>
+            <if test="userId != null and userId != ''">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="userCoordinatesGps != null and userCoordinatesGps != '' ">
+                user_coordinates_gps = #{userCoordinatesGps,jdbcType=VARCHAR},
+            </if>
+            <if test="userCoordinatesBaidu != null and userCoordinatesBaidu != ''">
+                user_coordinates_baidu = #{userCoordinatesBaidu,jdbcType=VARCHAR},
+            </if>
+            <if test="userCoordinatesGaode != null and userCoordinatesGaode !=''">
+                user_coordinates_gaode = #{userCoordinatesGaode,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null and cityId != ''">
+                city_id = #{cityId,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null and spotId != ''">
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null and broadcastId != ''">
+                broadcast_id = #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null and createDate != ''">
+                create_date = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null and updateDate != ''">
+                update_date = #{updateDate,jdbcType=VARCHAR},
+            </if>
+            <if test="provincesId != null and provincesId != ''">
+                provinces_id = #{provincesId,jdbcType=BIGINT},
+            </if>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId,jdbcType=BIGINT}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="editLock">
+        update lock_text
+        <set>
+            <if test="onOff != null and onOff != ''">
+                on_off = #{onOff,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = 2
+    </update>
+
+</mapper>

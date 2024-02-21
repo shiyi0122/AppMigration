@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysAboutUsMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        insert into sys_about_us
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="appSubversionId != null">
+                app_subversion_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=BIGINT},
+            </if>
+            <if test="appSubversionId != null">
+                #{appSubversionId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        update sys_about_us
+        <set >
+            <if test="id != null and id != ''" >
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null and title != '' " >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null and content != '' " >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="typeId != null and typeId != ''">
+                type_id = #{typeId,jdbcType=BIGINT},
+            </if>
+            <if test="appSubversionId != null and appSubversionId != ''">
+                app_subversion_id = #{appSubversionId,jdbcType = BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        select *
+        from sys_about_us
+        <where>
+            1=1
+            <if test="type != null">
+                and type_id = #{type}
+            </if>
+            <if test="subversionId != null">
+                and app_subversion_id = #{subversionId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete from sys_about_us
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="getTypeIdByList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        select *
+        from sys_about_us
+        where type_id = #{typeId}
+        and app_subversion_id = #{appSubversionId}
+    </select>
+
+    <delete id="deleteByTypeId">
+        delete from sys_about_us
+        where type_id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        select * from sys_about_us where id = #{id}
+    </select>
+
+    <select id="selectTypeNameAndSubversionId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUs">
+        select *
+        from  sys_about_us
+        where title = #{yhxy}
+        and app_subversion_id = #{subversionId}
+    </select>
+</mapper>

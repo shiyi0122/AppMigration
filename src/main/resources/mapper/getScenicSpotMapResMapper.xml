@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotMapResMapper" >
+
+    <select id="getScenicSpotMapRes" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotMapRes">
+        select * from SYS_ROBOT_MAP_RES
+        <where>
+            <if test="spotId != null and spotId != ''">
+                RES_SCENIC_SPOT_ID = #{spotId}
+            </if>
+            and RES_TYPE = 1
+        </where>
+        order by CREATE_DATE
+        limit 1
+
+    </select>
+
+
+
+
+
+</mapper>

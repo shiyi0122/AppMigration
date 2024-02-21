@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysEntertainmentDetailsMapperMapper" >
+
+    <select id="getSysEntertainmentIdDetails" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysEntertainmentDetails">
+        select *
+        from sys_entertainment_details
+        where entertainment_id = #{id}
+        order by create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotBroadcastAdmissionFeeMapper" >
+
+
+    <sql id="Base_Column_List" >
+        id, spot_id ,broadcast_id, admission_fee_name, admission_fee_price, admission_fee_illustrate, create_time, update_time, effective_days
+    </sql>
+
+    <select id="selectByBroadcastId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastAdmissionFee">
+        select *
+        from sys_scenic_spot_broadcast_admission_fee
+        where broadcast_id = #{broadcastId}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastAdmissionFee">
+        insert into sys_scenic_spot_broadcast_admission_fee
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotId != null">
+                spot_id,
+            </if>
+            <if test="broadcastId != null" >
+                broadcast_id,
+            </if>
+            <if test="admissionFeeName != null" >
+                admission_fee_name,
+            </if>
+            <if test="admissionFeePrice != null" >
+                admission_fee_price,
+            </if>
+            <if test="admissionFeeIllustrate != null">
+                admission_fee_illustrate,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="effectiveDays != null">
+                effective_days,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null">
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null" >
+                #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="admissionFeeName != null" >
+                #{admissionFeeName,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionFeePrice != null" >
+                #{admissionFeePrice,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionFeeIllustrate != null" >
+                #{admissionFeeIllustrate,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDays != null">
+                #{effectiveDays,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotBroadcastAdmissionFee">
+        select
+        sssbaf.*,
+        sssb.BROADCAST_NAME,
+        sss.SCENIC_SPOT_NAME as spotName
+        from sys_scenic_spot_broadcast_admission_fee sssbaf
+        left join SYS_SCENIC_SPOT_BROADCAST sssb on sssbaf.broadcast_id = sssb.BROADCAST_ID
+        left join SYS_SCENIC_SPOT sss on sssb.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+        <where>
+            1=1
+            <if test="spotId != null and spotId != ''">
+                and spot_id = #{spotId}
+            </if>
+            <if test="broadcastId != null and broadcastId != ''">
+                and sssbaf.broadcast_id = #{broadcastId}
+            </if>
+        </where>
+        order by create_time
+    </select>
+
+
+    <update id="updateSelective">
+        update sys_scenic_spot_broadcast_admission_fee
+        <set >
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null and broadcastId != ''" >
+                broadcast_id = #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="admissionFeeName != null and admissionFeeName != ''" >
+                admission_fee_name = #{admissionFeeName,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionFeePrice != null and admissionFeePrice !=''">
+                admission_fee_price = #{admissionFeePrice,jdbcType=VARCHAR},
+            </if>
+            <if test="admissionFeeIllustrate != null and admissionFeeIllustrate !=''">
+                admission_fee_illustrate = #{admissionFeeIllustrate,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime !=''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDays != null and effectiveDays !=''">
+                effective_days = #{effectiveDays,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_scenic_spot_broadcast_admission_fee
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+</mapper>

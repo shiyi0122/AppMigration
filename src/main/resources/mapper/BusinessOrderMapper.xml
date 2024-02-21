@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessOrderMapper" >
+
+    <insert id="addBusinessOrderY" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        insert into business_order
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="orderId != null" >
+                order_id,
+            </if>
+            <if test="spotId != null" >
+                spot_id,
+            </if>
+            <if test="businessShopId != null" >
+                business_shop_id,
+            </if>
+            <if test="orderNumber != null" >
+                order_number,
+            </if>
+            <if test="orderStatus != null">
+                order_status,
+            </if>
+            <if test="actualAmount != null">
+                actual_amount,
+            </if>
+            <if test="orderDiscount != null">
+                order_discount,
+            </if>
+            <if test="fullReduction != null">
+                full_reduction,
+            </if>
+            <if test="orderStartTime != null">
+                order_start_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="refundReason != null">
+                refund_reason,
+            </if>
+            <if test="retirementRate != null">
+                retirement_rate,
+            </if>
+            <if test="appUserId != null">
+                app_user_id,
+            </if>
+            <if test="overallEvaluation != null">
+                overall_evaluation,
+            </if>
+            <if test="paymentAmount != null">
+                payment_amount,
+            </if>
+            <if test="discountAmount != null">
+                discount_amount,
+            </if>
+            <if test="fullReductionPrice != null">
+                full_reduction_price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="orderId != null" >
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null" >
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="businessShopId != null" >
+                #{businessShopId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null" >
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="actualAmount != null" >
+                #{actualAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDiscount != null">
+                #{orderDiscount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReduction != null">
+                #{fullReduction,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStartTime != null">
+                #{orderStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="refundReason != null">
+                #{refundReason,jdbcType=VARCHAR},
+            </if>
+            <if test="retirementRate != null">
+                #{retirementRate,jdbcType=VARCHAR},
+            </if>
+            <if test="appUserId != null">
+                #{appUserId,jdbcType=BIGINT},
+            </if>
+            <if test="overallEvaluation != null">
+                #{overallEvaluation,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentAmount != null">
+                #{paymentAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="discountAmount != null">
+                #{discountAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReductionPrice != null">
+                #{fullReductionPrice,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        select *
+        from business_order
+        where order_id = #{id}
+    </select>
+
+    <select id="selectBySearch" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        select *
+        from business_order
+        <where>
+            1=1
+            <if test="uid != null and uid != ''">
+                and app_user_id = #{uid}
+            </if>
+            <if test="type != null and type != ''">
+                and order_types_of = #{type}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByOrderNumber" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        select *
+        from business_order
+        where order_number = #{orderNumber}
+    </select>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        update business_order
+        <set >
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="businessShopId != null and businessShopId != '' " >
+                business_shop_id = #{businessShopId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null and orderNumber != '' " >
+                order_number = #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null and orderStatus != '' " >
+                order_status = #{orderStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="actualAmount != null and actualAmount != '' " >
+                actual_amount = #{actualAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDiscount != null and orderDiscount != '' " >
+                order_discount = #{orderDiscount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReduction != null and fullReduction != '' " >
+                full_reduction = #{fullReduction,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStartTime != null and orderStartTime != ''">
+                order_start_time = #{orderStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != '' " >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="refundReason != null and refundReason != ''" >
+                refund_reason = #{refundReason,jdbcType=VARCHAR},
+            </if>
+            <if test="retirementRate != null and retirementRate != ''" >
+                retirement_rate = #{retirementRate,jdbcType=VARCHAR},
+            </if>
+            <if test="appUserId != null and appUserId != ''" >
+                app_user_id = #{appUserId,jdbcType=BIGINT},
+            </if>
+            <if test="overallEvaluation != null and overallEvaluation !=''">
+                overall_evaluation = #{overallEvaluation,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentAmount != null and paymentAmount !=''">
+                payment_amount = #{paymentAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="discountAmount != null and discountAmount !=''">
+                discount_amount = #{discountAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReductionPrice != null and fullReductionPrice !=''">
+                full_reduction_price = #{fullReductionPrice,jdbcType=VARCHAR},
+            </if>
+            <if test="orderTypesOf != null and orderTypesOf != ''">
+                order_types_of = #{orderTypesOf,jdbcType=VARCHAR},
+            </if>
+            <if test="writeOffStatus != null and  writeOffStatus != ''">
+                write_off_status = #{writeOffStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="writeUserId != null and writeUserId != ''">
+                write_user_id = #{writeUserId,jdbcType=BIGINT},
+            </if>
+            <if test="paymentTime != null and paymentTime != ''">
+                payment_time = #{paymentTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <update id="updateByOrderNumberSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderY">
+        update business_order
+        <set >
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="businessShopId != null and businessShopId != '' " >
+                business_shop_id = #{businessShopId,jdbcType=BIGINT},
+            </if>
+            <if test="orderStatus != null and orderStatus != '' " >
+                order_status = #{orderStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="actualAmount != null and actualAmount != '' " >
+                actual_amount = #{actualAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="orderDiscount != null and orderDiscount != '' " >
+                order_discount = #{orderDiscount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReduction != null and fullReduction != '' " >
+                full_reduction = #{fullReduction,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStartTime != null and orderStartTime != ''">
+                order_start_time = #{orderStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != '' " >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="refundReason != null and refundReason != ''" >
+                refund_reason = #{refundReason,jdbcType=VARCHAR},
+            </if>
+            <if test="retirementRate != null and retirementRate != ''" >
+                retirement_rate = #{retirementRate,jdbcType=VARCHAR},
+            </if>
+            <if test="appUserId != null and appUserId != ''" >
+                app_user_id = #{appUserId,jdbcType=BIGINT},
+            </if>
+            <if test="overallEvaluation != null and overallEvaluation !=''">
+                overall_evaluation = #{overallEvaluation,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentAmount != null and paymentAmount !=''">
+                payment_amount = #{paymentAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="discountAmount != null and discountAmount !=''">
+                discount_amount = #{discountAmount,jdbcType=VARCHAR},
+            </if>
+            <if test="fullReductionPrice != null and fullReductionPrice !=''">
+                full_reduction_price = #{fullReductionPrice,jdbcType=VARCHAR},
+            </if>
+            <if test="orderTypesOf != null and orderTypesOf != ''">
+                order_types_of = #{orderTypesOf,jdbcType=VARCHAR},
+            </if>
+            <if test="writeOffStatus != null and  writeOffStatus != ''">
+                write_off_status = #{writeOffStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="writeUserId != null and writeUserId != ''">
+                write_user_id = #{writeUserId,jdbcType=BIGINT},
+            </if>
+            <if test="paymentTime != null and paymentTime != ''">
+                payment_time = #{paymentTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where order_number = #{orderNumber,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectByOrderNumberZS" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrder">
+        select *
+        from business_order
+        where order_number = #{orderNumber}
+    </select>
+
+    <insert id="addBusinessOrderH" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrder">
+        insert into BUSINESS_ORDER
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                ID,
+            </if>
+            <if test="userId != null" >
+                USER_ID,
+            </if>
+            <if test="orderNumber != null" >
+                ORDER_NUMBER,
+            </if>
+            <if test="orderAmount != null" >
+                ORDER_AMOUNT,
+            </if>
+            <if test="payType != null" >
+                PAY_TYPE,
+            </if>
+            <if test="orderStatus != null" >
+                ORDER_STATUS,
+            </if>
+            <if test="invoiceStatus != null" >
+                INVOICE_STATUS,
+            </if>
+            <if test="orderType != null" >
+                ORDER_TYPE,
+            </if>
+            <if test="createTime != null" >
+                CREATE_TIME,
+            </if>
+            <if test="updateTime != null" >
+                UPDATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="orderNumber != null" >
+                #{orderNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="orderAmount != null" >
+                #{orderAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="payType != null" >
+                #{payType,jdbcType=BIT},
+            </if>
+            <if test="orderStatus != null" >
+                #{orderStatus,jdbcType=BIT},
+            </if>
+            <if test="invoiceStatus != null" >
+                #{invoiceStatus,jdbcType=BIT},
+            </if>
+            <if test="orderType != null" >
+                #{orderType,jdbcType=BIT},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

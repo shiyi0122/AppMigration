@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotDynamicContentMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicContent">
+        insert into sys_spot_dynamic_content
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotDynamicId != null" >
+                spot_dynamic_id,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="priceUrl != null">
+                price_url,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotDynamicId != null" >
+                #{spotDynamicId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="priceUrl != null">
+                #{priceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        delete from sys_spot_dynamic_content
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicContent">
+        select *
+        from sys_spot_dynamic_content
+        where spot_dynamic_id = #{id}
+        order by create_time ASC
+    </select>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicContent">
+        update sys_spot_dynamic_content
+        <set >
+            <if test="spotDynamicId != null and spotDynamicId != ''" >
+                spot_dynamic_id = #{spotDynamicId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null and content != '' " >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="priceUrl != null and priceUrl != '' " >
+                price_url = #{priceUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="delSysSpotDynamicContentPic">
+        update sys_spot_dynamic_content
+        set price_url = null where id = #{id}
+    </update>
+
+</mapper>

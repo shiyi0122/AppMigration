@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.WeatherMapper" >
+
+    <select id="getDistrictId" resultType="java.lang.String">
+        select district_geocode
+        from sys_district_county_weather
+        where province like concat('%',#{cityName},'%')
+        limit 1
+    </select>
+
+
+</mapper>

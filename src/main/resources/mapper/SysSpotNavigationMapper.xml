@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotNavigationMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotNavigation">
+        insert into sys_spot_navigation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotNavigationName != null" >
+                spot_navigation_name,
+            </if>
+            <if test="spotNavigationPicUrl != null" >
+                spot_navigation_pic_url,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotNavigationName != null" >
+                #{spotNavigationName,jdbcType=VARCHAR},
+            </if>
+            <if test="spotNavigationPicUrl != null" >
+                #{spotNavigationPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotNavigation">
+        update sys_spot_navigation
+        <set >
+            <if test="spotNavigationName != null and spotNavigationName != ''" >
+                spot_navigation_name = #{spotNavigationName,jdbcType=VARCHAR},
+            </if>
+            <if test="spotNavigationPicUrl != null and spotNavigationPicUrl != '' " >
+                spot_navigation_pic_url = #{spotNavigationPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null and sort != ''">
+                sort = #{sort,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_spot_navigation
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysNavigation">
+        select * from
+        sys_spot_navigation
+        <where>
+            <if test="content != null and content != ''">
+                spot_navigation_name like  CONCAT('%',#{content},'%')
+            </if>
+        </where>
+        order by sort
+    </select>
+
+
+</mapper>

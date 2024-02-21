@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessOnlineUserMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOnLineUser">
+        insert into BUSINESS_ON_LINE_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="robotCode != null">
+                ROBOT_CODE,
+            </if>
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="type != null">
+                TYPE,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null">
+                #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteOnlineUser" >
+        delete from BUSINESS_ON_LINE_USER
+        where ROBOT_CODE = #{robotCode}
+        and   USER_ID = #{userId}
+    </delete>
+
+    <select id="selectByRobotCode" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOnLineUser">
+        select *
+        from  BUSINESS_ON_LINE_USER
+        <where>
+            1 = 1
+            <if test="robotCode != null and robotCode != ''">
+                and ROBOT_CODE = #{robotCode}
+            </if>
+            <if test="type != null and type  != ''">
+                and TYPE = #{type}
+            </if>
+        </where>
+
+    </select>
+
+</mapper>

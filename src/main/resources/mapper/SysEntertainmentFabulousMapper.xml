@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysEntertainmentDetailsMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysEntertainmentFabulous">
+        insert into sys_entertainment_fabulous
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="entertainmentId != null" >
+                entertainment_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="entertainmentId != null" >
+                #{entertainmentId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <delete id="deleteById">
+        delete from sys_entertainment_fabulous
+        where id = #{id} and user_id = #{uid}
+    </delete>
+
+
+</mapper>
+

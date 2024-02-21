@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysNavigationMapper" >
+
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysNavigation">
+        insert into sys_navigation
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="navigationName != null" >
+                navigation_name,
+            </if>
+            <if test="navigationPicUrl != null" >
+                navigation_picUrl,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="navigationName != null" >
+                #{navigationName,jdbcType=VARCHAR},
+            </if>
+            <if test="navigationPicUrl != null" >
+                #{navigationPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysNavigation">
+        update sys_navigation
+        <set >
+            <if test="navigationName != null and navigationName != ''" >
+                navigation_name = #{navigationName,jdbcType=VARCHAR},
+            </if>
+            <if test="navigationPicUrl != null and navigationPicUrl != '' " >
+                navigation_pic_url = #{navigationPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null and sort != ''">
+                sort = #{sort,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_navigation
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysNavigation">
+        select * from
+        sys_navigation
+        <where>
+            <if test="content != null and content != ''">
+                navigation_name like  CONCAT('%',#{content},'%')
+            </if>
+        </where>
+        order by sort
+    </select>
+
+
+</mapper>

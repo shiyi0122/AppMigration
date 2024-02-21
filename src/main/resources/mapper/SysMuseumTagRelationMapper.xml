@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysMuseumTagRelationMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumTagRelation">
+        <id column="id" property="id"/>
+        <result column="museum_id" property="museumId"/>
+        <result column="tag_id" property="tagId"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , museum_id, tag_id
+    </sql>
+    <delete id="delMuseumTagForMuseum" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysMuseumTagRelation">
+        delete
+        from sys_museum_tag_relation
+        where museum_id = #{museumId}
+          and tag_id = #{tagId}
+
+    </delete>
+
+</mapper>

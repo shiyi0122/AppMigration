@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysAboutUsTypeMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUsType">
+        insert into sys_about_us_type
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="typeName != null" >
+                type_name,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="typeName != null" >
+                #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUsType">
+        update sys_about_us_type
+        <set >
+            <if test="id != null and id != ''" >
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="typeName != null and typeName != '' " >
+                type_name = #{typeName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delete">
+        delete from sys_about_us_type
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUsType">
+        select *
+        from sys_about_us_type
+    </select>
+
+    <select id="sysAboutUsTypeDropDown" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysAboutUsType">
+        select id,type_name
+        from sys_about_us_type
+    </select>
+
+
+</mapper>

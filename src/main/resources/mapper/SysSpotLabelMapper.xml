@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotLabelMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLabel">
+        insert into sys_spot_label
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="labelContent != null" >
+                label_content,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="labelContent != null" >
+                #{labelContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLabel">
+        update sys_spot_label
+        <set >
+            <if test="labelContent != null and labelContent != ''" >
+                label_content = #{labelContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_spot_label
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLabel">
+        select *
+        from sys_spot_label
+        where label_content like CONCAT('%',#{content},'%')
+    </select>
+
+    <select id="sysSpotLabelDrop" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLabel">
+        select id,label_content
+        from sys_spot_label
+    </select>
+
+
+
+
+</mapper>

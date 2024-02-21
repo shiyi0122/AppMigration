@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysStrategyLikeMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategyLike">
+
+        insert into sys_strategy_like
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="strategyId != null" >
+                strategy_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="strategyUid != null">
+                strategy_uid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="strategyId != null" >
+                #{strategyId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="strategyUid != null">
+                #{strategyUid,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        delete from sys_strategy_like
+        where strategy_id = #{id,jdbcType=BIGINT}
+        and user_id = #{userId,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectStrategyNumber" resultType="java.lang.Integer">
+        select  COUNT(0)
+        from sys_strategy_like
+        where strategy_id = #{id}
+        and type = #{type}
+    </select>
+
+    <select id="selectUidByLikeNumber" resultType="java.lang.Integer">
+        select  COUNT(0)
+        from sys_strategy_like
+        where strategy_uid = #{uid}
+    </select>
+
+    <select id="myLike" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategy">
+        select ss.* ,sgau.USER_NAME,sgau.PORTRAIT_PIC
+        from sys_strategy ss
+        left join  sys_strategy_like ssl1 on ssl1.strategy_id = ss.id
+        left join SYS_GUIDE_APP_USERS sgau on ss.user_id = sgau.USER_ID
+        where ssl1.user_id = #{uid}
+        and ssl1.type = #{type}
+        order by create_time DESC
+    </select>
+
+    <select id="getUserIsLike" resultType="java.lang.Integer">
+        select  COUNT(0)
+        from sys_strategy_like
+        where user_id = #{uid}
+        and strategy_id = #{id}
+    </select>
+</mapper>

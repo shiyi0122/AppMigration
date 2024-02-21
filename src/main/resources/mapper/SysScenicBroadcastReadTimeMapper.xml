@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicBroadcastReadTimeMapper" >
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicBroadcastReadTime" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="broadcast_id" property="broadcastId" jdbcType="BIGINT" />
+        <result column="create_date" property="createDate" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicBroadcastReadTime">
+        insert into sys_scenic_broadcast_read_time
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="broadcastId != null" >
+                broadcast_id,
+            </if>
+            <if test="createDate != null" >
+                create_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastId != null" >
+                #{broadcastId,jdbcType=BIGINT},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="getBroadcastRealTimePeople" resultType="java.lang.Integer">
+        select COUNT(*) from sys_scenic_broadcast_read_time
+        where broadcast_id = #{broadcastId}
+    </select>
+
+    <delete id="delBroadcastReadTime">
+        delete from sys_scenic_broadcast_read_time
+        where user_id = #{userId,jdbcType=BIGINT}
+        and broadcast_id = #{broadcastId,jdbcType=BIGINT}
+    </delete>
+
+
+
+</mapper>

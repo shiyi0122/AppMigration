@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessOrderCommodityMapper" >
+
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderCommodity">
+        insert into business_order_commodity
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="orderId != null" >
+                order_id,
+            </if>
+            <if test="orderCommodityId != null" >
+                order_commodity_id,
+            </if>
+            <if test="commodityClassifyId != null">
+                commodity_classify_id,
+            </if>
+            <if test="orderCommodityName != null">
+                order_commodity_name,
+            </if>
+            <if test="orderCommodityPrice != null">
+                order_commodity_price,
+            </if>
+            <if test="commodityQuantity != null">
+                commodity_quantity,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null" >
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="orderCommodityId != null" >
+                #{orderCommodityId,jdbcType=BIGINT},
+            </if>
+            <if test="commodityClassifyId != null">
+                #{commodityClassifyId,jdbcType=BIGINT},
+            </if>
+            <if test="orderCommodityName != null" >
+                #{orderCommodityName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderCommodityPrice != null">
+                #{orderCommodityPrice,jdbcType=VARCHAR},
+            </if>
+            <if test="commodityQuantity != null">
+                #{commodityQuantity,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByOrderId" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessOrderCommodity">
+        select *
+        from business_order_commodity
+        where order_id = #{id}
+    </select>
+
+
+</mapper>

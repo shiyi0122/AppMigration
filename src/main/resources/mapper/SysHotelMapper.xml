@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysHotelMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysHotel">
+        insert into sys_hotel
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="hotelName != null" >
+                hotel_name,
+            </if>
+            <if test="hotelPinyin != null" >
+                hotel_pinyin,
+            </if>
+            <if test="spotId != null" >
+                spot_id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="hotelGpsBaiDu != null">
+                hotel_gps_bai_du,
+            </if>
+            <if test="hotelGpsGaoDe != null">
+                hotel_gps_gao_de,
+            </if>
+            <if test="hotelGps != null">
+                hotel_gps,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="coverPic != null">
+                cover_pic,
+            </if>
+            <if test="detailsPic != null">
+                details_pic,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="businessHours != null">
+                business_hours,
+            </if>
+            <if test="recommendNumber != null">
+                recommend_number,
+            </if>
+            <if test="broadcastContent != null">
+                broadcast_content,
+            </if>
+            <if test="coordinateRadius != null">
+                coordinate_radius,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="hotelName != null" >
+                #{hotelName,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelPinyin != null" >
+                #{hotelPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="spotId != null">
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGpsBaiDu != null">
+                #{hotelGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGpsGaoDe != null">
+                #{hotelGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGps != null">
+                #{hotelGps,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null">
+                #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="detailsPic != null">
+                #{details_pic,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="businessHours != null">
+                #{businessHours,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null">
+                #{recommendNumber,jdbcType=BIGINT},
+            </if>
+            <if test="broadcastContent != null">
+                #{broadcastContent,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinateRadius != null">
+                #{coordinateRadius,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysHotel">
+        update sys_hotel
+        <set >
+            <if test="hotelName != null and hotelName != ''" >
+                hotel_name = #{hotelName,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelPinyin != null and hotelPinyin != '' " >
+                hotel_pinyin = #{hotelPinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="type != null and type !=''">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGpsBaiDu != null and hotelGpsBaiDu != ''">
+                hotel_gps_bai_du = #{hotelGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGpsGaoDe != null and hotelGpsGaoDe != ''">
+                hotel_gps_gao_de = #{hotelGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="hotelGps != null and hotelGps != ''">
+                hotel_gps = #{hotelGps,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null and province != ''">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null and city != ''">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null and city != ''">
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="coverPic != null and coverPic != ''">
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="detailsPic != null and detailsPic != ''">
+                details_pic = #{detailsPic,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="businessHours != null and businessHours != ''">
+                business_hours = #{businessHours,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null and recommendNumber != ''">
+                recommend_number = #{recommendNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="broadcastContent != null and broadcastContent != ''">
+                broadcast_content = #{broadcastContent,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinateRadius != null and coordinateRadius != ''">
+                coordinate_radius = #{coordinateRadius,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" >
+        delete from sys_hotel
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysHotel">
+        select sh.*,sss.SCENIC_SPOT_NAME,sssb1.SCENIC_SPOT_FNAME as provinceName,sssb2.SCENIC_SPOT_FNAME as cityName,sssb3.SCENIC_SPOT_FNAME as areaName
+        from sys_hotel sh
+        left join SYS_SCENIC_SPOT sss
+        on sh.spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_BINDING sssb1
+        on sh.province = sssb1.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb2
+        on sh.city = sssb2.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb3
+        on sh.area = sssb3.SCENIC_SPOT_FID
+        <where>
+            <if test="spotId != null">
+                sh.spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and  sh.hotel_name like CONCAT('%',#{content},'%')
+            </if>
+            <if test="province != null">
+                and sh.province = #{province}
+            </if>
+            <if test="city != null">
+                and sh.city = #{city}
+            </if>
+            <if test="area != null">
+                and sh.area = #{area}
+            </if>
+            <if test="cityId != null">
+                and (province = #{cityId} or city = #{cityId} or area = #{cityId})
+            </if>
+        </where>
+        order by sh.create_time DESC
+    </select>
+
+
+    <select id="uploadExcelHotel" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysHotel">
+        select sh.*,sss.SCENIC_SPOT_NAME
+        from sys_hotel sh
+        left join SYS_SCENIC_SPOT sss
+        on sh.spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_BINDING sssb1
+        on sh.province = sssb1.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb2
+        on sh.city = sssb2.SCENIC_SPOT_FID
+        left join SYS_SCENIC_SPOT_BINDING sssb3
+        on sh.area = sssb3.SCENIC_SPOT_FID
+        <where>
+            <if test="spotId != null">
+                sh.spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and  sh.hotel_name like CONCAT('%',#{content},'%')
+            </if>
+            <if test="province != null">
+                and sh.province = #{province}
+            </if>
+            <if test="city != null">
+                and sh.city = #{city}
+            </if>
+            <if test="area != null">
+                and sh.area = #{area}
+            </if>
+            <if test="cityId != null">
+                and (province = #{cityId} or city = #{cityId} or area = #{cityId})
+            </if>
+        </where>
+        order by sh.create_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysHotel">
+        select *
+        from sys_hotel
+        where id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysStrategyContentMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategyContent">
+        insert into sys_strategy_content
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sysStrategyId != null" >
+                sys_strategy_id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="pictureUrl != null">
+                picture_url,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sysStrategyId != null" >
+                #{sysStrategyId,jdbcType=BIGINT},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                #{pictureUrl,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=VARCHAR},
+            </if>
+        </trim>
+
+    </insert>
+
+
+    <delete id="delete" >
+        delete from sys_strategy_content
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteStrategyId">
+        delete from sys_strategy_content
+        where sys_strategy_id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="getStrategyIdByList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategyContent">
+        select *
+        from sys_strategy_content
+        where sys_strategy_id = #{strategyId}
+        order by sort+0 ASC , id ASC
+    </select>
+
+    <select id="getStrategyIdByListN" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategyContent">
+        select *
+        from sys_strategy_content
+        where sys_strategy_id = #{id}
+        order by sort+0 ASC , id ASC
+    </select>
+
+    <update id="updateSelective">
+        update sys_strategy_content
+        <set >
+            <if test="sysStrategyId != null and sysStrategyId != ''" >
+                sys_strategy_id = #{sysStrategyId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null and content != '' " >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null and pictureUrl != '' " >
+                picture_url = #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="sort != null and sort != ''">
+                sort = #{sort,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="delSysStrategyContentPic" >
+        update sys_strategy_content set picture_url = null where id = #{id}
+    </update>
+
+</mapper>

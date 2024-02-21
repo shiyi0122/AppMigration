@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.WechatDepositMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.WechatDeposit" >
+        insert into WECHAT_DEPOSIT
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="depositId != null" >
+                DEPOSIT_ID,
+            </if>
+            <if test="depositUserId != null" >
+                DEPOSIT_USER_ID,
+            </if>
+            <if test="depositMoney != null" >
+                DEPOSIT_MONEY,
+            </if>
+            <if test="depositScenicSpotId != null" >
+                DEPOSIT_SCENIC_SPOT_ID,
+            </if>
+            <if test="depositState != null" >
+                DEPOSIT_STATE,
+            </if>
+            <if test="outTradeNo != null" >
+                OUT_TRADE_NO,
+            </if>
+            <if test="spbillCreateIp != null" >
+                SPBILL_CREATE_IP,
+            </if>
+            <if test="returnResultCode != null" >
+                RETURN_RESULT_CODE,
+            </if>
+            <if test="requestNonceStr != null" >
+                REQUEST_NONCE_STR,
+            </if>
+            <if test="returnNonceStr != null" >
+                RETURN_NONCE_STR,
+            </if>
+            <if test="requestSign != null" >
+                REQUEST_SIGN,
+            </if>
+            <if test="returnSign != null" >
+                RETURN_SIGN,
+            </if>
+            <if test="returnPrepayId != null" >
+                RETURN_PREPAY_ID,
+            </if>
+            <if test="paymentClient != null" >
+                PAYMENT_CLIENT,
+            </if>
+            <if test="tradeNo != null" >
+                TRADE_NO,
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="depositId != null" >
+                #{depositId,jdbcType=BIGINT},
+            </if>
+            <if test="depositUserId != null" >
+                #{depositUserId,jdbcType=BIGINT},
+            </if>
+            <if test="depositMoney != null" >
+                #{depositMoney,jdbcType=VARCHAR},
+            </if>
+            <if test="depositScenicSpotId != null" >
+                #{depositScenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="depositState != null" >
+                #{depositState,jdbcType=VARCHAR},
+            </if>
+            <if test="outTradeNo != null" >
+                #{outTradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="spbillCreateIp != null" >
+                #{spbillCreateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="returnResultCode != null" >
+                #{returnResultCode,jdbcType=VARCHAR},
+            </if>
+            <if test="requestNonceStr != null" >
+                #{requestNonceStr,jdbcType=VARCHAR},
+            </if>
+            <if test="returnNonceStr != null" >
+                #{returnNonceStr,jdbcType=VARCHAR},
+            </if>
+            <if test="requestSign != null" >
+                #{requestSign,jdbcType=VARCHAR},
+            </if>
+            <if test="returnSign != null" >
+                #{returnSign,jdbcType=VARCHAR},
+            </if>
+            <if test="returnPrepayId != null" >
+                #{returnPrepayId,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentClient != null" >
+                #{paymentClient,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null" >
+                #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="getTransactLogsById" resultType="com.jxzy.AppMigration.NavigationApp.entity.WechatDeposit">
+        select *
+        from WECHAT_DEPOSIT
+        where OUT_TRADE_NO = #{tradeNo}
+    </select>
+
+    <update id="updateWechatDeposit" parameterType="com.jxzy.AppMigration.NavigationApp.entity.WechatDeposit">
+
+        update WECHAT_DEPOSIT
+        <set >
+            <if test="depositUserId != null" >
+                DEPOSIT_USER_ID = #{depositUserId,jdbcType=BIGINT},
+            </if>
+            <if test="depositMoney != null" >
+                DEPOSIT_MONEY = #{depositMoney,jdbcType=VARCHAR},
+            </if>
+            <if test="depositScenicSpotId != null" >
+                DEPOSIT_SCENIC_SPOT_ID = #{depositScenicSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="depositState != null" >
+                DEPOSIT_STATE = #{depositState,jdbcType=VARCHAR},
+            </if>
+            <if test="tradeNo != null" >
+                TRADE_NO = #{tradeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="spbillCreateIp != null" >
+                SPBILL_CREATE_IP = #{spbillCreateIp,jdbcType=VARCHAR},
+            </if>
+            <if test="returnResultCode != null" >
+                RETURN_RESULT_CODE = #{returnResultCode,jdbcType=VARCHAR},
+            </if>
+            <if test="requestNonceStr != null" >
+                REQUEST_NONCE_STR = #{requestNonceStr,jdbcType=VARCHAR},
+            </if>
+            <if test="returnNonceStr != null" >
+                RETURN_NONCE_STR = #{returnNonceStr,jdbcType=VARCHAR},
+            </if>
+            <if test="requestSign != null" >
+                REQUEST_SIGN = #{requestSign,jdbcType=VARCHAR},
+            </if>
+            <if test="returnSign != null" >
+                RETURN_SIGN = #{returnSign,jdbcType=VARCHAR},
+            </if>
+            <if test="returnPrepayId != null" >
+                RETURN_PREPAY_ID = #{returnPrepayId,jdbcType=VARCHAR},
+            </if>
+            <if test="couponFee != null" >
+                COUPON_FEE = #{couponFee,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentClient != null" >
+                PAYMENT_CLIENT = #{paymentClient,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null" >
+                CREATE_DATE = #{createDate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null" >
+                UPDATE_DATE = #{updateDate,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where DEPOSIT_ID = #{depositId,jdbcType=BIGINT}
+        and OUT_TRADE_NO = #{outTradeNo,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

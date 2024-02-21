@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotDynamicMapper" >
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamic">
+        select ssd.*,sss.SCENIC_SPOT_NAME
+        from sys_spot_dynamic ssd
+        left join SYS_SCENIC_SPOT sss on ssd.ascription_spot_id = sss.SCENIC_SPOT_ID
+        <where>
+            1=1
+            <if test="content != null">
+                and sss.SCENIC_SPOT_NAME like CONCAT('%',#{content},'%')
+            </if>
+            <if test="cityId != null">
+                and ssd.province = #{cityId} or ssd.city = #{cityId} or ssd.area = #{area}
+            </if>
+            <if test="spotId != null">
+                and ssd.ascription_spot_id = #{spotId}
+            </if>
+            <if test="startTime != null">
+                and ssd.create_time like CONCAT('%',#{startTime},'%')
+            </if>
+            <if test="spotName != null">
+                and sss.SCENIC_SPOT_NAME like CONCAT('%',#{spotName},'%')
+            </if>
+            <if test="title != null">
+                and ssd.title like CONCAT('%',#{title},'%')
+            </if>
+        </where>
+        order by create_time DESC
+    </select>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamic">
+
+        insert into sys_spot_dynamic
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="introduce != null" >
+                introduce,
+            </if>
+            <if test="ascriptionSpotId != null" >
+                ascription_spot_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="likeNumber != null">
+                like_number,
+            </if>
+            <if test="browseNumber != null">
+                browse_number,
+            </if>
+            <if test="coverPic != null">
+                cover_pic,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="area != null">
+                area
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null" >
+                #{introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="ascriptionSpotId != null">
+                #{ascriptionSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="likeNumber != null">
+                #{likeNumber,jdbcType=BIGINT},
+            </if>
+            <if test="browseNumber != null">
+                #{browseNumber,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null">
+                #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null">
+                #{area,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamic">
+        update sys_spot_dynamic
+        <set >
+            <if test="title != null and title != ''" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="introduce != null and introduce != '' " >
+                introduce = #{introduce,jdbcType=VARCHAR},
+            </if>
+            <if test="ascriptionSpotId != null and ascriptionSpotId != '' " >
+                ascription_spot_id = #{ascriptionSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="content != null and content != '' " >
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="likeNumber != null and likeNumber != '' " >
+                like_number = #{likeNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="browseNumber != null and browseNumber != '' " >
+                browse_number = #{browseNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="coverPic != null and coverPic != '' " >
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null and province !=''">
+                province = #{province,jdbcType=BIGINT},
+            </if>
+            <if test="city != null and city !=''">
+                city = #{city,jdbcType=BIGINT},
+            </if>
+            <if test="area != null and area !=''">
+                area = #{area,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <delete id="deleteByPrimaryKey">
+        delete from sys_spot_dynamic
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectById" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamic">
+        select *
+        from sys_spot_dynamic
+        where id = #{id}
+    </select>
+
+    <update id="addSysSpotDynamicBrowse" >
+        update sys_spot_dynamic
+        set browse_number = browse_number + 1
+        where id = #{id}
+    </update>
+
+    <select id="selectBySpotId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamic">
+        select * from sys_spot_dynamic where ascription_spot_id = #{scenicSpotId} order by create_time DESC limit 1
+    </select>
+
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessDurationOptionMapper" >
+
+    <select id="getDurationOptionList" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessDurationOption">
+        select *
+        from BUSINESS_DURATION_OPTION
+        <where>
+            1=1
+            <if test="type != null and type != ''">
+                and  TYPE = #{type}
+            </if>
+            <if test="scenicSpotId != null and scenicSpotId != ''">
+                and SCENIC_SPOT_ID = #{scenicSpotId}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getExperienceDuration" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessDurationOption">
+        select *
+        from BUSINESS_DURATION_OPTION
+        <where>
+            1=1
+            <if test="type != null and type != ''">
+                and  TYPE = #{type}
+            </if>
+            <if test="scenicSpotId != null and scenicSpotId != ''">
+                and SCENIC_SPOT_ID = #{scenicSpotId}
+            </if>
+        </where>
+        limit 0,1
+    </select>
+
+    <select id="getSpotIdIsNullList" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessDurationOption">
+        select *
+        from BUSINESS_DURATION_OPTION
+        where SCENIC_SPOT_ID IS NULL
+        and TYPE = #{type}
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessDurationOption">
+        select *
+        from BUSINESS_DURATION_OPTION
+        where ID = #{optionId}
+    </select>
+
+
+</mapper>

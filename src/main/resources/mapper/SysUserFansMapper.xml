@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysUserFansMapper" >
+
+    <select id="selectIsFans" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_user_fans
+        where fans_user_id = #{uid}
+        and  cover_fans_user_id = #{userId}
+    </select>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysUserFans">
+        insert into sys_user_fans
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="fansUserId != null" >
+                fans_user_id,
+            </if>
+            <if test="coverFansUserId != null" >
+                cover_fans_user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="fansUserId != null" >
+                #{fansUserId,jdbcType=BIGINT},
+            </if>
+            <if test="coverFansUserId != null" >
+                #{coverFansUserId,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectByFansNumber" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_user_fans
+        where cover_fans_user_id = #{uid}
+    </select>
+
+    <select id="selectByFollowNumber" resultType="java.lang.Integer">
+        select COUNT(0)
+        from sys_user_fans
+        where fans_user_id = #{uid}
+    </select>
+
+    <delete id="cancelSysUserFans">
+        delete from sys_user_fans
+        where fans_user_id = #{fansUserId}
+        and cover_fans_user_id = #{coverFansUserId}
+    </delete>
+
+</mapper>

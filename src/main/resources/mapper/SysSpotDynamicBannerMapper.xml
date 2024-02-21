@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotDynamicBannerMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicBanner">
+
+        insert into sys_spot_dynamic_banner
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotDynamicId != null" >
+                spot_dynamic_id,
+            </if>
+            <if test="spotDynamicBannerUrl != null" >
+                spot_dynamic_banner_url,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotDynamicId != null" >
+                #{spotDynamicId,jdbcType=BIGINT},
+            </if>
+            <if test="spotDynamicBannerUrl != null" >
+                #{spotDynamicBannerUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicBanner">
+        update sys_spot_dynamic_banner
+        <set >
+            <if test="spotDynamicId != null and spotDynamicId != ''" >
+                spot_dynamic_id = #{spotDynamicId,jdbcType=BIGINT},
+            </if>
+            <if test="spotDynamicBannerUrl != null and spotDynamicBannerUrl != '' " >
+                spot_dynamic_banner_url = #{spotDynamicBannerUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="delete">
+        delete from sys_spot_dynamic_banner
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotDynamicBanner">
+        select *
+        from sys_spot_dynamic_banner
+        where spot_dynamic_id = #{id}
+        order by create_time ASC
+    </select>
+
+</mapper>

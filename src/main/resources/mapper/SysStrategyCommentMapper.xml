@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysStrategyCommentMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysStrategyComment">
+
+        insert into sys_strategy_comment
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="strategyId != null" >
+                strategy_id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="update_time != null">
+                update_time,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="strategyComment != null">
+                strategy_comment,
+            </if>
+            <if test="commentPic != null">
+                comment_pic,
+            </if>
+            <if test="state != null">
+                state
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="strategyId != null" >
+                #{strategyId,jdbcType=BIGINT},
+            </if>
+            <if test="userId != null" >
+                #{user_id,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR}
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR}
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR}
+            </if>
+            <if test="strategyComment != null">
+                #{strategyComment,jdbcType=VARCHAR}
+            </if>
+            <if test="commentPic != null">
+                #{commentPic,jdbcType=VARCHAR}
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=VARCHAR}
+            </if>
+        </trim>
+
+    </insert>
+
+    <delete id="delete">
+        delete from sys_strategy_comment
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectStrategyNumber" resultType="java.lang.Integer">
+        select  COUNT(0)
+        from sys_strategy_comment
+        where strategy_id = #{id}
+        and type = #{type}
+    </select>
+
+
+
+</mapper>

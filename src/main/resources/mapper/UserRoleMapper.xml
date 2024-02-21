@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.UserRoleMapper" >
+
+
+    <select id="listByclassify" resultType="com.jxzy.AppMigration.NavigationApp.entity.UserRole">
+        select
+        a.USER_ID,
+        a.USER_NAME,
+        a.USER_PHONE,
+        a.USER_TYPE,
+        a.SCENIC_SPOT_ID,
+        a.CREATE_TIME,
+        a.UPDATE_TIME
+        from
+        user_role a
+        <where>
+            <if test="UserRoleDTO.scenicSpotId != null and UserRoleDTO.scenicSpotId != ''">
+                and SCENIC_SPOT_ID like '%${UserRoleDTO.scenicSpotId}'
+            </if>
+            <if test="UserRoleDTO.userId != null and UserRoleDTO.userId !=''">
+                and USER_ID like '%${UserRoleDTO.userId}'
+            </if>
+            <if test="UserRoleDTO.userName!= null and UserRoleDTO.userName!=''">
+                and USER_NAME like '%${UserRoleDTO.userName}'
+            </if>
+            <if test="UserRoleDTO.userPhone != null and UserRoleDTO.userPhone != ''">
+                and USER_PHONE like '%${UserRoleDTO.userPhone}'
+            </if>
+            <if test="UserRoleDTO.userType != null and UserRoleDTO.userType != ''">
+                and USER_TYPE =#{UserRoleDTO.userPhone}
+            </if>
+            <if test="UserRoleDTO.scenicSpotName != null and UserRoleDTO.scenicSpotName != ''">
+                and SCENICSPOTNAME =#{UserRoleDTO.scenicSpotName}
+            </if>
+        </where>
+    </select>
+</mapper>
+
+

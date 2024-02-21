@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessUserLiveDeviceLogMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceLog">
+            insert into BUSINESS_USER_LIVE_DEVICE_LOG
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    ID,
+                </if>
+                <if test="userId != null">
+                    USER_ID,
+                </if>
+                <if test="robotCode != null">
+                    ROBOT_CODE,
+                </if>
+                <if test="ifPay != null">
+                    IF_PAY,
+                </if>
+                <if test="createTime != null">
+                    CREATE_TIME,
+                </if>
+                <if test="updateTime != null">
+                    UPDATE_TIME,
+                </if>
+                <if test="paymentTime != null">
+                    PAYMENT_TIME,
+                </if>
+                <if test="exitTime != null">
+                    EXIT_TIME,
+                </if>
+                <if test="watchedDuration != null">
+                    WATCHED_DURATION,
+                </if>
+                <if test="dataSide != null">
+                    DATA_SIDE,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    #{id,jdbcType=BIGINT},
+                </if>
+                <if test="userId != null">
+                    #{userId,jdbcType=BIGINT},
+                </if>
+                <if test="robotCode != null">
+                    #{robotCode,jdbcType=VARCHAR},
+                </if>
+                <if test="ifPay != null">
+                    #{ifPay,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null">
+                    #{createTime,jdbcType=VARCHAR},
+                </if>
+                <if test="updateTime != null">
+                    #{updateTime,jdbcType=VARCHAR},
+                </if>
+                <if test="paymentTime != null">
+                    #{paymentTime,jdbcType=VARCHAR},
+                </if>
+                <if test="exitTime != null">
+                    #{exitTime,jdbcType=VARCHAR},
+                </if>
+                <if test="watchedDuration != null">
+                    #{watchedDuration,jdbcType=VARCHAR},
+                </if>
+                <if test="dataSide != null">
+                    #{dataSide,jdbcType=VARCHAR},
+                </if>
+            </trim>
+    </insert>
+
+    <select id="selectBySearchOne" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceLog">
+        select *
+        from  BUSINESS_USER_LIVE_DEVICE_LOG
+        <where>
+            1=1
+            <if test="robotCode != null and robotCode != ''">
+                and  ROBOT_CODE = #{robotCode}
+            </if>
+            <if test="userId != null and userId != ''">
+                and USER_ID = #{userId}
+            </if>
+            <if test="nowDay != null and nowDay != ''">
+                and CREATE_TIME like CONCAT(#{nowDay},'%')
+            </if>
+            <if test="ifPay != null and ifPay != ''">
+                and IF_PAY = #{ifPay}
+            </if>
+        </where>
+        order by CREATE_TIME DESC
+        limit 1
+    </select>
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceLog">
+        update BUSINESS_USER_LIVE_DEVICE_LOG
+        <set>
+            <if test="userId != null">
+                USER_ID = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="robotCode != null">
+                ROBOT_CODE = #{robotCode,jdbcType=VARCHAR},
+            </if>
+            <if test="ifPay != null">
+                IF_PAY = #{ifPay,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="paymentTime != null">
+                PAYMENT_TIME = #{paymentTime,jdbcType=VARCHAR},
+            </if>
+            <if test="exitTime != null">
+                EXIT_TIME = #{exitTime,jdbcType=VARCHAR},
+            </if>
+            <if test="watchedDuration != null">
+                WATCHED_DURATION = #{watchedDuration,jdbcType=VARCHAR},
+            </if>
+            <if test="dataSide != null">
+                DATA_SIDE = #{dataSide,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="editIfPayState">
+        update BUSINESS_USER_LIVE_DEVICE_LOG
+        set IF_PAY = 1,
+        PAYMENT_TIME = now()
+        where ID = #{liveId}
+    </update>
+
+    <select id="selectByPrimaryKey" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceLog">
+        select *
+        from BUSINESS_USER_LIVE_DEVICE_LOG
+        where ID = #{liveId}
+    </select>
+
+    <select id="selectBySearchList" resultType="com.jxzy.AppMigration.NavigationApp.entity.BusinessUserLiveDeviceLog">
+        select srld.*,sss.SCENIC_SPOT_NAME,buldl.PAYMENT_TIME
+        from BUSINESS_USER_LIVE_DEVICE_LOG buldl
+        left join SYS_ROBOT_LIVE_DEVICE srld on buldl.ROBOT_CODE = srld.ROBOT_CODE
+        left join SYS_SCENIC_SPOT sss on srld.SCENIC_SPOT_ID = sss.SCENIC_SPOT_ID
+        <where>
+            1=1
+            and buldl.IF_PAY = 1
+            <if test="userId != null and userId != ''">
+                and buldl.USER_ID = #{userId}
+            </if>
+            <if test="scenicSpotName != null and scenicSpotName != ''">
+                and sss.SCENIC_SPOT_NAME like CONCAT('%',#{scenicSpotName},'%')
+            </if>
+        </where>
+        group by buldl.ROBOT_CODE
+        order by buldl.CREATE_TIME
+    </select>
+
+</mapper>

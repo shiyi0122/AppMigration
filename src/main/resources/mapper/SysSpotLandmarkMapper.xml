@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysSpotLandmarkMapper" >
+
+    <insert id="insert" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLandmark">
+        insert into sys_spot_landmark
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="spotId != null" >
+                spot_id,
+            </if>
+            <if test="landmarkName != null" >
+                landmark_name,
+            </if>
+            <if test="landmarkNamePinyin != null" >
+                landmark_name_pinyin,
+            </if>
+            <if test="landmarkNameGps != null" >
+                landmark_name_gps,
+            </if>
+            <if test="landmarkNameGpsBaiDu != null" >
+                landmark_name_gps_bai_du,
+            </if>
+            <if test="landmarkNameGpsGaoDe != null" >
+                landmark_name_gps_gao_de,
+            </if>
+            <if test="coordinateRadius != null" >
+                coordinate_radius,
+            </if>
+            <if test="landmarkContent != null" >
+                landmark_content,
+            </if>
+            <if test="landmarkPicUrl != null" >
+                landmark_pic_url,
+            </if>
+            <if test="broadcastContent != null" >
+                broadcast_content,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="landmarkIntroduction != null">
+                landmark_introduction,
+            </if>
+            <if test="carrying != null">
+                carrying,
+            </if>
+            <if test="basicIntroduction != null">
+                basic_introduction,
+            </if>
+            <if test="landmarkHistory != null">
+                landmark_history,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="spotId != null" >
+                #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="landmarkName != null" >
+                #{landmarkName,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNamePinyin != null" >
+                #{landmarkNamePinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGps != null" >
+                #{landmarkNameGps,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGpsBaiDu != null" >
+                #{landmarkNameGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGpsGaoDe != null" >
+                #{landmarkNameGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinateRadius != null" >
+                #{coordinateRadius,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkContent != null" >
+                #{landmarkContent,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkPicUrl != null" >
+                #{landmarkPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="broadcastContent != null" >
+                #{broadcastContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkIntroduction != null">
+                #{landmarkIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="carrying != null">
+                #{carrying,jdbcType=VARCHAR},
+            </if>
+            <if test="basicIntroduction != null">
+                #{basicIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkHistory != null">
+                #{landmarkHistory,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLandmark">
+        update sys_spot_landmark
+        <set >
+            <if test="spotId != null and spotId != ''" >
+                spot_id = #{spotId,jdbcType=BIGINT},
+            </if>
+            <if test="landmarkName != null and landmarkName != '' " >
+                landmark_name = #{landmarkName,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNamePinyin != null and landmarkNamePinyin != '' " >
+                landmark_name_pinyin = #{landmarkNamePinyin,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGps != null and landmarkNameGps != '' " >
+                landmark_name_gps = #{landmarkNameGps,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGpsBaiDu != null and landmarkNameGpsBaiDu != '' " >
+                landmark_name_gps_bai_du = #{landmarkNameGpsBaiDu,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkNameGpsGaoDe != null and landmarkNameGpsGaoDe != '' " >
+                landmark_name_gps_gao_de = #{landmarkNameGpsGaoDe,jdbcType=VARCHAR},
+            </if>
+            <if test="coordinateRadius != null and coordinateRadius != '' " >
+                coordinate_radius = #{coordinateRadius,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkContent != null and landmarkContent != '' " >
+                landmark_content = #{landmarkContent,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkPicUrl != null and landmarkPicUrl != '' " >
+                landmark_pic_url = #{landmarkPicUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="broadcastContent != null and broadcastContent != '' " >
+                broadcast_content = #{broadcastContent,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkIntroduction != null and landmarkIntroduction != ''">
+                landmark_introduction = #{landmarkIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="carrying != null and carrying != ''">
+                carrying = #{carrying,jdbcType=VARCHAR},
+            </if>
+            <if test="basicIntroduction != null and basicIntroduction != ''">
+                basic_introduction = #{basicIntroduction,jdbcType=VARCHAR},
+            </if>
+            <if test="landmarkHistory != null and landmarkHistory != ''">
+                landmark_history = #{landmarkHistory,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <delete id="delete">
+        delete from sys_spot_landmark
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysSpotLandmark">
+        select sspl.*,sss.SCENIC_SPOT_NAME
+        from sys_spot_landmark sspl
+        left join SYS_SCENIC_SPOT sss
+        on sspl.spot_id = sss.SCENIC_SPOT_ID
+        <where>
+            1=1
+            <if test="spotId != null">
+               and  sspl.spot_id = #{spotId}
+            </if>
+            <if test="content != null">
+                and sspl.landmark_name like CONCAT('%',#{content},'%')
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

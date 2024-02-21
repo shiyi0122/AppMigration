@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysGoodThingsMapper" >
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThingsShop">
+        insert into sys_good_things
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sysGoodThings != null" >
+                sys_good_things,
+            </if>
+            <if test="goodThingsName != null" >
+                good_things_name,
+            </if>
+            <if test="price != null" >
+                price,
+            </if>
+            <if test="recommendNumber != null" >
+                recommend_number,
+            </if>
+            <if test="coverPic != null" >
+                cover_pic,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="goodThingsId != null" >
+                #{good_things_id,jdbcType=BIGINT},
+            </if>
+            <if test="goodThingsName != null" >
+                #{good_things_name,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null" >
+                #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null" >
+                #{recommendNumber,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null" >
+                #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+
+    <update id="updateSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThings">
+        update sys_good_things
+        <set >
+            <if test="goodThingsId != null " >
+                good_things_id = #{foodShopId,jdbcType=BIGINT},
+            </if>
+            <if test="goodThingsName != null and goodThingsName != '' " >
+                good_things_name = #{goodThingsName,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null and price != '' " >
+                price = #{price,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null  " >
+                recommend_number = #{recommendNumber,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null and coverPic != '' " >
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null and phone != '' " >
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="businessHours != null and businessHours != '' " >
+                business_hours = #{businessHours,jdbcType=VARCHAR},
+            </if>
+            <if test="recommendNumber != null" >
+                recommend_number = #{recommend_number,jdbcType=BIGINT},
+            </if>
+            <if test="coverPic != null and coverPic != ''" >
+                cover_pic = #{coverPic,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null and updateTime !=''">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" >
+        delete from sys_good_things
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="list" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysGoodThings">
+        select *
+        from sys_good_things
+        <where>
+            <if test="foodShopId != null">
+                food_shop_id = #{foodShopId}
+            </if>
+            <if test="content != null">
+                food_name like CONCAT('%',#{content},'%')
+            </if>
+        </where>
+
+        order by create_time DESC
+    </select>
+
+
+</mapper>

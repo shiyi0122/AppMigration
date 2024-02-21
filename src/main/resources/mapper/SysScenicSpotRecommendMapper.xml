@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.SysScenicSpotRecommendMapper" >
+    <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommend" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="recommend_spot_id" property="recommendSpotId" jdbcType="BIGINT" />
+        <result column="sort" property="sort" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="VARCHAR" />
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id,recommend_spot_id,sort,create_time,update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommend" >
+        insert into sys_scenic_spot_recommend
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="recommendSpotId != null" >
+                recommend_spot_id,
+            </if>
+            <if test="sort != null" >
+                sort,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="recommendSpotId != null" >
+                #{recommendSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="sort != null" >
+                #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommend" >
+        update sys_scenic_spot_recommend
+        <set >
+            <if test="recommendSpotId != null" >
+                recommend_spot_id = #{recommendSpotId,jdbcType=BIGINT},
+            </if>
+            <if test="sort != null" >
+                sort = #{sort,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from sys_scenic_spot_recommend
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from sys_scenic_spot_recommend
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="sysScenicSpotRecommendList" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommend">
+        select
+        <include refid="Base_Column_List" />
+        ,sss.SCENIC_SPOT_NAME,
+        sssi.SCNEIC_SPOT_IMG_URL
+        from sys_scenic_spot_recommend sssr
+        left join SYS_SCENIC_SPOT sss on sssr.recommend_spot_id = sss.SCENIC_SPOT_ID
+        left join SYS_SCENIC_SPOT_IMG sssi on sssr.recommend_spot_id = sssi.SCENIC_SPOT_ID
+        order by sort asc
+    </select>
+
+    <select id="getSortList" resultType="java.lang.String">
+        select sort
+        from sys_scenic_spot_recommend
+    </select>
+    <select id="getSpotId" resultType="com.jxzy.AppMigration.NavigationApp.entity.SysScenicSpotRecommend">
+        select *
+        from sys_scenic_spot_recommend
+        where recommend_spot_id = #{recommendSpotId}
+    </select>
+
+
+</mapper>

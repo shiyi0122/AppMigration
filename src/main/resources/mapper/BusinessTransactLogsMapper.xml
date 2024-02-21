@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jxzy.AppMigration.NavigationApp.dao.BusinessTransactLogsMapper" >
+  <resultMap id="BaseResultMap" type="com.jxzy.AppMigration.NavigationApp.entity.BusinessTransactLogs" >
+    
+    <!-- 订单编号 -->
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    
+    <!-- 用户标识 -->
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    
+    <!-- 手机号，可用于判断注册是否缴纳保证金 -->
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    
+    <!-- 操作对象的id -->
+    <result column="OBJECT_ID" property="objectId" jdbcType="BIGINT" />
+    
+    <!-- 交易金额 -->
+    <result column="PRICE" property="price" jdbcType="DECIMAL" />
+    
+    <!-- 支付方式 0微信 1支付宝 -->
+    <result column="PAY_TYPE" property="payType" jdbcType="TINYINT" />
+    
+    <!-- 备注 -->
+    <result column="REMARKS" property="remarks" jdbcType="VARCHAR" />
+    
+    <!-- 0注册保证金 1竞拍保证金 2限时购保证金 3订阅 -->
+    <result column="TYPE" property="type" jdbcType="TINYINT" />
+    
+    <!-- -1 删除 0未完成 1已完成 -->
+    <result column="STATUS" property="status" jdbcType="BIT" />
+    
+    <!-- 创建时间 -->
+    <result column="CREATE_TIME" property="createTime" jdbcType="VARCHAR" />
+    
+    <!-- 更新时间 -->
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="VARCHAR" />
+    <!-- 直播关联id   -->
+    <result column="LIVE_ID" property="liveId" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, USER_ID, PHONE, OBJECT_ID, PRICE, PAY_TYPE, REMARKS, TYPE, STATUS, CREATE_TIME, 
+    UPDATE_TIME,LIVE_ID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from BUSINESS_TRANSACT_LOGS
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="getTransactLogsCountByPhone" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+        count(ID)
+    from BUSINESS_TRANSACT_LOGS
+    where PHONE = #{phone}
+    and STATUS = 1
+    and `TYPE` = 0
+  </select>
+  <select id="getTransactLogsCountBySearch" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    SELECT
+	    count(ID)
+    FROM
+        BUSINESS_TRANSACT_LOGS
+    WHERE
+       STATUS = 1
+       <if test="userId !=null and userId !='' ">
+            AND USER_ID = ${userId}
+       </if>
+       <if test="objectId !=null and objectId !='' ">
+            AND OBJECT_ID = ${objectId}
+       </if>
+       <if test="type !=null and type !='' ">
+            AND TYPE = ${type}
+       </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from BUSINESS_TRANSACT_LOGS
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" >
+    insert into BUSINESS_TRANSACT_LOGS
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="phone != null" >
+        PHONE,
+      </if>
+      <if test="objectId != null" >
+        OBJECT_ID,
+      </if>
+      <if test="price != null" >
+        PRICE,
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE,
+      </if>
+      <if test="remarks != null" >
+        REMARKS,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="liveId != null">
+        LIVE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null" >
+        #{objectId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="liveId != null">
+        #{liveId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" >
+    update BUSINESS_TRANSACT_LOGS
+    <set >
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        PHONE = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null" >
+        OBJECT_ID = #{objectId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        PRICE = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null" >
+        PAY_TYPE = #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="remarks != null" >
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="liveId != null">
+        LIVE_ID =#{liveId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
